@@ -659,9 +659,8 @@
    utilizadores, preenche isto e implementa loadRemote/saveRemote.
    Enquanto estiver vazio, a app funciona 100% local.
 ------------------------------------------------------------- */
-let SUPABASE = { url:'', anonKey:'' }; // preenche aqui OU no ecrã "Nuvem" dentro da app
+let SUPABASE = { url:'https://ldnryprfzigtjnwwedjf.supabase.co', anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnJ5cHJmemlndGpud3dlZGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjM0NjcsImV4cCI6MjEwMDg5OTQ2N30.vaUtd-mCuQFb5CbUVWEBz7qnr3zxHrN837sHpIYMDBA' };
 try{const _s=JSON.parse(localStorage.getItem('norte_supabase')||'null');if(_s&&_s.url&&_s.anonKey)SUPABASE=_s;}catch(e){}
-
 /* ---------- estado + persistência ---------- */
 const KEY='norte_v1';
 let mem=null; // fallback se localStorage falhar (ex.: pré-visualização)
