@@ -187,6 +187,7 @@
       <span class="mini" id="auth-email"></span>
       <button class="btn ghost" id="auth-out" style="padding:8px 12px;font-size:13px">Sair</button>
     </div>
+    <button class="btn ghost" id="dbBtn" style="padding:8px 12px;font-size:13px">Nuvem</button>
     <button class="btn ghost" id="exportBtn" style="padding:8px 12px;font-size:13px">Exportar</button>
     <button class="btn ghost" id="resetBtn" style="padding:8px 12px;font-size:13px">Repor</button>
   </div>
@@ -200,6 +201,18 @@
     <div class="field"><label>Email</label><input type="email" id="auth-email-in" placeholder="tu@email.com"></div>
     <button class="btn" id="auth-send" style="width:100%">Enviar link de acesso</button>
     <div class="mini" id="auth-msg" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<div id="db-modal" style="display:none;position:fixed;inset:0;z-index:110;background:rgba(27,36,50,.5);align-items:center;justify-content:center;padding:20px">
+  <div class="card pad" style="max-width:460px;width:100%;max-height:88vh;overflow:auto">
+    <div class="split"><h3 style="font-size:20px">Base de dados (nuvem)</h3><button class="del" id="db-close" style="font-size:22px">×</button></div>
+    <p class="mini" id="db-status" style="margin:6px 0 14px"></p>
+    <div class="field"><label>Project URL</label><input type="text" id="db-url" placeholder="https://xxxx.supabase.co"></div>
+    <div class="field"><label>anon public key</label><input type="text" id="db-key" placeholder="eyJ..."></div>
+    <button class="btn" id="db-save" style="width:100%">Ligar à nuvem</button>
+    <button class="btn ghost" id="db-clear" style="width:100%;margin-top:8px">Desligar / voltar ao dispositivo</button>
+    <div class="teach" style="margin-top:14px"><b>Onde encontrar:</b> no Supabase → <b>Settings → API</b>, copia o Project URL e a anon public key. Antes disso, corre o SQL da tabela no <b>SQL Editor</b> e mete o teu link do site em <b>Authentication → URL Configuration</b>. Assim ligas a nuvem sem tocar no código.</div>
   </div>
 </div>
 
@@ -646,7 +659,8 @@
    utilizadores, preenche isto e implementa loadRemote/saveRemote.
    Enquanto estiver vazio, a app funciona 100% local.
 ------------------------------------------------------------- */
-const SUPABASE = { url:'', anonKey:'' }; // deixa vazio por agora
+let SUPABASE = { url:'', anonKey:'' }; // preenche aqui OU no ecrã "Nuvem" dentro da app
+try{const _s=JSON.parse(localStorage.getItem('norte_supabase')||'null');if(_s&&_s.url&&_s.anonKey)SUPABASE=_s;}catch(e){}
 
 /* ---------- estado + persistência ---------- */
 const KEY='norte_v1';
@@ -1383,6 +1397,26 @@ renderAll();
 el('auth-send').onclick=()=>sbSignIn(el('auth-email-in').value.trim());
 el('auth-out').onclick=sbSignOut;
 el('auth-email-in')&&el('auth-email-in').addEventListener('keydown',e=>{if(e.key==='Enter')sbSignIn(el('auth-email-in').value.trim());});
+function openDb(){
+  el('db-url').value=SUPABASE.url||''; el('db-key').value=SUPABASE.anonKey||'';
+  el('db-status').textContent=sbReady()?(sbUser?('Ligado como '+sbUser.email+'.'):'Ligado à nuvem — falta entrar (login).'):'Não ligado — a guardar só neste dispositivo.';
+  el('db-modal').style.display='flex';
+}
+el('dbBtn').onclick=openDb;
+el('db-close').onclick=()=>el('db-modal').style.display='none';
+el('db-save').onclick=()=>{
+  const url=el('db-url').value.trim(), key=el('db-key').value.trim();
+  if(!url||!key){el('db-status').innerHTML='<span class="neg">Preenche o URL e a chave.</span>';return;}
+  if(!window.supabase){el('db-status').innerHTML='<span class="neg">Sem ligação à internet para carregar o cliente. Tenta com a app publicada.</span>';return;}
+  SUPABASE={url,anonKey:key};
+  try{localStorage.setItem('norte_supabase',JSON.stringify(SUPABASE));}catch(e){}
+  el('db-modal').style.display='none';
+  sbInit();
+};
+el('db-clear').onclick=()=>{
+  try{localStorage.removeItem('norte_supabase');}catch(e){}
+  SUPABASE={url:'',anonKey:''}; sbUser=null; sb=null; updateAuthUI(); el('db-modal').style.display='none';
+};
 sbInit();
 </script>
 </body>
