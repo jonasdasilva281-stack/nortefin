@@ -1438,31 +1438,38 @@ function renderGate(){
 async function sbEnter(){
   const email=el('auth-email').value.trim(), pass=el('auth-pass').value;
   if(!email||!pass){amsg('Escreve o email e a senha.');return;}
-  if(regMode){
-    const name=el('auth-name').value.trim();
-    if(!name){amsg('Escreve o teu nome.');return;}
-    if(pass.length<6){amsg('A senha precisa de pelo menos 6 caracteres.');return;}
-    pendingProfile={name};
-    el('auth-msg').textContent='A criar conta...';
-    const {data,error}=await sb.auth.signUp({email,password:pass});
-    if(error){ amsg(/registered|exists/i.test(error.message)?'Este email já tem conta. Escolhe "Entrar".':error.message); pendingProfile=null; return; }
-    if(!(data&&data.session)){ el('auth-msg').textContent='Conta criada! Confirma no email e volta para entrar.'; }
-  }else{
-    pendingProfile=null;
-    el('auth-msg').textContent='A entrar...';
-    const {error}=await sb.auth.signInWithPassword({email,password:pass});
-    if(error){
-      if(/not confirmed|confirm/i.test(error.message)) amsg('Confirma o teu email primeiro (vê a caixa de entrada) — ou desliga "Confirm email" no Supabase.');
-      else amsg(/Invalid|credentials/i.test(error.message)?'Email ou senha errados. Sem conta ainda? Escolhe "Criar conta".':error.message);
+  if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifica a internet e recarrega a página.');return;}
+  if(!sb){ if(sbReady()){sb=window.supabase.createClient(SUPABASE.url,SUPABASE.anonKey);sb.auth.onAuthStateChange((_e,s)=>handleSession(s));} else {amsg('A base de dados não está configurada. Abre "Nuvem" e liga, ou recarrega a página.');return;} }
+  try{
+    if(regMode){
+      const name=el('auth-name').value.trim();
+      if(!name){amsg('Escreve o teu nome.');return;}
+      if(pass.length<6){amsg('A senha precisa de pelo menos 6 caracteres.');return;}
+      pendingProfile={name};
+      el('auth-msg').textContent='A criar conta...';
+      const {data,error}=await sb.auth.signUp({email,password:pass});
+      if(error){ amsg(/registered|exists/i.test(error.message)?'Este email já tem conta. Escolhe "Entrar".':error.message); pendingProfile=null; return; }
+      if(!(data&&data.session)){ el('auth-msg').textContent='Conta criada! Confirma no email e volta para entrar.'; }
+    }else{
+      pendingProfile=null;
+      el('auth-msg').textContent='A entrar...';
+      const {error}=await sb.auth.signInWithPassword({email,password:pass});
+      if(error){
+        if(/not confirmed|confirm/i.test(error.message)) amsg('Confirma o teu email primeiro (vê a caixa de entrada) — ou desliga "Confirm email" no Supabase.');
+        else amsg(/Invalid|credentials/i.test(error.message)?'Email ou senha errados. Sem conta ainda? Escolhe "Criar conta".':error.message);
+      }
     }
-  }
+  }catch(err){ amsg('Erro de ligação: '+(err&&err.message?err.message:err)+'. Verifica a internet e recarrega.'); }
 }
 async function sbForgot(){
   const email=el('auth-email').value.trim();
   if(!email){amsg('Escreve o teu email primeiro.');return;}
+  if(!sb){ if(window.supabase&&sbReady()){sb=window.supabase.createClient(SUPABASE.url,SUPABASE.anonKey);} else {amsg('Base de dados não pronta. Recarrega a página.');return;} }
   el('auth-msg').textContent='A enviar...';
-  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('#')[0]});
-  el('auth-msg').textContent=error?('Erro: '+error.message):'Enviámos um link para redefinir a senha para '+email+'.';
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('#')[0]});
+    el('auth-msg').textContent=error?('Erro: '+error.message):'Enviámos um link para redefinir a senha para '+email+'.';
+  }catch(err){ amsg('Erro de ligação: '+(err&&err.message?err.message:err)); }
 }
 async function sbSignOut(){ if(sb)await sb.auth.signOut(); sbUser=null; updateAuthUI(); }
 function updateAuthUI(){
