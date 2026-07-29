@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>if(!window.supabase){document.write('<scr'+'ipt src="https://unpkg.com/@supabase/supabase-js@2"></scr'+'ipt>');}</script>
 <style>
   :root{
     --ink:#f5f5f7; --ink-soft:#b7b7c2; --paper:#09090b; --card:#141418;
@@ -205,6 +206,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o teu caminho — organizar, decidir com cabeça e construir o teu património até milionário.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
+    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v4</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -229,6 +231,7 @@
       </div>
       <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="tu@email.com" autocomplete="username"></div>
       <div class="field"><label>Senha</label><input type="password" id="auth-pass" placeholder="a tua senha" autocomplete="current-password"></div>
+      <label class="mini" style="display:flex;align-items:center;gap:8px;margin:2px 0 14px;cursor:pointer"><input type="checkbox" id="auth-keep" checked style="width:auto"> Manter-me ligado neste dispositivo</label>
       <button class="btn" id="auth-send" style="width:100%">Entrar</button>
       <button class="btn ghost" id="auth-forgot" style="width:100%;margin-top:8px;font-size:13px">Esqueci a senha</button>
       <div class="mini" id="auth-msg" style="margin-top:14px"></div>
@@ -1384,10 +1387,15 @@ el('r-today').onclick=()=>{resumoRef=new Date();renderResumo();};
 /* ---------- Supabase (nuvem, opcional) ---------- */
 let sb=null, sbUser=null, pushTimer=null;
 function sbReady(){return !!(SUPABASE.url && SUPABASE.anonKey && window.supabase);}
+function mkClient(){
+  let storage; try{storage=(localStorage.getItem('norte_keep')==='0')?window.sessionStorage:window.localStorage;}catch(_){storage=undefined;}
+  sb=window.supabase.createClient(SUPABASE.url,SUPABASE.anonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage}});
+  sb.auth.onAuthStateChange((_e,s)=>handleSession(s));
+  return sb;
+}
 async function sbInit(){
   if(!sbReady()){updateAuthUI();return;}
-  sb=window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey);
-  sb.auth.onAuthStateChange((_e,s)=>handleSession(s));
+  mkClient();
   const {data}=await sb.auth.getSession();
   handleSession(data?data.session:null);
 }
@@ -1439,7 +1447,7 @@ async function sbEnter(){
   const email=el('auth-email').value.trim(), pass=el('auth-pass').value;
   if(!email||!pass){amsg('Escreve o email e a senha.');return;}
   if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifica a internet e recarrega a página.');return;}
-  if(!sb){ if(sbReady()){sb=window.supabase.createClient(SUPABASE.url,SUPABASE.anonKey);sb.auth.onAuthStateChange((_e,s)=>handleSession(s));} else {amsg('A base de dados não está configurada. Abre "Nuvem" e liga, ou recarrega a página.');return;} }
+  if(!sb){ if(sbReady()){mkClient();} else {amsg('A base de dados não está configurada. Abre "Nuvem" e liga, ou recarrega a página.');return;} }
   try{
     if(regMode){
       const name=el('auth-name').value.trim();
@@ -1464,7 +1472,7 @@ async function sbEnter(){
 async function sbForgot(){
   const email=el('auth-email').value.trim();
   if(!email){amsg('Escreve o teu email primeiro.');return;}
-  if(!sb){ if(window.supabase&&sbReady()){sb=window.supabase.createClient(SUPABASE.url,SUPABASE.anonKey);} else {amsg('Base de dados não pronta. Recarrega a página.');return;} }
+  if(!sb){ if(window.supabase&&sbReady()){mkClient();} else {amsg('Base de dados não pronta. Recarrega a página.');return;} }
   el('auth-msg').textContent='A enviar...';
   try{
     const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('#')[0]});
@@ -1490,6 +1498,8 @@ el('auth-send').onclick=sbEnter;
 el('auth-out').onclick=sbSignOut;
 el('auth-forgot').onclick=sbForgot;
 el('auth-pass')&&el('auth-pass').addEventListener('keydown',e=>{if(e.key==='Enter')sbEnter();});
+el('auth-keep')&&(el('auth-keep').checked=(function(){try{return localStorage.getItem('norte_keep')!=='0';}catch(_){return true;}})());
+el('auth-keep')&&el('auth-keep').addEventListener('change',e=>{try{localStorage.setItem('norte_keep',e.target.checked?'1':'0');}catch(_){}if(window.supabase&&sbReady())mkClient();});
 function showScreen(n){['splash','choose','form'].forEach(s=>{const e=el('scr-'+s);if(e)e.style.display=(s===n?'block':'none');});}
 el('splash-go').onclick=()=>showScreen('choose');
 el('go-login').onclick=()=>{regMode=false;renderGate();showScreen('form');setTimeout(()=>el('auth-email').focus(),50);};
