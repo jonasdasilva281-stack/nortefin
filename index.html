@@ -188,7 +188,7 @@
   </div>
   <div class="tools">
     <div id="auth-bar" style="display:none;align-items:center;gap:8px">
-      <span class="mini" id="auth-email"></span>
+      <span class="mini" id="auth-who"></span>
       <button class="btn ghost" id="auth-out" style="padding:8px 12px;font-size:13px">Sair</button>
     </div>
     <button class="btn ghost" id="dbBtn" style="padding:8px 12px;font-size:13px">Nuvem</button>
@@ -206,7 +206,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o teu caminho — organizar, decidir com cabeça e construir o teu património até milionário.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v6</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v7</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -1455,14 +1455,15 @@ function renderGate(){
   el('auth-msg').textContent='';
 }
 async function sbEnter(){
-  el('auth-msg').innerHTML='<span style="color:var(--brass)">A processar… (recebi o teu toque)</span>';
-  const email=el('auth-email').value.trim(), pass=el('auth-pass').value;
+  el('auth-msg').innerHTML='<span style="color:var(--brass)">A processar…</span>';
+  const gv=id=>{const e=el(id);return e&&e.value!=null?e.value.trim():'';};
+  const email=gv('auth-email'), pass=(el('auth-pass')&&el('auth-pass').value)||'';
   if(!email||!pass){amsg('Escreve o email e a senha.');return;}
   if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifica a internet e recarrega a página.');return;}
   if(!sb){ if(sbReady()){mkClient();} else {amsg('A base de dados não está configurada. Abre "Nuvem" e liga, ou recarrega a página.');return;} }
   try{
     if(regMode){
-      const name=el('auth-name').value.trim();
+      const name=gv('auth-name');
       if(!name){amsg('Escreve o teu nome.');return;}
       if(pass.length<6){amsg('A senha precisa de pelo menos 6 caracteres.');return;}
       pendingProfile={name};
@@ -1495,7 +1496,7 @@ async function sbSignOut(){ if(sb)await sb.auth.signOut(); sbUser=null; updateAu
 function updateAuthUI(){
   const gate=el('auth-gate'), bar=el('auth-bar');
   if(!sbReady()){gate.style.display='none';bar.style.display='none';return;}
-  if(sbUser){gate.style.display='none';bar.style.display='flex';el('auth-email').textContent=(state.profile&&state.profile.name)||'A minha conta';}
+  if(sbUser){gate.style.display='none';bar.style.display='flex';el('auth-who').textContent=(state.profile&&state.profile.name)||'A minha conta';}
   else{gate.style.display='flex';bar.style.display='none';}
 }
 
