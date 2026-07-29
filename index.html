@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Norte — Finanças com controlo e sabedoria</title>
+<title>Nortefin — Finanças com controlo e sabedoria</title>
 <meta name="theme-color" content="#09090b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Norte">
+<meta name="apple-mobile-web-app-title" content="Nortefin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23111114'/%3E%3Ctext x='50' y='73' font-family='Arial,sans-serif' font-weight='700' font-size='66' fill='%23f0bd51' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23111114'/%3E%3Ctext x='50' y='73' font-family='Arial,sans-serif' font-weight='700' font-size='66' fill='%23f0bd51' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Norte%22%2C%22short_name%22%3A%22Norte%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22start_url%22%3A%22.%22%7D">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Nortefin%22%2C%22short_name%22%3A%22Nortefin%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22start_url%22%3A%22.%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
@@ -28,6 +28,7 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;height:6px;z-index:60;background:linear-gradient(90deg,#f0bd51,#f0774f,#e0518f,#7c6cf0,#3ddc97)}
   body{
     font-family:'Inter',system-ui,sans-serif;
     background:radial-gradient(1100px 560px at 50% -8%, rgba(240,189,81,.10), transparent 62%), var(--paper);
@@ -184,14 +185,13 @@
 <header class="top">
   <div class="brand">
     <div class="mark">N</div>
-    <div><b>Norte</b><span>controlo &amp; sabedoria</span></div>
+    <div><b>Nortefin</b><span>controlo &amp; sabedoria</span></div>
   </div>
   <div class="tools">
     <div id="auth-bar" style="display:none;align-items:center;gap:8px">
       <span class="mini" id="auth-who"></span>
       <button class="btn ghost" id="auth-out" style="padding:8px 12px;font-size:13px">Sair</button>
     </div>
-    <button class="btn ghost" id="dbBtn" style="padding:8px 12px;font-size:13px">Nuvem</button>
     <button class="btn ghost" id="exportBtn" style="padding:8px 12px;font-size:13px">Exportar</button>
     <button class="btn ghost" id="resetBtn" style="padding:8px 12px;font-size:13px">Repor</button>
   </div>
@@ -202,19 +202,19 @@
   <!-- 1) SPLASH / BOAS-VINDAS -->
   <div class="auth-screen" id="scr-splash" style="text-align:center;max-width:420px">
     <div class="mark" style="width:96px;height:96px;font-size:52px;border-radius:26px;margin:0 auto 22px;box-shadow:0 0 60px rgba(240,189,81,.5)">N</div>
-    <h1 style="font-family:'Space Grotesk';font-weight:700;font-size:46px;letter-spacing:-.04em;margin:0">Norte</h1>
+    <h1 style="font-family:'Space Grotesk';font-weight:700;font-size:46px;letter-spacing:-.04em;margin:0">Nortefin</h1>
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
-    <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o teu caminho — organizar, decidir com cabeça e construir o teu património até milionário.</p>
+    <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v7</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v10</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
   <div class="auth-screen" id="scr-choose" style="display:none;max-width:380px;width:100%">
     <div class="card pad">
-      <div class="brand" style="margin-bottom:16px"><div class="mark">N</div><div><b>Norte</b><span>a tua conta</span></div></div>
+      <div class="brand" style="margin-bottom:16px"><div class="mark">N</div><div><b>Nortefin</b><span>a sua conta</span></div></div>
       <h3 style="font-size:22px;margin-bottom:4px">Bem-vindo 👋</h3>
-      <p class="mini" style="margin:0 0 18px">Como queres continuar?</p>
+      <p class="mini" style="margin:0 0 18px">Como quer continuar?</p>
       <button class="btn" id="go-login" style="width:100%;font-size:15px">Entrar</button>
       <button class="btn ghost" id="go-register" style="width:100%;margin-top:10px;font-size:15px">Criar conta</button>
     </div>
@@ -225,13 +225,13 @@
     <div class="card pad">
       <button class="btn ghost" id="auth-back" style="padding:6px 12px;font-size:13px;margin-bottom:14px">‹ Voltar</button>
       <h3 id="auth-hi" style="font-size:22px;margin-bottom:4px">Bem-vindo 👋</h3>
-      <p id="auth-sub" class="mini" style="margin:0 0 16px">Vamos criar a tua conta.</p>
+      <p id="auth-sub" class="mini" style="margin:0 0 16px">Vamos criar a sua conta.</p>
       <div id="auth-diag" class="mini" style="margin:0 0 14px;padding:8px 11px;border:1px solid var(--line);border-radius:9px">A ligar à base de dados…</div>
       <div id="auth-reg-fields">
-        <div class="field"><label>Como te chamas?</label><input type="text" id="auth-name" placeholder="O teu nome" autocomplete="off"></div>
+        <div class="field"><label>Como te chamas?</label><input type="text" id="auth-name" placeholder="O seu nome" autocomplete="off"></div>
       </div>
       <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="tu@email.com" autocomplete="username"></div>
-      <div class="field"><label>Senha</label><input type="password" id="auth-pass" placeholder="a tua senha" autocomplete="current-password"></div>
+      <div class="field"><label>Senha</label><input type="password" id="auth-pass" placeholder="a sua senha" autocomplete="current-password"></div>
       <label class="mini" style="display:flex;align-items:center;gap:8px;margin:2px 0 14px;cursor:pointer"><input type="checkbox" id="auth-keep" checked style="width:auto"> Manter-me ligado neste dispositivo</label>
       <button class="btn" id="auth-send" style="width:100%">Entrar</button>
       <button class="btn ghost" id="auth-forgot" style="width:100%;margin-top:8px;font-size:13px">Esqueci a senha</button>
@@ -248,7 +248,7 @@
     <div class="field"><label>anon public key</label><input type="text" id="db-key" placeholder="eyJ..."></div>
     <button class="btn" id="db-save" style="width:100%">Ligar à nuvem</button>
     <button class="btn ghost" id="db-clear" style="width:100%;margin-top:8px">Desligar / voltar ao dispositivo</button>
-    <div class="teach" style="margin-top:14px"><b>Onde encontrar:</b> no Supabase → <b>Settings → API</b>, copia o Project URL e a anon public key. Antes disso, corre o SQL da tabela no <b>SQL Editor</b> e mete o teu link do site em <b>Authentication → URL Configuration</b>. Assim ligas a nuvem sem tocar no código.</div>
+    <div class="teach" style="margin-top:14px"><b>Onde encontrar:</b> no Supabase → <b>Settings → API</b>, copia o Project URL e a anon public key. Antes disso, corre o SQL da tabela no <b>SQL Editor</b> e mete o seu link do site em <b>Authentication → URL Configuration</b>. Assim ligas a nuvem sem tocar no código.</div>
   </div>
 </div>
 
@@ -269,9 +269,9 @@
 
   <!-- ================= PAINEL ================= -->
   <section class="view on" id="painel">
-    <h2 class="view-h" id="painel-hi">O teu norte</h2>
-    <div class="eyebrow" style="margin-top:6px">Rumo ao teu primeiro milhão</div>
-    <p class="sub">Onde estás hoje — e o que fazer a seguir.</p>
+    <h2 class="view-h" id="painel-hi">O seu norte</h2>
+    <div class="eyebrow" style="margin-top:6px">Rumo ao seu primeiro milhão</div>
+    <p class="sub">Onde está hoje — e o que fazer a seguir.</p>
 
     <div class="grid g3" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">Património líquido</div><div class="val" id="s-net">—</div><div class="lbl">contas + investido + ativos − dívidas</div></div>
@@ -302,7 +302,7 @@
   <!-- ================= CARTEIRA ================= -->
   <section class="view" id="carteira">
     <h2 class="view-h">Carteira</h2>
-    <p class="sub">Onde está o teu dinheiro: contas, poupanças e dinheiro vivo.</p>
+    <p class="sub">Onde está o seu dinheiro: contas, poupanças e dinheiro vivo.</p>
 
     <div class="card pad stat" style="margin-bottom:16px"><div class="eyebrow">Total disponível</div><div class="val" id="w-total">—</div><div class="lbl">soma de todas as contas e dinheiro</div></div>
 
@@ -320,7 +320,7 @@
         <div class="teach"><b>Como se liga:</b> ao fazer um lançamento, escolhes de que conta saiu (ou entrou) o dinheiro. O saldo de cada conta atualiza-se sozinho a partir daí.</div>
       </div>
       <div class="card pad">
-        <div class="split"><h3 style="font-size:18px">As tuas contas</h3><span class="mini" id="w-count"></span></div>
+        <div class="split"><h3 style="font-size:18px">As suas contas</h3><span class="mini" id="w-count"></span></div>
         <div id="w-list" style="margin-top:10px"></div>
       </div>
     </div>
@@ -350,7 +350,7 @@
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Orçamento por categoria</h3><span class="mini">€/mês · 0 = sem limite</span></div>
         <div class="limgrid" id="o-limits" style="margin-top:14px"></div>
-        <div class="teach"><b>Este é o coração do plano.</b> Para cada categoria defines o limite por <b>mês</b> e, se quiseres, por <b>ano</b>. O limite mensal controla o dia a dia; o anual serve para saber se, mesmo com um mês em que gastaste mais, continuas dentro do plano do ano. Vês a divisão por período no Resumo. Guia 50/30/20: ~50% necessidades, 30% desejos, 20% poupar e investir.</div>
+        <div class="teach"><b>Este é o coração do plano.</b> Para cada categoria defines o limite por <b>mês</b> e, se quiseres, por <b>ano</b>. O limite mensal controla o dia a dia; o anual serve para saber se, mesmo com um mês em que gastou mais, continuas dentro do plano do ano. Vês a divisão por período no Resumo. Guia 50/30/20: ~50% necessidades, 30% desejos, 20% poupar e investir.</div>
       </div>
     </div>
   </section>
@@ -358,7 +358,7 @@
   <!-- ================= LANÇAMENTOS ================= -->
   <section class="view" id="lancamentos">
     <h2 class="view-h">Lançamentos diários</h2>
-    <p class="sub">Regista o que gastas e recebes, dia a dia. Cada movimento entra numa categoria.</p>
+    <p class="sub">Registe o que gastas e recebes, dia a dia. Cada movimento entra numa categoria.</p>
 
     <div class="card pad" style="margin-bottom:16px">
       <div class="split" style="margin-bottom:14px">
@@ -403,7 +403,7 @@
   <!-- ================= PRESTAÇÕES ================= -->
   <section class="view" id="parcelas">
     <h2 class="view-h">Compras a prestações</h2>
-    <p class="sub">Regista o total, agenda as prestações e ajusta quanto pagas em cada mês.</p>
+    <p class="sub">Registe o total, agenda as prestações e ajusta quanto pagas em cada mês.</p>
 
     <div class="grid g2" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">A pagar este mês</div><div class="val sm neg" id="pc-due">—</div></div>
@@ -412,7 +412,7 @@
 
     <div class="card pad">
       <h3 style="font-size:18px;margin-bottom:6px">Nova compra a prestações</h3>
-      <div class="field"><label>O que compraste</label><input type="text" id="pc-desc" placeholder="Ex.: Portátil, Eletrodoméstico"></div>
+      <div class="field"><label>O que comprou</label><input type="text" id="pc-desc" placeholder="Ex.: Portátil, Eletrodoméstico"></div>
       <div class="inline">
         <div class="field"><label>Valor total (€)</label><input type="number" id="pc-total" placeholder="0" min="0" step="0.01"></div>
         <div class="field"><label>Nº de prestações</label><input type="number" id="pc-n" placeholder="12" min="1" step="1"></div>
@@ -420,7 +420,7 @@
         <div class="field"><label>Categoria</label><select id="pc-cat"></select></div>
       </div>
       <button class="btn" id="pc-add">Agendar prestações</button>
-      <div class="teach"><b>Depois de agendar:</b> podes editar o valor de qualquer mês (por exemplo, adiantar uma prestação) e marcar cada uma como paga à medida que pagas.</div>
+      <div class="teach"><b>Depois de agendar:</b> pode editar o valor de qualquer mês (por exemplo, adiantar uma prestação) e marcar cada uma como paga à medida que pagas.</div>
     </div>
 
     <div class="card pad" style="margin-top:16px">
@@ -432,7 +432,7 @@
   <!-- ================= DÍVIDAS ================= -->
   <section class="view" id="dividas">
     <h2 class="view-h">Sair das dívidas</h2>
-    <p class="sub">Uma ordem clara para pagar. Escolhe o método e segue-o.</p>
+    <p class="sub">Uma ordem clara para pagar. Escolha o método e segue-o.</p>
 
     <div class="grid g2">
       <div class="card pad">
@@ -453,13 +453,13 @@
             <button data-m="aval">Avalanche</button>
           </div>
         </div>
-        <div class="field" style="margin:0"><label>Extra que consegues pôr por mês, além dos mínimos (€)</label><input type="number" id="d-extra" placeholder="0" min="0" step="0.01"></div>
+        <div class="field" style="margin:0"><label>Extra que consegue pôr por mês, além dos mínimos (€)</label><input type="number" id="d-extra" placeholder="0" min="0" step="0.01"></div>
         <div id="d-plan" style="margin-top:14px"></div>
       </div>
     </div>
 
     <div class="card pad" style="margin-top:16px">
-      <div class="split"><h3 style="font-size:18px">As tuas dívidas</h3><span class="mini" id="d-total"></span></div>
+      <div class="split"><h3 style="font-size:18px">As suas dívidas</h3><span class="mini" id="d-total"></span></div>
       <div id="d-list" style="margin-top:10px"></div>
     </div>
   </section>
@@ -480,7 +480,7 @@
         </div>
         <div class="field"><label>Guardar em (conta)</label><select id="g-acct"></select></div>
         <button class="btn" id="g-add">Criar objetivo</button>
-        <div class="teach"><b>Primeiro degrau:</b> antes de investir, garante um fundo de emergência de 3 a 6 meses das tuas despesas fixas. É o que te impede de voltar às dívidas quando a vida atrapalha.</div>
+        <div class="teach"><b>Primeiro degrau:</b> antes de investir, garanta um fundo de emergência de 3 a 6 meses das suas despesas fixas. É o que o impede de voltar às dívidas quando a vida atrapalha.</div>
       </div>
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Objetivos</h3><span class="mini" id="g-count"></span></div>
@@ -490,7 +490,7 @@
 
     <div class="card pad" style="margin-top:16px">
       <h3 style="font-size:18px;margin-bottom:6px">Mover dinheiro para um objetivo</h3>
-      <p class="mini" style="margin:0 0 12px">Regista a transferência: o dinheiro sai de uma conta e fica guardado na conta do objetivo.</p>
+      <p class="mini" style="margin:0 0 12px">Registe a transferência: o dinheiro sai de uma conta e fica guardado na conta do objetivo.</p>
       <div class="inline">
         <div class="field"><label>Objetivo</label><select id="mv-goal"></select></div>
         <div class="field"><label>O que fazer</label>
@@ -509,7 +509,7 @@
   <!-- ================= INVESTIR ================= -->
   <section class="view" id="investir">
     <h2 class="view-h">Investir com cabeça</h2>
-    <p class="sub">Acompanha o que tens e percebe onde estás no mapa.</p>
+    <p class="sub">Acompanha o que tem e percebe onde está no mapa.</p>
 
     <div class="grid g3" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">Investido</div><div class="val sm" id="i-cost">—</div></div>
@@ -527,7 +527,7 @@
         </div>
         <div class="field"><label>Dinheiro saiu de (conta)</label><select id="i-acct"></select></div>
         <button class="btn" id="i-add">Adicionar</button>
-        <div class="teach"><b>Movimento registado:</b> ao investir, o valor sai da conta que escolheres e passa a contar como investimento — o teu património não muda, só muda de forma.</div>
+        <div class="teach"><b>Movimento registado:</b> ao investir, o valor sai da conta que escolheres e passa a contar como investimento — o seu património não muda, só muda de forma.</div>
       </div>
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Carteira</h3><span class="mini" id="i-count"></span></div>
@@ -545,7 +545,7 @@
         </div>
       </div>
       <div id="i-guide"></div>
-      <div class="disc"><b>Isto é educação, não é aconselhamento financeiro.</b> Norte não conhece a tua situação completa e não recomenda produtos. Para decisões concretas, fala com um profissional certificado (CMVM).</div>
+      <div class="disc"><b>Isto é educação, não é aconselhamento financeiro.</b> Norte não conhece a sua situação completa e não recomenda produtos. Para decisões concretas, fala com um profissional certificado (CMVM).</div>
     </div>
   </section>
 
@@ -556,7 +556,7 @@
 
     <div class="grid g3" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">Património líquido</div><div class="val" id="pt-net">—</div><div class="lbl">ativos − dívidas</div></div>
-      <div class="card pad stat"><div class="eyebrow">Objetivo</div><div class="val sm" id="pt-goal">—</div><div class="lbl" id="pt-goal-lbl">define a tua meta</div></div>
+      <div class="card pad stat"><div class="eyebrow">Objetivo</div><div class="val sm" id="pt-goal">—</div><div class="lbl" id="pt-goal-lbl">define a sua meta</div></div>
       <div class="card pad stat"><div class="eyebrow">Progresso</div><div class="val sm" id="pt-prog">—</div></div>
     </div>
 
@@ -601,7 +601,7 @@
 
     <div class="card pad">
       <div class="inline">
-        <div class="field"><label>O que queres comprar</label><input type="text" id="c-what" placeholder="Ex.: Telemóvel novo"></div>
+        <div class="field"><label>O que quer comprar</label><input type="text" id="c-what" placeholder="Ex.: Telemóvel novo"></div>
         <div class="field"><label>Quanto custa (€)</label><input type="number" id="c-cost" placeholder="0" min="0" step="0.01"></div>
       </div>
       <div class="field"><label>Isto é...</label>
@@ -619,7 +619,7 @@
   <!-- ================= RESUMO ================= -->
   <section class="view" id="resumo">
     <h2 class="view-h">Resumo</h2>
-    <p class="sub">Vê o teu dinheiro por período — da semana ao ano.</p>
+    <p class="sub">Vê o seu dinheiro por período — da semana ao ano.</p>
 
     <div class="card pad" style="margin-bottom:16px">
       <div class="inline" style="align-items:flex-end">
@@ -671,8 +671,8 @@
 
   <div class="disc" id="storenote"></div>
   <div class="foot">
-    Norte · finanças pessoais com controlo e sabedoria<br>
-    Os teus dados ficam só neste dispositivo (armazenamento local do navegador). Faz <b>Exportar</b> para guardar uma cópia.
+    Nortefin · finanças pessoais com controlo e sabedoria<br>
+    Os seus dados ficam só neste dispositivo (armazenamento local do navegador). Faz <b>Exportar</b> para guardar uma cópia.
   </div>
 </div>
 
@@ -728,7 +728,7 @@ function load(){
   catch(e){return mem?{...defaults(),...mem}:defaults();}
 }
 function saveLocal(){
-  try{localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('storenote').textContent=sbUser?'Sincronizado na tua conta (nuvem).':'Guardado neste dispositivo automaticamente.';}
+  try{localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('storenote').textContent=sbUser?'Sincronizado na sua conta (nuvem).':'Guardado neste dispositivo automaticamente.';}
   catch(e){mem=JSON.parse(JSON.stringify(state));document.getElementById('storenote').textContent='Modo pré-visualização: dados guardados só nesta sessão. Publica o ficheiro para guardar em permanência.';}
 }
 function save(){ saveLocal(); renderAll(); syncPush(); }
@@ -740,12 +740,12 @@ const el=id=>document.getElementById(id);
 
 /* ---------- princípios (a camada de sabedoria) ---------- */
 const PRINCIPLES=[
-  ['Paga-te primeiro.','Separa a poupança assim que o dinheiro entra, não com o que sobra no fim do mês. O que sobra costuma ser zero.'],
-  ['A dívida cara come o futuro.','Juro alto é o teu dinheiro a trabalhar contra ti. Atacá-la é o investimento com retorno garantido.'],
-  ['Riqueza é o que não vês.','É o carro que não compraste, a viagem que adiaste. O que guardas vale mais do que o que mostras.'],
-  ['Um orçamento é liberdade, não prisão.','Saber para onde vai o dinheiro é o que te deixa dizer sim sem culpa e não sem medo.'],
-  ['O tempo é o teu maior ativo.','Começar cedo, mesmo com pouco, vence começar tarde com muito. Os juros compostos precisam de tempo.'],
-  ['Nem toda a compra é um gasto.','O que perde valor é despesa. O que te faz ganhar ou poupar depois, é investimento. Sabe distinguir.'],
+  ['Pague-se primeiro.','Separe a poupança assim que o dinheiro entra, não com o que sobra no fim do mês. O que sobra costuma ser zero.'],
+  ['A dívida cara come o futuro.','Juro alto é o seu dinheiro a trabalhar contra si. Atacá-la é o investimento com retorno garantido.'],
+  ['Riqueza é o que não se vê.','É o carro que não comprou, a viagem que adiou. O que guarda vale mais do que o que mostra.'],
+  ['Um orçamento é liberdade, não prisão.','Saber para onde vai o dinheiro é o que o deixa dizer sim sem culpa e não sem medo.'],
+  ['O tempo é o seu maior ativo.','Começar cedo, mesmo com pouco, vence começar tarde com muito. Os juros compostos precisam de tempo.'],
+  ['Nem toda a compra é um gasto.','O que perde valor é despesa. O que lhe faz ganhar ou poupar depois, é investimento. Saiba distinguir.'],
 ];
 
 /* ---------- cálculos ---------- */
@@ -776,7 +776,7 @@ function totals(){
 function renderPainel(){
   const t=totals();
   const pn=state.profile&&state.profile.name;
-  el('painel-hi').textContent=pn?('O teu norte, '+pn):'O teu norte';
+  el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
   el('s-margin').textContent=eur(t.margin);
@@ -791,7 +791,7 @@ function renderPainel(){
   // alertas de limite do mês, no topo
   const al=monthAlerts(new Date().toISOString().slice(0,7));
   el('p-alert').innerHTML=al.length
-    ? '<div class="teach" style="margin-bottom:16px;border-color:var(--clay);background:var(--clay-bg)"><b>Atenção aos limites este mês:</b> '+al.map(a=>esc(a.c)+' ('+a.p+'%)').join(' · ')+'. Vê os Lançamentos.</div>'
+    ? '<div class="teach" style="margin-bottom:16px;border-color:var(--clay);background:var(--clay-bg)"><b>Atenção aos limites este mês:</b> '+al.map(a=>esc(a.c)+' ('+a.p+'%)').join(' · ')+'. Veja os Lançamentos.</div>'
     : '';
   const pdue=parcelasDue();
   el('p-parcelas').innerHTML=pdue>0?'<div class="teach" style="margin-bottom:16px"><b>Prestações a pagar este mês:</b> '+eur(pdue)+'. Já é um compromisso assumido — conta antes de gastares o resto.</div>':'';
@@ -799,17 +799,17 @@ function renderPainel(){
   // próximo passo — a lógica que "opera"
   let step='';
   const hiDebt=[...state.debts].sort((a,b)=>b.apr-a.apr)[0];
-  if(t.income===0){step=stepCard('Começa pelo orçamento','Regista quanto entra por mês e define um limite para cada categoria. É a base de tudo o resto.','orcamento','Ir para Orçamento');}
-  else if(t.plannedExp===0){step=stepCard('Define os limites por categoria','Já sabes o que entra. Agora diz quanto queres gastar em cada categoria — é isso que dá controlo ao dia a dia.','orcamento','Definir orçamento');}
-  else if(hiDebt && hiDebt.apr>=12){step=stepCard('Ataca a dívida cara','A tua '+hiDebt.name+' tem '+hiDebt.apr+'% de juro. Nenhum investimento te dá esse retorno garantido — pagá-la é a jogada.','dividas','Ver plano de dívidas');}
-  else if(t.efMonths<3){step=stepCard('Constrói o fundo de emergência','Tens '+t.efMonths.toFixed(1)+' meses cobertos. O alvo é 3 a 6. É o que te protege de voltar às dívidas.','poupanca','Reforçar poupança');}
-  else if(t.margin>0){step=stepCard('Põe a margem a trabalhar','A tua margem planeada é '+eur(t.margin)+'/mês e já tens rede. Está na hora de investir com regularidade.','investir','Ver carteira');}
+  if(t.income===0){step=stepCard('Começa pelo orçamento','Registe quanto entra por mês e define um limite para cada categoria. É a base de tudo o resto.','orcamento','Ir para Orçamento');}
+  else if(t.plannedExp===0){step=stepCard('Define os limites por categoria','Já sabes o que entra. Agora diz quanto quer gastar em cada categoria — é isso que dá controlo ao dia a dia.','orcamento','Definir orçamento');}
+  else if(hiDebt && hiDebt.apr>=12){step=stepCard('Ataca a dívida cara','A sua '+hiDebt.name+' tem '+hiDebt.apr+'% de juro. Nenhum investimento lhe dá esse retorno garantido — pagá-la é a jogada.','dividas','Ver plano de dívidas');}
+  else if(t.efMonths<3){step=stepCard('Constrói o fundo de emergência','Tens '+t.efMonths.toFixed(1)+' meses cobertos. O alvo é 3 a 6. É o que o protege de voltar às dívidas.','poupanca','Reforçar poupança');}
+  else if(t.margin>0){step=stepCard('Põe a margem a trabalhar','A sua margem planeada é '+eur(t.margin)+'/mês e já tem rede. Está na hora de investir com regularidade.','investir','Ver carteira');}
   else{step=stepCard('Reequilibra o orçamento','A margem planeada está negativa. Corta limites ou aumenta entradas até sobrar algo.','orcamento','Rever orçamento');}
   el('nextstep').innerHTML=step;
 
   // objetivos mini
   el('goalcount').textContent=state.goals.length?state.goals.length+' ativos':'';
-  if(!state.goals.length){el('goalmini').innerHTML='<div class="empty">Ainda sem objetivos. Dá um nome ao que queres alcançar.</div>';}
+  if(!state.goals.length){el('goalmini').innerHTML='<div class="empty">Ainda sem objetivos. Dá um nome ao que quer alcançar.</div>';}
   else{
     el('goalmini').innerHTML=state.goals.slice(0,3).map(g=>{
       const pct=g.target>0?Math.min(100,g.have/g.target*100):0;
@@ -831,7 +831,7 @@ function renderOrc(){
   const inc=state.budget.filter(b=>b.type==='in');
   el('o-list').innerHTML=inc.length
     ? inc.map(b=>'<div class="row"><span class="pill g">Entrada</span><div class="grow"><div class="name">'+esc(b.desc)+'</div></div><span class="amt pos">+'+eur(b.val)+'</span><button class="del" onclick="rm(\'budget\',\''+b.id+'\')">×</button></div>').join('')
-    : '<div class="empty">Regista as tuas entradas: ordenado, negócio, rendimentos.</div>';
+    : '<div class="empty">Registe as suas entradas: ordenado, negócio, rendimentos.</div>';
   renderBudgetCats();
 }
 function renderBudgetCats(){
@@ -871,7 +871,7 @@ function renderTx(){
   // aviso no topo: categorias perto (>=80%) ou acima do limite
   const alerts=monthAlerts(ym);
   el('t-alert').innerHTML=alerts.length
-    ? '<div class="teach" style="margin-top:14px;border-color:var(--clay);background:var(--clay-bg)">'+alerts.map(a=>'<div style="margin:2px 0"><b>'+esc(a.c)+'</b> — '+(a.over?'passaste o limite ('+a.p+'%). Não devias gastar mais aqui este mês.':'já usaste '+a.p+'% do limite. Atenção.')+'</div>').join('')+'</div>'
+    ? '<div class="teach" style="margin-top:14px;border-color:var(--clay);background:var(--clay-bg)">'+alerts.map(a=>'<div style="margin:2px 0"><b>'+esc(a.c)+'</b> — '+(a.over?'passou o limite ('+a.p+'%). Não devia gastar mais aqui este mês.':'já usou '+a.p+'% do limite. Atenção.')+'</div>').join('')+'</div>'
     : '';
 
   // barras por categoria (limite quando definido)
@@ -886,8 +886,8 @@ function renderTx(){
         const r=spent/limit; barPct=Math.min(100,r*100);
         color=r>1?'var(--clay)':(r>=0.8?'var(--brass)':'var(--green)');
         note=r>1
-          ? '<span class="neg">Passaste '+eur(spent-limit)+' do limite de '+eur(limit)+'</span>'
-          : 'usaste '+Math.round(r*100)+'% · faltam '+eur(limit-spent)+' de '+eur(limit);
+          ? '<span class="neg">Passou '+eur(spent-limit)+' do limite de '+eur(limit)+'</span>'
+          : 'usou '+Math.round(r*100)+'% · faltam '+eur(limit-spent)+' de '+eur(limit);
       }else{
         barPct=outSum>0?spent/outSum*100:0; color='var(--brass)';
         note='sem limite · '+Math.round(barPct)+'% dos gastos';
@@ -897,7 +897,7 @@ function renderTx(){
   }
 
   // diário agrupado por dia
-  if(!rows.length){el('t-list').innerHTML='<div class="empty">Ainda sem lançamentos neste mês. Regista o primeiro à esquerda.</div>';return;}
+  if(!rows.length){el('t-list').innerHTML='<div class="empty">Ainda sem lançamentos neste mês. Registe o primeiro à esquerda.</div>';return;}
   let html='',lastDay='';
   rows.forEach(t=>{
     if(t.date!==lastDay){lastDay=t.date;html+='<div class="mini" style="margin:16px 0 2px;font-weight:700;letter-spacing:.03em;color:var(--brass-dk)">'+fmtDay(t.date)+'</div>';}
@@ -924,7 +924,7 @@ function renderParcelas(){
   el('pc-due').textContent=eur(parcelasDue());
   el('pc-left').textContent=eur(state.parcelas.reduce((a,p)=>a+planStats(p).left,0));
   el('pc-count').textContent=state.parcelas.length?state.parcelas.length+' compras':'';
-  if(!state.parcelas.length){el('pc-list').innerHTML='<div class="empty">Sem compras a prestações. Regista uma para agendar os pagamentos.</div>';return;}
+  if(!state.parcelas.length){el('pc-list').innerHTML='<div class="empty">Sem compras a prestações. Registe uma para agendar os pagamentos.</div>';return;}
   const cym=new Date().toISOString().slice(0,7);
   el('pc-list').innerHTML=state.parcelas.map(p=>{
     const st=planStats(p), months=Object.keys(p.sched).sort();
@@ -937,7 +937,7 @@ function renderParcelas(){
     }).join('');
     return '<div style="padding:16px 0;border-top:1px solid var(--line)"><div class="split"><span class="name">'+esc(p.desc)+' <span class="mini">· '+esc(p.cat||'Compras')+'</span></span><button class="del" onclick="delParcela(\''+p.id+'\')">×</button></div>'
       +'<div class="split" style="margin-top:2px"><span class="mini money">Total '+eur(p.total)+' · em falta '+eur(st.left)+'</span><span class="mini">'+st.rem+' por pagar</span></div>'
-      +(mismatch?'<div class="mini" style="color:var(--clay);margin-top:4px">O agendado ('+eur(st.sched)+') difere do total. Ajusta os meses para bater certo.</div>':'')
+      +(mismatch?'<div class="mini" style="color:var(--clay);margin-top:4px">O agendado ('+eur(st.sched)+') difere do total. Ajuste os meses para bater certo.</div>':'')
       +'<div style="margin-top:10px">'+rows+'</div></div>';
   }).join('');
 }
@@ -1010,7 +1010,7 @@ function renderResumo(){
       if(yl>0){
         const lim=yl/div, r=lim>0?v/lim:0, pct=Math.min(100,r*100);
         const col=r>1?'var(--clay)':(r>=0.8?'var(--brass)':'var(--green)');
-        const note=r>1?'<span class="neg">Passaste '+eur(v-lim)+' do limite ('+eur(lim)+')</span>':'usaste '+Math.round(r*100)+'% do limite · faltam '+eur(lim-v)+' de '+eur(lim);
+        const note=r>1?'<span class="neg">Passou '+eur(v-lim)+' do limite ('+eur(lim)+')</span>':'usou '+Math.round(r*100)+'% do limite · faltam '+eur(lim-v)+' de '+eur(lim);
         return '<div style="margin-bottom:12px"><div class="split"><span class="name" style="font-size:14px">'+esc(c)+'</span><span class="amt neg">'+eur(v)+'</span></div><div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div><div class="mini" style="margin-top:3px">'+note+'</div></div>';
       }
       const pct=outSum>0?v/outSum*100:0;
@@ -1024,7 +1024,7 @@ function renderResumo(){
     const tone=rate>=20?'var(--green)':(rate>=0?'var(--brass-dk)':'var(--clay)');
     el('r-note').innerHTML='<div class="teach" style="border-color:'+tone+'"><b>Taxa de poupança:</b> guardaste '+rate+'% do que entrou. '+(rate>=20?'Acima dos 20% — excelente ritmo.':(rate>=0?'Positivo, mas há margem para subir rumo aos 20%.':'Gastaste mais do que entrou neste período.'))+'</div>';
   }else{
-    el('r-note').innerHTML='<div class="mini">Regista entradas e saídas nos Lançamentos para veres a tua taxa de poupança.</div>';
+    el('r-note').innerHTML='<div class="mini">Registe entradas e saídas nos Lançamentos para veres a sua taxa de poupança.</div>';
   }
 
   // diário do período (agrupado por dia)
@@ -1055,7 +1055,7 @@ function renderCarteira(){
   el('w-count').textContent=state.accounts.length?state.accounts.length+' contas':'';
   el('w-list').innerHTML=state.accounts.length
     ? state.accounts.map(a=>{const b=acctBalance(a);return '<div class="row"><div class="grow"><div class="name">'+esc(a.name)+'</div><div class="meta">'+esc(a.type)+'</div></div><span class="amt '+(b>=0?'':'neg')+'">'+eur(b)+'</span><button class="del" onclick="delAccount(\''+a.id+'\')">×</button></div>';}).join('')
-    : '<div class="empty">Sem contas. Adiciona a tua conta à ordem, o mealheiro, a poupança...</div>';
+    : '<div class="empty">Sem contas. Adiciona a sua conta à ordem, o mealheiro, a poupança...</div>';
   fillAcctSelects();
 }
 function delAccount(id){
@@ -1080,7 +1080,7 @@ function renderPatrimonio(){
     el('pt-target').value=state.patGoal.target;
     el('pt-months').value=state.patGoal.months;
   }else{
-    el('pt-goal').textContent='—'; el('pt-goal-lbl').textContent='define a tua meta'; el('pt-prog').textContent='—';
+    el('pt-goal').textContent='—'; el('pt-goal-lbl').textContent='define a sua meta'; el('pt-prog').textContent='—';
   }
   const parts=[['Contas',t.accts,'var(--green)'],['Investimentos',t.invVal,'var(--brass)'],['Outros ativos',t.assets,'#a78bfa'],['Dívidas',-t.debt,'var(--clay)']];
   const gross=(t.accts+t.invVal+t.assets+t.debt)||1;
@@ -1100,7 +1100,7 @@ function renderTimeline(t){
   const nowYM=new Date().toISOString().slice(0,7), items=[];
   state.goals.forEach(g=>items.push({date:addMonths(nowYM,g.months||0),name:g.name,have:g.have,target:g.target,kind:'objetivo'}));
   if(state.patGoal&&state.patGoal.target>0)items.push({date:addMonths(nowYM,state.patGoal.months||0),name:'Meta de património',have:t.net,target:state.patGoal.target,kind:'património'});
-  if(!items.length){el('pt-timeline').innerHTML='<div class="empty">Cria objetivos na Poupança e define a meta de património para veres a tua linha do tempo.</div>';return;}
+  if(!items.length){el('pt-timeline').innerHTML='<div class="empty">Crie objetivos na Poupança e define a meta de património para veres a sua linha do tempo.</div>';return;}
   items.sort((a,b)=>a.date.localeCompare(b.date));
   el('pt-timeline').innerHTML='<div class="tl">'+items.map(it=>{
     const pct=it.target>0?Math.min(100,Math.max(0,it.have/it.target*100)):0, done=pct>=100, left=Math.max(0,it.target-it.have);
@@ -1115,7 +1115,7 @@ function renderTimeline(t){
 function renderDebt(){
   const total=state.debts.reduce((a,d)=>a+d.bal,0);
   el('d-total').textContent=state.debts.length?'Total: '+eur(total):'';
-  if(!state.debts.length){el('d-list').innerHTML='<div class="empty">Sem dívidas registadas. Se tens alguma, listá-la é o primeiro passo para a dominar.</div>';}
+  if(!state.debts.length){el('d-list').innerHTML='<div class="empty">Sem dívidas registadas. Se tem alguma, listá-la é o primeiro passo para a dominar.</div>';}
   else{
     el('d-list').innerHTML=state.debts.map(d=>
       '<div class="row"><div class="grow"><div class="name">'+esc(d.name)+'</div><div class="meta">'+d.apr+'% juro · mínimo '+eur(d.min)+'/mês</div></div><span class="amt neg">'+eur(d.bal)+'</span><button class="del" onclick="rm(\'debts\',\''+d.id+'\')">×</button></div>'
@@ -1123,7 +1123,7 @@ function renderDebt(){
   }
   el('d-extra').value=state.debtExtra||'';
   const tm=totals().margin;
-  el('d-extra').placeholder=tm>0?('sugestão: '+Math.round(tm)+' (a tua margem)'):'0';
+  el('d-extra').placeholder=tm>0?('sugestão: '+Math.round(tm)+' (a sua margem)'):'0';
   [...el('d-seg').children].forEach(b=>b.classList.toggle('on',b.dataset.m===state.debtMethod));
   renderDebtPlan();
 }
@@ -1171,7 +1171,7 @@ function renderGoals(){
   el('g-count').textContent=state.goals.length?state.goals.length+' objetivos':'';
   // seletor de objetivo no cartão de movimentar
   const mg=el('mv-goal'); if(mg){const c=mg.value;mg.innerHTML=state.goals.map(g=>'<option value="'+g.id+'">'+esc(g.name)+'</option>').join('');if(c&&state.goals.some(g=>g.id===c))mg.value=c;}
-  if(!state.goals.length){el('g-list').innerHTML='<div class="empty">Cria o teu primeiro objetivo. Sugestão: começa pelo fundo de emergência.</div>';return;}
+  if(!state.goals.length){el('g-list').innerHTML='<div class="empty">Crie o seu primeiro objetivo. Sugestão: começa pelo fundo de emergência.</div>';return;}
   el('g-list').innerHTML=state.goals.map(g=>{
     const pct=g.target>0?Math.min(100,g.have/g.target*100):0;
     const left=Math.max(0,g.target-g.have);
@@ -1194,7 +1194,7 @@ function renderInv(){
   el('i-pl').textContent=(pl>=0?'+':'')+eur(pl);
   el('i-pl').className='val sm '+(pl>=0?'pos':'neg');
   el('i-count').textContent=state.inv.length?state.inv.length+' posições':'';
-  if(!state.inv.length){el('i-list').innerHTML='<div class="empty">Sem posições. Regista aqui os teus ETF, PPR, ações ou outros ativos.</div>';}
+  if(!state.inv.length){el('i-list').innerHTML='<div class="empty">Sem posições. Registe aqui os seus ETF, PPR, ações ou outros ativos.</div>';}
   else{
     el('i-list').innerHTML=state.inv.map(i=>{
       const d=i.val-i.cost, up=d>=0;
@@ -1215,7 +1215,7 @@ let cKind='need';
 function evaluate(){
   const what=txt('c-what')||'Esta compra', cost=num('c-cost');
   const t=totals();
-  if(cost<=0){el('c-out').innerHTML='<div class="verdict wait"><h3>Falta o valor</h3><p class="mini">Diz-me quanto custa para eu correr as contas.</p></div>';return;}
+  if(cost<=0){el('c-out').innerHTML='<div class="verdict wait"><h3>Falta o valor</h3><p class="mini">Diga-me quanto custa para eu correr as contas.</p></div>';return;}
   const reasons=[]; let level; // yes / wait / no
   const hiDebt=[...state.debts].sort((a,b)=>b.apr-a.apr)[0];
   const share=t.margin>0?(cost/t.margin):Infinity;
@@ -1227,14 +1227,14 @@ function evaluate(){
     reasons.push('Tens a '+hiDebt.name+' a '+hiDebt.apr+'% de juro. Cada euro aqui devia ir para lá primeiro.');
   } else if(avail<=0){
     level='no';
-    reasons.push('A tua margem livre este mês está em '+eur(avail)+(pdue>0?' (já a contar '+eur(pdue)+' de prestações)':'')+'. Não há de onde tirar sem mexer na poupança ou criar dívida.');
+    reasons.push('A sua margem livre este mês está em '+eur(avail)+(pdue>0?' (já a contar '+eur(pdue)+' de prestações)':'')+'. Não há de onde tirar sem mexer na poupança ou criar dívida.');
   } else if(cost>avail){
     level=cKind==='need'?'wait':'no';
-    reasons.push('Custa '+eur(cost)+' e este mês tens '+eur(avail)+' livres'+(pdue>0?' depois das prestações ('+eur(pdue)+')':'')+'. Não cabe de uma vez.');
-    reasons.push('Poupando a margem livre toda, terias o valor em ~'+Math.ceil(cost/Math.max(avail,1))+' meses.');
+    reasons.push('Custa '+eur(cost)+' e este mês tem '+eur(avail)+' livres'+(pdue>0?' depois das prestações ('+eur(pdue)+')':'')+'. Não cabe de uma vez.');
+    reasons.push('Poupando a margem livre toda, teria o valor em ~'+Math.ceil(cost/Math.max(avail,1))+' meses.');
   } else if(t.efMonths<3 && cKind==='want'){
     level='wait';
-    reasons.push('Cabe na margem, mas o teu fundo de emergência ainda vai em '+t.efMonths.toFixed(1)+' meses (alvo: 3). Um desejo pode esperar por isso.');
+    reasons.push('Cabe na margem, mas o seu fundo de emergência ainda vai em '+t.efMonths.toFixed(1)+' meses (alvo: 3). Um desejo pode esperar por isso.');
   } else {
     level='yes';
     reasons.push('Cabe na margem: fica com '+eur(avail-cost)+' livres este mês'+(pdue>0?' (já descontadas as prestações)':'')+'.');
@@ -1248,14 +1248,14 @@ function evaluate(){
     if(g) reasons.push('Este valor equivale a '+Math.round(cost/Math.max(g.target-g.have,1)*100)+'% do que falta para o objetivo "'+esc(g.name)+'".');
   }
 
-  // contexto real: quanto já gastaste do orçamento este mês
+  // contexto real: quanto já gastou do orçamento este mês
   if(t.plannedExp>0){
     const used=Math.round(t.realOut/t.plannedExp*100);
-    if(used>=80) reasons.push('Já vais em '+used+'% do teu orçamento do mês — o mês já está apertado.');
+    if(used>=80) reasons.push('Já vais em '+used+'% do seu orçamento do mês — o mês já está apertado.');
   }
 
-  const head={yes:['yes','Sim — podes avançar'],wait:['wait','Espera um pouco'],no:['no','Melhor não, por agora']}[level];
-  const princ={yes:'Cabe no plano e não trava nada mais importante.',wait:'Não é não — é ainda não. Dá tempo ao teu dinheiro.',no:'Este euro tem um trabalho mais urgente. Isto é escolher, não abdicar.'}[level];
+  const head={yes:['yes','Sim — pode avançar'],wait:['wait','Espera um pouco'],no:['no','Melhor não, por agora']}[level];
+  const princ={yes:'Cabe no plano e não trava nada mais importante.',wait:'Não é não — é ainda não. Dá tempo ao seu dinheiro.',no:'Este euro tem um trabalho mais urgente. Isto é escolher, não abdicar.'}[level];
   el('c-out').innerHTML='<div class="verdict '+head[0]+'"><div class="eyebrow">'+esc(what)+' · '+eur(cost)+'</div><h3>'+head[1]+'</h3><p style="margin:0;font-size:14px">'+princ+'</p><ul>'+reasons.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>';
 }
 
@@ -1267,15 +1267,15 @@ function todayISO(){return new Date().toISOString().slice(0,10);}
 function selGoal(id){el('mv-goal').value=id;const c=el('mv-goal').closest('.card');if(c&&c.scrollIntoView)c.scrollIntoView({behavior:'smooth',block:'center'});el('mv-val').focus();}
 function moveGoal(){
   const g=state.goals.find(x=>x.id===el('mv-goal').value), amount=num('mv-val'), other=el('mv-acct').value;
-  if(!g){el('mv-msg').textContent='Cria um objetivo primeiro.';return;}
+  if(!g){el('mv-msg').textContent='Crie um objetivo primeiro.';return;}
   if(amount<=0){el('mv-val').focus();return;}
-  if(!g.acct){el('mv-msg').innerHTML='<span class="neg">Este objetivo não tem conta associada. Recria-o a escolher onde guardar.</span>';return;}
-  if(!other){el('mv-msg').innerHTML='<span class="neg">Escolhe a conta de '+(mvDir==='add'?'origem':'destino')+'.</span>';return;}
+  if(!g.acct){el('mv-msg').innerHTML='<span class="neg">Este objetivo não tem conta associada. Recrie-o a escolher onde guardar.</span>';return;}
+  if(!other){el('mv-msg').innerHTML='<span class="neg">Escolha a conta de '+(mvDir==='add'?'origem':'destino')+'.</span>';return;}
   if(mvDir==='add'){
     state.transfers.push({id:uid(),date:todayISO(),from:other,to:g.acct,amount,kind:'goal',refId:g.id});
     g.have+=amount;
   }else{
-    if(amount>g.have){el('mv-msg').innerHTML='<span class="neg">Não podes retirar mais do que o objetivo tem ('+eur(g.have)+').</span>';return;}
+    if(amount>g.have){el('mv-msg').innerHTML='<span class="neg">Não pode retirar mais do que o objetivo tem ('+eur(g.have)+').</span>';return;}
     state.transfers.push({id:uid(),date:todayISO(),from:g.acct,to:other,amount,kind:'goal',refId:g.id});
     g.have-=amount;
   }
@@ -1323,7 +1323,7 @@ el('exportBtn').onclick=()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='norte-financas-'+new Date().toISOString().slice(0,10)+'.json';a.click();
 };
-el('resetBtn').onclick=()=>{if(confirm('Isto apaga todos os teus dados neste dispositivo. Continuar?')){state=defaults();save();}};
+el('resetBtn').onclick=()=>{if(confirm('Isto apaga todos os seus dados neste dispositivo. Continuar?')){state=defaults();save();}};
 
 /* ---------- lançamentos: eventos ---------- */
 el('t-type').addEventListener('change',fillCats);
@@ -1400,7 +1400,7 @@ function mkClient(){
 async function sbInit(){
   const dg=el('auth-diag');
   if(!sbReady()){
-    if(dg) dg.innerHTML=(!window.supabase)?'<span class="neg">⚠ A base de dados não carregou (cliente Supabase não abriu). Verifica a internet/recarrega.</span>':'<span class="neg">⚠ Base de dados não configurada.</span>';
+    if(dg) dg.innerHTML=(!window.supabase)?'<span class="neg">⚠ A base de dados não carregou (cliente Supabase não abriu). Verifique a internet/recarrega.</span>':'<span class="neg">⚠ Base de dados não configurada.</span>';
     updateAuthUI();return;
   }
   try{
@@ -1434,21 +1434,21 @@ async function pushRemote(){
 }
 function syncPush(){ if(!sbUser)return; clearTimeout(pushTimer); pushTimer=setTimeout(pushRemote,800); }
 let regMode=true, pendingProfile=null;
-function milTitle(){return 'Rumo ao teu primeiro milhão';}
+function milTitle(){return 'Rumo ao seu primeiro milhão';}
 function cachedProfile(){try{return JSON.parse(localStorage.getItem('norte_profile')||'null');}catch(e){return null;}}
 function cacheProfile(){try{localStorage.setItem('norte_profile',JSON.stringify(state.profile||{}));}catch(e){}}
 function amsg(t){el('auth-msg').innerHTML='<span class="neg">'+t+'</span>';}
 function renderGate(){
   if(regMode){
     el('auth-reg-fields').style.display='';
-    el('auth-hi').textContent='Criar a tua conta';
+    el('auth-hi').textContent='Criar a sua conta';
     el('auth-sub').textContent='Nome, email e uma senha (mín. 6 caracteres).';
     el('auth-send').textContent='Criar conta e entrar';
     el('auth-forgot').style.display='none';
   }else{
     el('auth-reg-fields').style.display='none';
     el('auth-hi').textContent='Entrar';
-    el('auth-sub').textContent='Escreve o teu email e a tua senha.';
+    el('auth-sub').textContent='Escreva o seu email e a sua senha.';
     el('auth-send').textContent='Entrar';
     el('auth-forgot').style.display='';
   }
@@ -1458,34 +1458,34 @@ async function sbEnter(){
   el('auth-msg').innerHTML='<span style="color:var(--brass)">A processar…</span>';
   const gv=id=>{const e=el(id);return e&&e.value!=null?e.value.trim():'';};
   const email=gv('auth-email'), pass=(el('auth-pass')&&el('auth-pass').value)||'';
-  if(!email||!pass){amsg('Escreve o email e a senha.');return;}
-  if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifica a internet e recarrega a página.');return;}
-  if(!sb){ if(sbReady()){mkClient();} else {amsg('A base de dados não está configurada. Abre "Nuvem" e liga, ou recarrega a página.');return;} }
+  if(!email||!pass){amsg('Escreva o email e a senha.');return;}
+  if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifique a internet e recarregue a página.');return;}
+  if(!sb){ if(sbReady()){mkClient();} else {amsg('A base de dados não está configurada. Abra "Nuvem" e liga, ou recarregue a página.');return;} }
   try{
     if(regMode){
       const name=gv('auth-name');
-      if(!name){amsg('Escreve o teu nome.');return;}
+      if(!name){amsg('Escreva o seu nome.');return;}
       if(pass.length<6){amsg('A senha precisa de pelo menos 6 caracteres.');return;}
       pendingProfile={name};
       el('auth-msg').textContent='A criar conta...';
       const {data,error}=await sb.auth.signUp({email,password:pass});
-      if(error){ amsg(/registered|exists/i.test(error.message)?'Este email já tem conta. Escolhe "Entrar".':error.message); pendingProfile=null; return; }
-      if(!(data&&data.session)){ el('auth-msg').textContent='Conta criada! Confirma no email e volta para entrar.'; }
+      if(error){ amsg(/registered|exists/i.test(error.message)?'Este email já tem conta. Escolha "Entrar".':error.message); pendingProfile=null; return; }
+      if(!(data&&data.session)){ el('auth-msg').textContent='Conta criada! Confirme no email e volta para entrar.'; }
     }else{
       pendingProfile=null;
       el('auth-msg').textContent='A entrar...';
       const {error}=await sb.auth.signInWithPassword({email,password:pass});
       if(error){
-        if(/not confirmed|confirm/i.test(error.message)) amsg('Confirma o teu email primeiro (vê a caixa de entrada) — ou desliga "Confirm email" no Supabase.');
-        else amsg(/Invalid|credentials/i.test(error.message)?'Email ou senha errados. Sem conta ainda? Escolhe "Criar conta".':error.message);
+        if(/not confirmed|confirm/i.test(error.message)) amsg('Confirme o seu email primeiro (vê a caixa de entrada) — ou desliga "Confirm email" no Supabase.');
+        else amsg(/Invalid|credentials/i.test(error.message)?'Email ou senha errados. Sem conta ainda? Escolha "Criar conta".':error.message);
       }
     }
-  }catch(err){ amsg('Erro de ligação: '+(err&&err.message?err.message:err)+'. Verifica a internet e recarrega.'); }
+  }catch(err){ amsg('Erro de ligação: '+(err&&err.message?err.message:err)+'. Verifique a internet e recarregue.'); }
 }
 async function sbForgot(){
   const email=el('auth-email').value.trim();
-  if(!email){amsg('Escreve o teu email primeiro.');return;}
-  if(!sb){ if(window.supabase&&sbReady()){mkClient();} else {amsg('Base de dados não pronta. Recarrega a página.');return;} }
+  if(!email){amsg('Escreva o seu email primeiro.');return;}
+  if(!sb){ if(window.supabase&&sbReady()){mkClient();} else {amsg('Base de dados não pronta. Recarregue a página.');return;} }
   el('auth-msg').textContent='A enviar...';
   try{
     const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('#')[0]});
@@ -1525,7 +1525,6 @@ function openDb(){
   el('db-status').textContent=sbReady()?(sbUser?('Ligado como '+sbUser.email+'.'):'Ligado à nuvem — falta entrar (login).'):'Não ligado — a guardar só neste dispositivo.';
   el('db-modal').style.display='flex';
 }
-el('dbBtn').onclick=openDb;
 el('db-close').onclick=()=>el('db-modal').style.display='none';
 el('db-save').onclick=()=>{
   const url=el('db-url').value.trim(), key=el('db-key').value.trim();
