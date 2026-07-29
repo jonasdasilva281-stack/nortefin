@@ -206,7 +206,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o teu caminho — organizar, decidir com cabeça e construir o teu património até milionário.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v4</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Norte · v6</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -226,6 +226,7 @@
       <button class="btn ghost" id="auth-back" style="padding:6px 12px;font-size:13px;margin-bottom:14px">‹ Voltar</button>
       <h3 id="auth-hi" style="font-size:22px;margin-bottom:4px">Bem-vindo 👋</h3>
       <p id="auth-sub" class="mini" style="margin:0 0 16px">Vamos criar a tua conta.</p>
+      <div id="auth-diag" class="mini" style="margin:0 0 14px;padding:8px 11px;border:1px solid var(--line);border-radius:9px">A ligar à base de dados…</div>
       <div id="auth-reg-fields">
         <div class="field"><label>Como te chamas?</label><input type="text" id="auth-name" placeholder="O teu nome" autocomplete="off"></div>
       </div>
@@ -697,6 +698,9 @@
 ------------------------------------------------------------- */
 let SUPABASE = { url:'https://ldnryprfzigtjnwwedjf.supabase.co', anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnJ5cHJmemlndGpud3dlZGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMjM0NjcsImV4cCI6MjEwMDg5OTQ2N30.vaUtd-mCuQFb5CbUVWEBz7qnr3zxHrN837sHpIYMDBA' }; // preenche aqui OU no ecrã "Nuvem" dentro da app
 try{const _s=JSON.parse(localStorage.getItem('norte_supabase')||'null');if(_s&&_s.url&&_s.anonKey)SUPABASE=_s;}catch(e){}
+(function(){function bar(t){try{var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#7f1d1d;color:#fff;font:12px/1.4 monospace;padding:9px 12px;white-space:pre-wrap';d.textContent=t;(document.body||document.documentElement).prepend(d);}catch(_){}}
+window.addEventListener('error',function(e){bar('ERRO: '+(e.message||(e.error&&e.error.message)||e.error)+(e.lineno?(' (linha '+e.lineno+')'):''));},true);
+window.addEventListener('unhandledrejection',function(e){bar('ERRO async: '+((e.reason&&e.reason.message)||e.reason));});})();
 
 /* ---------- estado + persistência ---------- */
 const KEY='norte_v1';
@@ -1394,10 +1398,17 @@ function mkClient(){
   return sb;
 }
 async function sbInit(){
-  if(!sbReady()){updateAuthUI();return;}
-  mkClient();
-  const {data}=await sb.auth.getSession();
-  handleSession(data?data.session:null);
+  const dg=el('auth-diag');
+  if(!sbReady()){
+    if(dg) dg.innerHTML=(!window.supabase)?'<span class="neg">⚠ A base de dados não carregou (cliente Supabase não abriu). Verifica a internet/recarrega.</span>':'<span class="neg">⚠ Base de dados não configurada.</span>';
+    updateAuthUI();return;
+  }
+  try{
+    mkClient();
+    if(dg) dg.innerHTML='<span style="color:var(--green)">Base de dados ligada ✓</span>';
+    const {data}=await sb.auth.getSession();
+    handleSession(data?data.session:null);
+  }catch(err){ if(dg) dg.innerHTML='<span class="neg">⚠ Erro ao ligar: '+(err&&err.message?err.message:err)+'</span>'; }
 }
 async function handleSession(session){
   sbUser=session&&session.user?session.user:null;
@@ -1444,6 +1455,7 @@ function renderGate(){
   el('auth-msg').textContent='';
 }
 async function sbEnter(){
+  el('auth-msg').innerHTML='<span style="color:var(--brass)">A processar… (recebi o teu toque)</span>';
   const email=el('auth-email').value.trim(), pass=el('auth-pass').value;
   if(!email||!pass){amsg('Escreve o email e a senha.');return;}
   if(!window.supabase){amsg('Não foi possível carregar a base de dados (o cliente do Supabase não abriu). Verifica a internet e recarrega a página.');return;}
