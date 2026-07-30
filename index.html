@@ -160,6 +160,11 @@
   .tlitem.done:before{background:var(--green)}
   .tldate{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brass)}
   .chip{display:inline-block;font-size:12px;font-weight:600;color:var(--ink-soft);background:#26262e;padding:3px 10px;border-radius:99px}
+  .pc-cta{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;cursor:pointer;
+    margin:0 0 16px;padding:16px 20px;border-radius:var(--r);text-align:left;
+    background:linear-gradient(120deg,rgba(240,189,81,.14),rgba(240,119,79,.10));border:1px solid rgba(240,189,81,.35);
+    box-shadow:0 6px 22px rgba(0,0,0,.25);transition:.15s}
+  .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
 
   /* navegação inferior (mobile) */
   .bottomnav{display:none}
@@ -206,7 +211,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v10</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v15</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -261,8 +266,7 @@
     <button data-v="parcelas">Prestações</button>
     <button data-v="comprar">Posso comprar?</button>
     <button data-v="dividas">Dívidas</button>
-    <button data-v="poupanca">Poupança</button>
-    <button data-v="investir">Investir</button>
+    <button data-v="poupanca">Poupança &amp; Investir</button>
     <button data-v="patrimonio">Património</button>
     <button data-v="resumo">Resumo</button>
   </nav>
@@ -281,6 +285,19 @@
 
     <div id="p-alert"></div>
     <div id="p-parcelas"></div>
+
+    <div class="card pad" style="margin-bottom:16px">
+      <div class="split" style="margin-bottom:6px"><h3 style="font-size:18px">Evolução</h3><span class="mini">saldo dos últimos meses</span></div>
+      <div id="p-chart"></div>
+    </div>
+
+    <button class="pc-cta" onclick="go('comprar')">
+      <div style="text-align:left">
+        <div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--brass)">Posso comprar isto?</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:2px">Antes de gastar, pergunte à app.</div>
+      </div>
+      <div style="font-size:26px;color:var(--brass)">→</div>
+    </button>
 
     <div class="principle" style="margin-bottom:16px">
       <div class="q">&ldquo;</div>
@@ -350,6 +367,10 @@
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Orçamento por categoria</h3><span class="mini">€/mês · 0 = sem limite</span></div>
         <div class="limgrid" id="o-limits" style="margin-top:14px"></div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <input type="text" id="cat-new" placeholder="Nova categoria (ex.: Lazer, Filhos)" style="flex:1">
+          <button class="btn ghost" id="cat-add" style="white-space:nowrap">+ Categoria</button>
+        </div>
         <div class="teach"><b>Este é o coração do plano.</b> Para cada categoria defines o limite por <b>mês</b> e, se quiseres, por <b>ano</b>. O limite mensal controla o dia a dia; o anual serve para saber se, mesmo com um mês em que gastou mais, continuas dentro do plano do ano. Vês a divisão por período no Resumo. Guia 50/30/20: ~50% necessidades, 30% desejos, 20% poupar e investir.</div>
       </div>
     </div>
@@ -387,6 +408,7 @@
         </div>
         <div class="field"><label>Conta</label><select id="t-acct"></select></div>
         <button class="btn" id="t-add">Registar</button>
+        <button class="btn ghost" id="t-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
       </div>
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Por categoria</h3><span class="mini">gastos do mês</span></div>
@@ -397,6 +419,23 @@
     <div class="card pad" style="margin-top:16px">
       <div class="split"><h3 style="font-size:18px">Diário</h3><span class="mini" id="t-count"></span></div>
       <div id="t-list" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card pad" style="margin-top:16px">
+      <h3 style="font-size:18px;margin-bottom:6px">Movimentos recorrentes</h3>
+      <p class="mini" style="margin:0 0 12px">Renda, ordenado, assinaturas... lançam-se sozinhos todos os meses.</p>
+      <div class="inline">
+        <div class="field"><label>Descrição</label><input type="text" id="rc-desc" placeholder="Ex.: Renda, Ordenado, Netflix"></div>
+        <div class="field"><label>Valor (€)</label><input type="number" id="rc-val" placeholder="0" min="0" step="0.01"></div>
+      </div>
+      <div class="inline">
+        <div class="field"><label>Tipo</label><select id="rc-type"><option value="out">Saída</option><option value="in">Entrada</option></select></div>
+        <div class="field"><label>Categoria</label><select id="rc-cat"></select></div>
+        <div class="field"><label>Conta</label><select id="rc-acct"></select></div>
+        <div class="field"><label>Dia do mês</label><input type="number" id="rc-day" placeholder="1" min="1" max="28"></div>
+      </div>
+      <button class="btn" id="rc-add">Adicionar recorrente</button>
+      <div id="rc-list" style="margin-top:14px"></div>
     </div>
   </section>
 
@@ -466,8 +505,10 @@
 
   <!-- ================= POUPANÇA ================= -->
   <section class="view" id="poupanca">
-    <h2 class="view-h">Juntar dinheiro</h2>
-    <p class="sub">Objetivos com nome, número e prazo. Vago não se poupa.</p>
+    <h2 class="view-h">Poupança &amp; Investir</h2>
+    <p class="sub">Guardar para objetivos e fazer o dinheiro crescer — no mesmo sítio.</p>
+    <div class="card pad stat" style="margin-bottom:18px"><div class="eyebrow">Guardado + Investido</div><div class="val" id="pi-total">—</div><div class="lbl" id="pi-total-lbl">poupança nos objetivos + valor investido</div></div>
+    <h3 style="font-size:19px;margin:0 0 12px;color:var(--brass)">Poupança</h3>
 
     <div class="grid g2">
       <div class="card pad">
@@ -504,19 +545,13 @@
       <button class="btn brass" id="mv-do">Registar movimento</button>
       <div class="mini" id="mv-msg" style="margin-top:10px"></div>
     </div>
-  </section>
 
-  <!-- ================= INVESTIR ================= -->
-  <section class="view" id="investir">
-    <h2 class="view-h">Investir com cabeça</h2>
-    <p class="sub">Acompanha o que tem e percebe onde está no mapa.</p>
-
+    <h3 style="font-size:19px;margin:34px 0 12px;color:var(--brass)">Investimentos</h3>
     <div class="grid g3" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">Investido</div><div class="val sm" id="i-cost">—</div></div>
       <div class="card pad stat"><div class="eyebrow">Valor atual</div><div class="val sm" id="i-val">—</div></div>
       <div class="card pad stat"><div class="eyebrow">Ganho / perda</div><div class="val sm" id="i-pl">—</div></div>
     </div>
-
     <div class="grid g2">
       <div class="card pad">
         <h3 style="font-size:18px;margin-bottom:6px">Adicionar posição</h3>
@@ -527,14 +562,13 @@
         </div>
         <div class="field"><label>Dinheiro saiu de (conta)</label><select id="i-acct"></select></div>
         <button class="btn" id="i-add">Adicionar</button>
-        <div class="teach"><b>Movimento registado:</b> ao investir, o valor sai da conta que escolheres e passa a contar como investimento — o seu património não muda, só muda de forma.</div>
+        <div class="teach"><b>Movimento registado:</b> ao investir, o valor sai da conta que escolher e passa a contar como investimento — o seu património não muda, só muda de forma.</div>
       </div>
       <div class="card pad">
         <div class="split"><h3 style="font-size:18px">Carteira</h3><span class="mini" id="i-count"></span></div>
         <div id="i-list" style="margin-top:10px"></div>
       </div>
     </div>
-
     <div class="card pad" style="margin-top:16px">
       <div class="split" style="margin-bottom:10px">
         <h3 style="font-size:18px">Bússola de perfil</h3>
@@ -545,7 +579,7 @@
         </div>
       </div>
       <div id="i-guide"></div>
-      <div class="disc"><b>Isto é educação, não é aconselhamento financeiro.</b> Norte não conhece a sua situação completa e não recomenda produtos. Para decisões concretas, fala com um profissional certificado (CMVM).</div>
+      <div class="disc"><b>Isto é educação, não é aconselhamento financeiro.</b> A Nortefin não conhece a sua situação completa e não recomenda produtos. Para decisões concretas, fale com um profissional certificado (CMVM).</div>
     </div>
   </section>
 
@@ -676,6 +710,17 @@
   </div>
 </div>
 
+<div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
+  <div class="card pad" style="max-width:400px;width:100%;text-align:center">
+    <div id="onb-icon" style="font-size:42px;margin-bottom:8px"></div>
+    <h3 id="onb-title" style="font-size:22px"></h3>
+    <p id="onb-text" class="mini" style="margin:10px auto 18px;max-width:320px;font-size:14px;line-height:1.6"></p>
+    <div id="onb-dots" style="display:flex;gap:6px;justify-content:center;margin-bottom:16px"></div>
+    <button class="btn" id="onb-next" style="width:100%">Seguinte</button>
+    <button class="btn ghost" id="onb-skip" style="width:100%;margin-top:8px;font-size:13px">Saltar</button>
+  </div>
+</div>
+
 <nav class="bottomnav" id="bnav">
   <button data-v="painel" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Painel</span></button>
   <button data-v="carteira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M16 12h3.5"/></svg><span>Carteira</span></button>
@@ -705,7 +750,7 @@ window.addEventListener('unhandledrejection',function(e){bar('ERRO async: '+((e.
 /* ---------- estado + persistência ---------- */
 const KEY='norte_v1';
 let mem=null; // fallback se localStorage falhar (ex.: pré-visualização)
-const defaults=()=>({profile:{name:'',fem:false},budget:[],tx:[],limits:{},limitsY:{},parcelas:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
+const defaults=()=>({profile:{name:'',fem:false},budget:[],tx:[],limits:{},limitsY:{},customCats:[],recurring:[],parcelas:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
 let state=load();
 
 function migrate(o){
@@ -753,7 +798,7 @@ function acctBalance(a){let b=a.initial||0;state.tx.forEach(t=>{if(t.acct===a.id
 function accountsTotal(){return state.accounts.reduce((s,a)=>s+acctBalance(a),0);}
 function totals(){
   const income=state.budget.filter(b=>b.type==='in').reduce((a,b)=>a+b.val,0);   // entradas planeadas/mês
-  const plannedExp=CATS.out.reduce((a,c)=>a+(state.limits[c]||0),0);              // orçamento por categoria = despesa planeada
+  const plannedExp=outCats().reduce((a,c)=>a+(state.limits[c]||0),0);              // orçamento por categoria = despesa planeada
   const margin=income-plannedExp;                                                // margem planeada
   const ym=new Date().toISOString().slice(0,7);                                   // real do mês corrente
   const mtx=state.tx.filter(t=>t.date.slice(0,7)===ym);
@@ -773,10 +818,30 @@ function totals(){
 }
 
 /* ---------- render: PAINEL ---------- */
+function renderChart(){
+  const box=el('p-chart'); if(!box)return;
+  const now=new Date(), months=[];
+  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));}
+  const data=months.map(ym=>{const rows=state.tx.filter(t=>t.date.slice(0,7)===ym);const inS=rows.filter(t=>t.type==='in').reduce((a,b)=>a+b.val,0);const outS=rows.filter(t=>t.type==='out').reduce((a,b)=>a+b.val,0);return{ym,net:inS-outS};});
+  if(!data.some(d=>Math.abs(d.net)>0.005)){box.innerHTML='<div class="empty">Ainda sem dados. Lance movimentos e a evolução aparece aqui.</div>';return;}
+  const max=Math.max(1,...data.map(d=>Math.abs(d.net))), H=130, half=H/2-4;
+  let bars='<div style="display:flex;gap:6px;height:'+H+'px">';
+  data.forEach(d=>{const h=Math.round(Math.abs(d.net)/max*half), up=d.net>=0;
+    bars+='<div style="flex:1;display:flex;flex-direction:column;align-items:center" title="'+eur(d.net)+'">'
+      +'<div style="height:'+(H/2)+'px;width:100%;display:flex;align-items:flex-end;justify-content:center">'+(up?'<div style="width:66%;max-width:28px;height:'+h+'px;background:var(--green);border-radius:5px 5px 0 0"></div>':'')+'</div>'
+      +'<div style="height:'+(H/2)+'px;width:100%;display:flex;align-items:flex-start;justify-content:center">'+(!up?'<div style="width:66%;max-width:28px;height:'+h+'px;background:var(--clay);border-radius:0 0 5px 5px"></div>':'')+'</div>'
+      +'</div>';});
+  bars+='</div><div style="position:relative;height:1px;background:var(--line);margin-top:-'+(H/2)+'px;margin-bottom:'+(H/2)+'px"></div>';
+  let labels='<div style="display:flex;gap:6px;margin-top:8px">';
+  data.forEach(d=>{const nm=new Date(d.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'short'});labels+='<div style="flex:1;text-align:center"><div class="mini" style="text-transform:capitalize">'+nm+'</div></div>';});
+  labels+='</div>';
+  box.innerHTML=bars+labels;
+}
 function renderPainel(){
   const t=totals();
   const pn=state.profile&&state.profile.name;
   el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
+  renderChart();
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
   el('s-margin').textContent=eur(t.margin);
@@ -803,7 +868,7 @@ function renderPainel(){
   else if(t.plannedExp===0){step=stepCard('Define os limites por categoria','Já sabes o que entra. Agora diz quanto quer gastar em cada categoria — é isso que dá controlo ao dia a dia.','orcamento','Definir orçamento');}
   else if(hiDebt && hiDebt.apr>=12){step=stepCard('Ataca a dívida cara','A sua '+hiDebt.name+' tem '+hiDebt.apr+'% de juro. Nenhum investimento lhe dá esse retorno garantido — pagá-la é a jogada.','dividas','Ver plano de dívidas');}
   else if(t.efMonths<3){step=stepCard('Constrói o fundo de emergência','Tens '+t.efMonths.toFixed(1)+' meses cobertos. O alvo é 3 a 6. É o que o protege de voltar às dívidas.','poupanca','Reforçar poupança');}
-  else if(t.margin>0){step=stepCard('Põe a margem a trabalhar','A sua margem planeada é '+eur(t.margin)+'/mês e já tem rede. Está na hora de investir com regularidade.','investir','Ver carteira');}
+  else if(t.margin>0){step=stepCard('Põe a margem a trabalhar','A sua margem planeada é '+eur(t.margin)+'/mês e já tem rede. Está na hora de investir com regularidade.','poupanca','Ver Poupança & Investir');}
   else{step=stepCard('Reequilibra o orçamento','A margem planeada está negativa. Corta limites ou aumenta entradas até sobrar algo.','orcamento','Rever orçamento');}
   el('nextstep').innerHTML=step;
 
@@ -835,9 +900,11 @@ function renderOrc(){
   renderBudgetCats();
 }
 function renderBudgetCats(){
-  el('o-limits').innerHTML=CATS.out.map(c=>{
+  const custom=state.customCats||[];
+  el('o-limits').innerHTML=outCats().map(c=>{
     const m=state.limits[c]||'', y=(state.limitsY&&state.limitsY[c])||'';
-    return '<div class="limitem"><label>'+esc(c)+'</label><div style="display:flex;gap:6px"><input type="number" min="0" step="1" data-cat="'+esc(c)+'" data-k="m" value="'+m+'" placeholder="mês" title="Limite por mês" style="width:76px"><input type="number" min="0" step="1" data-cat="'+esc(c)+'" data-k="y" value="'+y+'" placeholder="ano" title="Limite por ano" style="width:76px"></div></div>';
+    const rm=custom.includes(c)?'<span class="del" data-rmcat="'+esc(c)+'" style="padding:0 6px;font-size:16px">×</span>':'';
+    return '<div class="limitem"><label>'+esc(c)+rm+'</label><div style="display:flex;gap:6px"><input type="number" min="0" step="1" data-cat="'+esc(c)+'" data-k="m" value="'+m+'" placeholder="mês" title="Limite por mês" style="width:76px"><input type="number" min="0" step="1" data-cat="'+esc(c)+'" data-k="y" value="'+y+'" placeholder="ano" title="Limite por ano" style="width:76px"></div></div>';
   }).join('');
 }
 
@@ -846,13 +913,48 @@ const CATS={
   out:['Mercado','Restaurantes','Casa & contas','Impostos','Transporte','Saúde','Educação','Lazer','Compras','Poupança / Investir','Outros'],
   in:['Ordenado','Vendas','Extra','Outros']
 };
+function outCats(){return CATS.out.concat(state.customCats||[]);}
+function addCat(){
+  const v=(el('cat-new').value||'').trim();
+  if(!v){el('cat-new').focus();return;}
+  if(outCats().some(c=>c.toLowerCase()===v.toLowerCase())){el('cat-new').value='';return;}
+  state.customCats=(state.customCats||[]).concat(v);
+  el('cat-new').value='';
+  save();
+}
+function removeCat(c){
+  state.customCats=(state.customCats||[]).filter(x=>x!==c);
+  delete state.limits[c]; if(state.limitsY)delete state.limitsY[c];
+  save();
+}
 function fillCats(){
   const t=el('t-type').value;
-  el('t-cat').innerHTML=CATS[t].map(c=>'<option>'+c+'</option>').join('');
+  el('t-cat').innerHTML=(t==='out'?outCats():CATS.in).map(c=>'<option>'+esc(c)+'</option>').join('');
 }
 function catSpend(ym){const b={};state.tx.filter(t=>t.date.slice(0,7)===ym&&t.type==='out').forEach(t=>{b[t.cat]=(b[t.cat]||0)+t.val;});return b;}
-function monthAlerts(ym){const by=catSpend(ym);return CATS.out.filter(c=>(state.limits[c]||0)>0&&(by[c]||0)>=state.limits[c]*0.8).map(c=>{const s=by[c]||0,l=state.limits[c];return{c,p:Math.round(s/l*100),over:s>l};}).sort((a,b)=>b.p-a.p);}
+function monthAlerts(ym){const by=catSpend(ym);return outCats().filter(c=>(state.limits[c]||0)>0&&(by[c]||0)>=state.limits[c]*0.8).map(c=>{const s=by[c]||0,l=state.limits[c];return{c,p:Math.round(s/l*100),over:s>l};}).sort((a,b)=>b.p-a.p);}
 function fmtDay(d){try{const s=new Date(d+'T00:00:00').toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'});return s.charAt(0).toUpperCase()+s.slice(1);}catch(e){return d;}}
+function fillRcCats(){const t=el('rc-type')?el('rc-type').value:'out';if(el('rc-cat'))el('rc-cat').innerHTML=(t==='out'?outCats():CATS.in).map(c=>'<option>'+esc(c)+'</option>').join('');}
+function postRecurring(){
+  const nowYM=new Date().toISOString().slice(0,7); let changed=false;
+  (state.recurring||[]).forEach(r=>{
+    let ym=r.lastPosted?addMonths(r.lastPosted,1):(r.start||nowYM), guard=0;
+    while(ym<=nowYM && guard<600){
+      const day=String(Math.min(28,Math.max(1,r.day||1))).padStart(2,'0');
+      state.tx.push({id:uid(),date:ym+'-'+day,desc:r.desc,val:r.val,type:r.type,cat:r.cat,acct:r.acct||null,src:'recorrente'});
+      r.lastPosted=ym; changed=true; ym=addMonths(ym,1); guard++;
+    }
+  });
+  if(changed) saveLocal();
+  return changed;
+}
+function removeRecurring(id){state.recurring=(state.recurring||[]).filter(r=>r.id!==id);save();}
+function renderRecurring(){
+  const list=state.recurring||[];
+  el('rc-list').innerHTML=list.length
+    ? list.map(r=>{const acc=state.accounts.find(a=>a.id===r.acct);return '<div class="row"><div class="grow"><div class="name">'+esc(r.desc)+'</div><div class="meta">'+esc(r.cat)+' · dia '+(r.day||1)+(acc?' · '+esc(acc.name):'')+'</div></div><span class="amt '+(r.type==='in'?'pos':'neg')+'">'+(r.type==='in'?'+':'−')+eur(r.val)+'/mês</span><button class="del" onclick="removeRecurring(\''+r.id+'\')">×</button></div>';}).join('')
+    : '<div class="empty">Sem recorrentes. Adicione a renda, o ordenado, as assinaturas.</div>';
+}
 function renderTx(){
   const ym=el('t-month').value||new Date().toISOString().slice(0,7);
   const rows=state.tx.filter(t=>t.date.slice(0,7)===ym).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
@@ -875,7 +977,7 @@ function renderTx(){
     : '';
 
   // barras por categoria (limite quando definido)
-  const cats=CATS.out.map(c=>({c,spent:byCat[c]||0,limit:state.limits[c]||0}))
+  const cats=outCats().map(c=>({c,spent:byCat[c]||0,limit:state.limits[c]||0}))
     .filter(x=>x.spent>0||x.limit>0)
     .sort((a,b)=>{const ra=a.limit>0?a.spent/a.limit:0,rb=b.limit>0?b.spent/b.limit:0;return rb-ra||b.spent-a.spent;});
   if(!cats.length){el('t-cats').innerHTML='<div class="empty">Sem gastos nem limites definidos neste mês.</div>';}
@@ -902,7 +1004,7 @@ function renderTx(){
   rows.forEach(t=>{
     if(t.date!==lastDay){lastDay=t.date;html+='<div class="mini" style="margin:16px 0 2px;font-weight:700;letter-spacing:.03em;color:var(--brass-dk)">'+fmtDay(t.date)+'</div>';}
     const isP=t.src==='parcela';
-    html+='<div class="row"><div class="grow"><div class="name">'+esc(t.desc||t.cat)+(isP?' <span class="pill b">prestação</span>':'')+'</div><div class="meta">'+esc(t.cat)+'</div></div><span class="amt '+(t.type==='in'?'pos':'neg')+'">'+(t.type==='in'?'+':'−')+eur(t.val)+'</span>'+(isP?'<span class="del" style="opacity:.35;cursor:default" title="Gerido nas Prestações">×</span>':'<button class="del" onclick="rm(\'tx\',\''+t.id+'\')">×</button>')+'</div>';
+    html+='<div class="row"><div class="grow"><div class="name">'+esc(t.desc||t.cat)+(isP?' <span class="pill b">prestação</span>':'')+'</div><div class="meta">'+esc(t.cat)+'</div></div><span class="amt '+(t.type==='in'?'pos':'neg')+'">'+(t.type==='in'?'+':'−')+eur(t.val)+'</span>'+(isP?'<span class="del" style="opacity:.35;cursor:default" title="Gerido nas Prestações">×</span>':'<button class="del" title="Editar" onclick="editTx(\''+t.id+'\')">✎</button><button class="del" onclick="rm(\'tx\',\''+t.id+'\')">×</button>')+'</div>';
   });
   el('t-list').innerHTML=html;
 }
@@ -1000,7 +1102,7 @@ function renderResumo(){
   const cats=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
   el('r-top').textContent=cats.length?cats[0][0]:'—';
   // limite total do período (do anual, dividido)
-  const totalY=CATS.out.reduce((a,c)=>a+((state.limitsY&&state.limitsY[c])||0),0);
+  const totalY=outCats().reduce((a,c)=>a+((state.limitsY&&state.limitsY[c])||0),0);
   if(totalY>0){const lim=totalY/div;el('r-lim').textContent=eur(lim);el('r-lim').className='amt '+(outSum<=lim?'pos':'neg');}
   else{el('r-lim').textContent='—';el('r-lim').className='amt';}
   if(!cats.length){el('r-cats').innerHTML='<div class="empty">Sem gastos neste período.</div>';}
@@ -1048,6 +1150,7 @@ function fillAcctSelects(){
   setSel('g-acct','— escolhe a conta —',true);
   setSel('i-acct','— sem conta —',false);
   setSel('mv-acct','— escolhe a conta —',true);
+  setSel('rc-acct','— sem conta —',true);
 }
 function renderCarteira(){
   el('w-total').textContent=eur(accountsTotal());
@@ -1189,6 +1292,8 @@ function renderGoals(){
 /* ---------- render: INVESTIR ---------- */
 function renderInv(){
   const t=totals(), pl=t.invVal-t.invCost;
+  const saved=state.goals.reduce((a,g)=>a+(g.have||0),0);
+  el('pi-total').textContent=eur(saved+t.invVal);
   el('i-cost').textContent=eur(t.invCost);
   el('i-val').textContent=eur(t.invVal);
   el('i-pl').textContent=(pl>=0?'+':'')+eur(pl);
@@ -1290,7 +1395,7 @@ function delInv(id){
 }
 function go(v){activate(v);}
 
-function renderAll(){renderPainel();renderCarteira();renderOrc();renderTx();renderParcelas();renderResumo();renderDebt();renderGoals();renderInv();renderPatrimonio();}
+function renderAll(){renderPainel();renderCarteira();renderOrc();renderTx();renderRecurring();renderParcelas();renderResumo();renderDebt();renderGoals();renderInv();renderPatrimonio();}
 
 /* ---------- eventos ---------- */
 function countUp(id,val){const e=el(id);if(!e)return;if(!isFinite(val)){return;}const dur=650,t0=performance.now();function step(t){const k=Math.min(1,(t-t0)/dur);e.textContent=eur(val*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
@@ -1335,10 +1440,43 @@ el('o-limits').addEventListener('change',e=>{
   if(v>0)state[store][c]=v; else delete state[store][c];
   save();
 });
+el('o-limits').addEventListener('click',e=>{const b=e.target.closest('[data-rmcat]');if(!b)return;removeCat(b.dataset.rmcat);});
+el('cat-add').onclick=addCat;
+el('cat-new')&&el('cat-new').addEventListener('keydown',e=>{if(e.key==='Enter')addCat();});
+
+let editTxId=null;
+function editTx(id){
+  const t=state.tx.find(x=>x.id===id); if(!t)return;
+  editTxId=id;
+  el('t-type').value=t.type; fillCats();
+  el('t-cat').value=t.cat; el('t-date').value=t.date; el('t-val').value=t.val; el('t-desc').value=t.desc||'';
+  if(el('t-acct')) el('t-acct').value=t.acct||'';
+  el('t-add').textContent='Guardar alterações';
+  el('t-cancel').style.display='';
+  activate('lancamentos');
+  setTimeout(()=>el('t-val').focus(),60);
+}
+function cancelEdit(){editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';el('t-desc').value='';el('t-val').value='';}
+el('t-cancel')&&(el('t-cancel').onclick=cancelEdit);
+el('rc-add')&&(el('rc-add').onclick=()=>{
+  const d=txt('rc-desc'), v=num('rc-val');
+  if(!d||v<=0){el('rc-desc').focus();return;}
+  const nowYM=new Date().toISOString().slice(0,7);
+  state.recurring.push({id:uid(),desc:d,val:v,type:el('rc-type').value,cat:el('rc-cat').value,acct:(el('rc-acct')&&el('rc-acct').value)||null,day:Math.min(28,Math.max(1,Math.round(num('rc-day')||1))),start:nowYM,lastPosted:null});
+  el('rc-desc').value='';el('rc-val').value='';el('rc-day').value='';
+  postRecurring(); save();
+});
+el('rc-type')&&el('rc-type').addEventListener('change',fillRcCats);
 el('t-add').onclick=()=>{
   const v=num('t-val'), date=el('t-date').value||new Date().toISOString().slice(0,10);
   if(v<=0){el('t-val').focus();return;}
-  state.tx.push({id:uid(),date,desc:txt('t-desc'),val:v,type:el('t-type').value,cat:el('t-cat').value,acct:el('t-acct').value||null});
+  if(editTxId){
+    const t=state.tx.find(x=>x.id===editTxId);
+    if(t){t.date=date;t.desc=txt('t-desc');t.val=v;t.type=el('t-type').value;t.cat=el('t-cat').value;t.acct=(el('t-acct')&&el('t-acct').value)||null;}
+    editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';
+  }else{
+    state.tx.push({id:uid(),date,desc:txt('t-desc'),val:v,type:el('t-type').value,cat:el('t-cat').value,acct:(el('t-acct')&&el('t-acct').value)||null});
+  }
   el('t-desc').value='';el('t-val').value='';el('t-month').value=date.slice(0,7);
   save();
 };
@@ -1416,9 +1554,22 @@ async function handleSession(session){
   if(sbUser){
     await pullRemote();
     if(pendingProfile){ state.profile=pendingProfile; saveLocal(); pushRemote(); pendingProfile=null; }
-    cacheProfile(); renderPainel();
+    if(postRecurring()) pushRemote();
+    cacheProfile(); renderAll(); maybeOnboard();
   }
 }
+const ONB=[
+  ['🏦','Comece pela Carteira','Diga onde está o seu dinheiro — contas à ordem, poupança e dinheiro vivo. É a base de tudo.'],
+  ['📋','Depois, o Orçamento','Registe o que entra por mês e um limite para cada categoria. É o que lhe dá controlo.'],
+  ['✍️','E lance o dia a dia','Registe gastos e recebimentos à medida que acontecem. O que se repete, ponha em recorrentes.']
+];
+let onbI=0;
+function renderOnb(){const s=ONB[onbI];el('onb-icon').textContent=s[0];el('onb-title').textContent=s[1];el('onb-text').textContent=s[2];el('onb-next').textContent=onbI===ONB.length-1?'Começar':'Seguinte';el('onb-dots').innerHTML=ONB.map((_,i)=>'<span style="width:8px;height:8px;border-radius:50%;background:'+(i===onbI?'var(--brass)':'var(--line)')+'"></span>').join('');}
+function showOnboarding(){onbI=0;renderOnb();el('onb').style.display='flex';}
+function finishOnb(){el('onb').style.display='none';if(state.profile)state.profile.onboarded=true;saveLocal();if(sbUser)pushRemote();}
+function maybeOnboard(){if(sbUser&&state.profile&&!state.profile.onboarded)showOnboarding();}
+el('onb-next')&&(el('onb-next').onclick=()=>{if(onbI<ONB.length-1){onbI++;renderOnb();}else finishOnb();});
+el('onb-skip')&&(el('onb-skip').onclick=finishOnb);
 async function pullRemote(){
   try{
     const {data,error}=await sb.from('norte_state').select('data').eq('user_id',sbUser.id).maybeSingle();
@@ -1504,8 +1655,10 @@ function updateAuthUI(){
 el('t-date').value=new Date().toISOString().slice(0,10);
 el('t-month').value=new Date().toISOString().slice(0,7);
 el('pc-start').value=new Date().toISOString().slice(0,7);
-el('pc-cat').innerHTML=CATS.out.map(c=>'<option'+(c==='Compras'?' selected':'')+'>'+c+'</option>').join('');
+el('pc-cat').innerHTML=outCats().map(c=>'<option'+(c==='Compras'?' selected':'')+'>'+esc(c)+'</option>').join('');
 fillCats();
+fillRcCats();
+postRecurring();
 renderAll();
 el('auth-send').onclick=sbEnter;
 el('auth-out').onclick=sbSignOut;
