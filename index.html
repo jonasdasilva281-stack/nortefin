@@ -211,7 +211,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v15</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v17</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -264,7 +264,6 @@
     <button data-v="carteira">Carteira</button>
     <button data-v="orcamento">Orçamento</button>
     <button data-v="parcelas">Prestações</button>
-    <button data-v="comprar">Posso comprar?</button>
     <button data-v="dividas">Dívidas</button>
     <button data-v="poupanca">Poupança &amp; Investir</button>
     <button data-v="patrimonio">Património</button>
@@ -456,6 +455,7 @@
         <div class="field"><label>Valor total (€)</label><input type="number" id="pc-total" placeholder="0" min="0" step="0.01"></div>
         <div class="field"><label>Nº de prestações</label><input type="number" id="pc-n" placeholder="12" min="1" step="1"></div>
         <div class="field"><label>1ª prestação</label><input type="month" id="pc-start"></div>
+        <div class="field"><label>Dia de pagamento</label><input type="number" id="pc-day" placeholder="8" min="1" max="28"></div>
         <div class="field"><label>Categoria</label><select id="pc-cat"></select></div>
       </div>
       <button class="btn" id="pc-add">Agendar prestações</button>
@@ -483,6 +483,7 @@
           <div class="field"><label>Mínimo/mês (€)</label><input type="number" id="d-min" placeholder="0" min="0" step="0.01"></div>
         </div>
         <button class="btn" id="d-add">Adicionar</button>
+        <button class="btn ghost" id="d-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
       </div>
       <div class="card pad">
         <div class="split" style="margin-bottom:12px">
@@ -1033,7 +1034,7 @@ function renderParcelas(){
     const mismatch=Math.abs(st.sched-p.total)>0.5;
     const rows=months.map(ym=>{
       const c=p.sched[ym], cur=ym===cym;
-      return '<div class="row" style="'+(cur?'background:rgba(240,189,81,.08);border-radius:10px;padding:12px 8px;':'')+'"><div class="grow"><div class="name" style="font-size:14px">'+fmtMonth(ym)+(cur?' <span class="pill b">este mês</span>':'')+'</div></div>'
+      return '<div class="row" style="'+(cur?'background:rgba(240,189,81,.08);border-radius:10px;padding:12px 8px;':'')+'"><div class="grow"><div class="name" style="font-size:14px">'+(p.day?('dia '+p.day+' · '):'')+fmtMonth(ym)+(cur?' <span class="pill b">este mês</span>':'')+'</div></div>'
         +'<input type="number" min="0" step="0.01" value="'+c.amt+'" data-pid="'+p.id+'" data-ym="'+ym+'" data-k="amt" style="width:112px;padding:7px 9px;text-align:right'+(c.paid?';opacity:.5':'')+'">'
         +'<label class="mini" style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" data-pid="'+p.id+'" data-ym="'+ym+'" data-k="paid" '+(c.paid?'checked':'')+'> pago</label></div>';
     }).join('');
@@ -1221,7 +1222,7 @@ function renderDebt(){
   if(!state.debts.length){el('d-list').innerHTML='<div class="empty">Sem dívidas registadas. Se tem alguma, listá-la é o primeiro passo para a dominar.</div>';}
   else{
     el('d-list').innerHTML=state.debts.map(d=>
-      '<div class="row"><div class="grow"><div class="name">'+esc(d.name)+'</div><div class="meta">'+d.apr+'% juro · mínimo '+eur(d.min)+'/mês</div></div><span class="amt neg">'+eur(d.bal)+'</span><button class="del" onclick="rm(\'debts\',\''+d.id+'\')">×</button></div>'
+      '<div class="row"><div class="grow"><div class="name">'+esc(d.name)+'</div><div class="meta">'+d.apr+'% juro · mínimo '+eur(d.min)+'/mês</div></div><span class="amt neg">'+eur(d.bal)+'</span><button class="del" title="Editar" onclick="editDebt(\''+d.id+'\')">✎</button><button class="del" onclick="rm(\'debts\',\''+d.id+'\')">×</button></div>'
     ).join('');
   }
   el('d-extra').value=state.debtExtra||'';
@@ -1412,7 +1413,17 @@ el('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-v]
 el('bnav').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(b)activate(b.dataset.v);});
 
 el('o-add').onclick=()=>{const d=txt('o-desc'),v=num('o-val');if(!d||v<=0){el('o-desc').focus();return;}state.budget.push({id:uid(),desc:d,val:v,type:'in'});el('o-desc').value='';el('o-val').value='';save();};
-el('d-add').onclick=()=>{const n=txt('d-name'),b=num('d-bal');if(!n||b<=0){el('d-name').focus();return;}state.debts.push({id:uid(),name:n,bal:b,apr:num('d-apr'),min:num('d-min')});['d-name','d-bal','d-apr','d-min'].forEach(i=>el(i).value='');save();};
+let editDebtId=null;
+function editDebt(id){const dd=state.debts.find(x=>x.id===id);if(!dd)return;editDebtId=id;el('d-name').value=dd.name;el('d-bal').value=dd.bal;el('d-apr').value=dd.apr||'';el('d-min').value=dd.min||'';el('d-add').textContent='Guardar alterações';el('d-cancel').style.display='';activate('dividas');setTimeout(()=>el('d-name').focus(),60);}
+function cancelDebtEdit(){editDebtId=null;el('d-add').textContent='Adicionar';el('d-cancel').style.display='none';['d-name','d-bal','d-apr','d-min'].forEach(i=>el(i).value='');}
+el('d-cancel')&&(el('d-cancel').onclick=cancelDebtEdit);
+el('d-add').onclick=()=>{
+  const n=txt('d-name'),b=num('d-bal');
+  if(!n||b<=0){el('d-name').focus();return;}
+  if(editDebtId){const dd=state.debts.find(x=>x.id===editDebtId);if(dd){dd.name=n;dd.bal=b;dd.apr=num('d-apr');dd.min=num('d-min');}editDebtId=null;el('d-add').textContent='Adicionar';el('d-cancel').style.display='none';}
+  else{state.debts.push({id:uid(),name:n,bal:b,apr:num('d-apr'),min:num('d-min')});}
+  ['d-name','d-bal','d-apr','d-min'].forEach(i=>el(i).value='');save();
+};
 el('g-add').onclick=()=>{const n=txt('g-name'),tg=num('g-target');if(!n||tg<=0){el('g-name').focus();return;}state.goals.push({id:uid(),name:n,target:tg,have:num('g-have'),months:Math.max(1,Math.round(num('g-months')||12)),acct:el('g-acct').value||(state.accounts[0]?state.accounts[0].id:'')});['g-name','g-target','g-have','g-months'].forEach(i=>el(i).value='');save();};
 el('i-add').onclick=()=>{const n=txt('i-name'),c=num('i-cost-in');if(!n||c<=0){el('i-name').focus();return;}const id=uid();state.inv.push({id,name:n,cost:c,val:num('i-val-in')||c});const from=el('i-acct').value;if(from)state.transfers.push({id:uid(),date:todayISO(),from,to:null,amount:c,kind:'inv',refId:id});['i-name','i-cost-in','i-val-in'].forEach(i=>el(i).value='');save();};
 
@@ -1486,8 +1497,8 @@ el('pc-add').onclick=()=>{
   const d=txt('pc-desc'), total=num('pc-total'), n=Math.max(1,Math.round(num('pc-n')||1));
   const start=el('pc-start').value||new Date().toISOString().slice(0,7);
   if(!d||total<=0){el('pc-desc').focus();return;}
-  state.parcelas.push({id:uid(),desc:d,total,n,start,cat:el('pc-cat').value,sched:genSched(total,n,start)});
-  el('pc-desc').value='';el('pc-total').value='';el('pc-n').value='';
+  state.parcelas.push({id:uid(),desc:d,total,n,start,day:Math.min(28,Math.max(1,Math.round(num('pc-day')||1))),cat:el('pc-cat').value,sched:genSched(total,n,start)});
+  el('pc-desc').value='';el('pc-total').value='';el('pc-n').value='';el('pc-day').value='';
   save();
 };
 el('pc-list').addEventListener('change',e=>{
@@ -1502,7 +1513,8 @@ el('pc-list').addEventListener('change',e=>{
     c.paid=t.checked;
     if(c.paid){                       // pago → cria gasto real no diário
       const id=uid();
-      state.tx.push({id,date:ym+'-01',desc:p.desc+' (prestação)',val:c.amt,type:'out',cat:p.cat||'Compras',src:'parcela'});
+      const dd=String(Math.min(28,Math.max(1,p.day||1))).padStart(2,'0');
+      state.tx.push({id,date:ym+'-'+dd,desc:p.desc+' (prestação)',val:c.amt,type:'out',cat:p.cat||'Compras',src:'parcela'});
       c.txId=id;
     }else if(c.txId){                 // desmarcado → remove o lançamento
       state.tx=state.tx.filter(x=>x.id!==c.txId); delete c.txId;
@@ -1655,6 +1667,7 @@ function updateAuthUI(){
 el('t-date').value=new Date().toISOString().slice(0,10);
 el('t-month').value=new Date().toISOString().slice(0,7);
 el('pc-start').value=new Date().toISOString().slice(0,7);
+el('pc-day')&&(el('pc-day').value=new Date().getDate()>28?28:new Date().getDate());
 el('pc-cat').innerHTML=outCats().map(c=>'<option'+(c==='Compras'?' selected':'')+'>'+esc(c)+'</option>').join('');
 fillCats();
 fillRcCats();
