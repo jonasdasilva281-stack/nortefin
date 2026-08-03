@@ -211,7 +211,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v18</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v19</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -263,9 +263,7 @@
     <button data-v="lancamentos">Lançamentos</button>
     <button data-v="carteira">Carteira</button>
     <button data-v="orcamento">Orçamento</button>
-    <button data-v="parcelas">Prestações</button>
-    <button data-v="contas">Contas</button>
-    <button data-v="dividas">Dívidas</button>
+    <button data-v="pagar">A pagar</button>
     <button data-v="poupanca">Poupança &amp; Investir</button>
     <button data-v="patrimonio">Património</button>
     <button data-v="resumo">Resumo</button>
@@ -441,9 +439,11 @@
   </section>
 
   <!-- ================= PRESTAÇÕES ================= -->
-  <section class="view" id="parcelas">
-    <h2 class="view-h">Compras a prestações</h2>
-    <p class="sub">Registe o total, agenda as prestações e ajusta quanto pagas em cada mês.</p>
+  <section class="view" id="pagar">
+    <h2 class="view-h">A pagar</h2>
+    <p class="sub">Prestações, contas do mês e dívidas — tudo o que tem a pagar, num só sítio.</p>
+    <h3 style="font-size:19px;margin:8px 0 2px;color:var(--brass)">Compras a prestações</h3>
+    <p class="mini" style="margin:0 0 14px">Registe o total, agenda as prestações e ajusta quanto paga em cada mês.</p>
 
     <div class="grid g2" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">A pagar este mês</div><div class="val sm neg" id="pc-due">—</div></div>
@@ -468,12 +468,9 @@
       <div class="split"><h3 style="font-size:18px">Prestações agendadas</h3><span class="mini" id="pc-count"></span></div>
       <div id="pc-list" style="margin-top:10px"></div>
     </div>
-  </section>
 
-  <!-- ================= CONTAS A PAGAR ================= -->
-  <section class="view" id="contas">
-    <h2 class="view-h">Contas a pagar</h2>
-    <p class="sub">As contas do mês com data de vencimento. A app avisa quando alguma está em atraso.</p>
+    <h3 style="font-size:19px;margin:40px 0 2px;color:var(--brass)">Contas a pagar</h3>
+    <p class="mini" style="margin:0 0 14px">As contas do mês com data de vencimento. A app avisa quando alguma está em atraso.</p>
 
     <div class="grid g3" style="margin-bottom:16px">
       <div class="card pad stat"><div class="eyebrow">Por pagar</div><div class="val sm" id="bl-open">—</div></div>
@@ -502,12 +499,9 @@
         <div id="bl-list" style="margin-top:10px"></div>
       </div>
     </div>
-  </section>
 
-  <!-- ================= DÍVIDAS ================= -->
-  <section class="view" id="dividas">
-    <h2 class="view-h">Sair das dívidas</h2>
-    <p class="sub">Uma ordem clara para pagar. Escolha o método e segue-o.</p>
+    <h3 style="font-size:19px;margin:40px 0 2px;color:var(--brass)">Sair das dívidas</h3>
+    <p class="mini" style="margin:0 0 14px">Uma ordem clara para pagar. Escolha o método e siga-o.</p>
 
     <div class="grid g2">
       <div class="card pad">
@@ -904,7 +898,7 @@ function renderPainel(){
   const hiDebt=[...state.debts].sort((a,b)=>b.apr-a.apr)[0];
   if(t.income===0){step=stepCard('Começa pelo orçamento','Registe quanto entra por mês e define um limite para cada categoria. É a base de tudo o resto.','orcamento','Ir para Orçamento');}
   else if(t.plannedExp===0){step=stepCard('Define os limites por categoria','Já sabes o que entra. Agora diz quanto quer gastar em cada categoria — é isso que dá controlo ao dia a dia.','orcamento','Definir orçamento');}
-  else if(hiDebt && hiDebt.apr>=12){step=stepCard('Ataca a dívida cara','A sua '+hiDebt.name+' tem '+hiDebt.apr+'% de juro. Nenhum investimento lhe dá esse retorno garantido — pagá-la é a jogada.','dividas','Ver plano de dívidas');}
+  else if(hiDebt && hiDebt.apr>=12){step=stepCard('Ataca a dívida cara','A sua '+hiDebt.name+' tem '+hiDebt.apr+'% de juro. Nenhum investimento lhe dá esse retorno garantido — pagá-la é a jogada.','pagar','Ver plano de dívidas');}
   else if(t.efMonths<3){step=stepCard('Constrói o fundo de emergência','Tens '+t.efMonths.toFixed(1)+' meses cobertos. O alvo é 3 a 6. É o que o protege de voltar às dívidas.','poupanca','Reforçar poupança');}
   else if(t.margin>0){step=stepCard('Põe a margem a trabalhar','A sua margem planeada é '+eur(t.margin)+'/mês e já tem rede. Está na hora de investir com regularidade.','poupanca','Ver Poupança & Investir');}
   else{step=stepCard('Reequilibra o orçamento','A margem planeada está negativa. Corta limites ou aumenta entradas até sobrar algo.','orcamento','Rever orçamento');}
@@ -1027,12 +1021,12 @@ function billsAlert(){
   const soon=(state.bills||[]).filter(b=>{if(b.paid||!b.due||b.due<today)return false;const diff=(new Date(b.due)-new Date(today))/86400000;return diff<=7;});
   let html='';
   if(late.length){
-    html+='<button onclick="go(\'contas\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(255,107,107,.4);background:var(--clay-bg);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;color:var(--ink)">'
+    html+='<button onclick="go(\'pagar\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(255,107,107,.4);background:var(--clay-bg);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;color:var(--ink)">'
       +'<div style="font-weight:700;color:var(--clay)">⚠ '+late.length+' conta'+(late.length>1?'s':'')+' em atraso — '+eur(late.reduce((a,b)=>a+b.val,0))+'</div>'
       +'<div class="mini" style="margin-top:3px">'+late.slice(0,3).map(b=>esc(b.desc)+' (venceu '+new Date(b.due+'T00:00:00').toLocaleDateString('pt-PT',{day:'numeric',month:'short'})+')').join(' · ')+(late.length>3?' …':'')+'</div></button>';
   }
   if(soon.length){
-    html+='<button onclick="go(\'contas\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(240,189,81,.35);background:rgba(240,189,81,.08);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;color:var(--ink)">'
+    html+='<button onclick="go(\'pagar\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(240,189,81,.35);background:rgba(240,189,81,.08);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;color:var(--ink)">'
       +'<div style="font-weight:700;color:var(--brass)">'+soon.length+' conta'+(soon.length>1?'s':'')+' a vencer nos próximos dias — '+eur(soon.reduce((a,b)=>a+b.val,0))+'</div></button>';
   }
   box.innerHTML=html;
