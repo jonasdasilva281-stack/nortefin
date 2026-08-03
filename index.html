@@ -211,7 +211,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v19</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v20</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -442,34 +442,7 @@
   <section class="view" id="pagar">
     <h2 class="view-h">A pagar</h2>
     <p class="sub">Prestações, contas do mês e dívidas — tudo o que tem a pagar, num só sítio.</p>
-    <h3 style="font-size:19px;margin:8px 0 2px;color:var(--brass)">Compras a prestações</h3>
-    <p class="mini" style="margin:0 0 14px">Registe o total, agenda as prestações e ajusta quanto paga em cada mês.</p>
-
-    <div class="grid g2" style="margin-bottom:16px">
-      <div class="card pad stat"><div class="eyebrow">A pagar este mês</div><div class="val sm neg" id="pc-due">—</div></div>
-      <div class="card pad stat"><div class="eyebrow">Total em falta</div><div class="val sm" id="pc-left">—</div></div>
-    </div>
-
-    <div class="card pad">
-      <h3 style="font-size:18px;margin-bottom:6px">Nova compra a prestações</h3>
-      <div class="field"><label>O que comprou</label><input type="text" id="pc-desc" placeholder="Ex.: Portátil, Eletrodoméstico"></div>
-      <div class="inline">
-        <div class="field"><label>Valor total (€)</label><input type="number" id="pc-total" placeholder="0" min="0" step="0.01"></div>
-        <div class="field"><label>Nº de prestações</label><input type="number" id="pc-n" placeholder="12" min="1" step="1"></div>
-        <div class="field"><label>1ª prestação</label><input type="month" id="pc-start"></div>
-        <div class="field"><label>Dia de pagamento</label><input type="number" id="pc-day" placeholder="8" min="1" max="28"></div>
-        <div class="field"><label>Categoria</label><select id="pc-cat"></select></div>
-      </div>
-      <button class="btn" id="pc-add">Agendar prestações</button>
-      <div class="teach"><b>Depois de agendar:</b> pode editar o valor de qualquer mês (por exemplo, adiantar uma prestação) e marcar cada uma como paga à medida que pagas.</div>
-    </div>
-
-    <div class="card pad" style="margin-top:16px">
-      <div class="split"><h3 style="font-size:18px">Prestações agendadas</h3><span class="mini" id="pc-count"></span></div>
-      <div id="pc-list" style="margin-top:10px"></div>
-    </div>
-
-    <h3 style="font-size:19px;margin:40px 0 2px;color:var(--brass)">Contas a pagar</h3>
+    <h3 style="font-size:19px;margin:8px 0 2px;color:var(--brass)">Contas a pagar</h3>
     <p class="mini" style="margin:0 0 14px">As contas do mês com data de vencimento. A app avisa quando alguma está em atraso.</p>
 
     <div class="grid g3" style="margin-bottom:16px">
@@ -498,6 +471,33 @@
         <div class="split"><h3 style="font-size:18px">As suas contas</h3><span class="mini" id="bl-count"></span></div>
         <div id="bl-list" style="margin-top:10px"></div>
       </div>
+    </div>
+
+    <h3 style="font-size:19px;margin:40px 0 2px;color:var(--brass)">Compras a prestações</h3>
+    <p class="mini" style="margin:0 0 14px">Registe o total, agenda as prestações e ajusta quanto paga em cada mês.</p>
+
+    <div class="grid g2" style="margin-bottom:16px">
+      <div class="card pad stat"><div class="eyebrow">A pagar este mês</div><div class="val sm neg" id="pc-due">—</div></div>
+      <div class="card pad stat"><div class="eyebrow">Total em falta</div><div class="val sm" id="pc-left">—</div></div>
+    </div>
+
+    <div class="card pad">
+      <h3 style="font-size:18px;margin-bottom:6px">Nova compra a prestações</h3>
+      <div class="field"><label>O que comprou</label><input type="text" id="pc-desc" placeholder="Ex.: Portátil, Eletrodoméstico"></div>
+      <div class="inline">
+        <div class="field"><label>Valor total (€)</label><input type="number" id="pc-total" placeholder="0" min="0" step="0.01"></div>
+        <div class="field"><label>Nº de prestações</label><input type="number" id="pc-n" placeholder="12" min="1" step="1"></div>
+        <div class="field"><label>1ª prestação</label><input type="month" id="pc-start"></div>
+        <div class="field"><label>Dia de pagamento</label><input type="number" id="pc-day" placeholder="8" min="1" max="28"></div>
+        <div class="field"><label>Categoria</label><select id="pc-cat"></select></div>
+      </div>
+      <button class="btn" id="pc-add">Agendar prestações</button>
+      <div class="teach"><b>Depois de agendar:</b> pode editar o valor de qualquer mês (por exemplo, adiantar uma prestação) e marcar cada uma como paga à medida que pagas.</div>
+    </div>
+
+    <div class="card pad" style="margin-top:16px">
+      <div class="split"><h3 style="font-size:18px">Prestações agendadas</h3><span class="mini" id="pc-count"></span></div>
+      <div id="pc-list" style="margin-top:10px"></div>
     </div>
 
     <h3 style="font-size:19px;margin:40px 0 2px;color:var(--brass)">Sair das dívidas</h3>
