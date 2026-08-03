@@ -211,7 +211,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v17</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v18</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -264,6 +264,7 @@
     <button data-v="carteira">Carteira</button>
     <button data-v="orcamento">Orçamento</button>
     <button data-v="parcelas">Prestações</button>
+    <button data-v="contas">Contas</button>
     <button data-v="dividas">Dívidas</button>
     <button data-v="poupanca">Poupança &amp; Investir</button>
     <button data-v="patrimonio">Património</button>
@@ -283,6 +284,7 @@
     </div>
 
     <div id="p-alert"></div>
+    <div id="p-bills"></div>
     <div id="p-parcelas"></div>
 
     <div class="card pad" style="margin-bottom:16px">
@@ -465,6 +467,40 @@
     <div class="card pad" style="margin-top:16px">
       <div class="split"><h3 style="font-size:18px">Prestações agendadas</h3><span class="mini" id="pc-count"></span></div>
       <div id="pc-list" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <!-- ================= CONTAS A PAGAR ================= -->
+  <section class="view" id="contas">
+    <h2 class="view-h">Contas a pagar</h2>
+    <p class="sub">As contas do mês com data de vencimento. A app avisa quando alguma está em atraso.</p>
+
+    <div class="grid g3" style="margin-bottom:16px">
+      <div class="card pad stat"><div class="eyebrow">Por pagar</div><div class="val sm" id="bl-open">—</div></div>
+      <div class="card pad stat"><div class="eyebrow">Em atraso</div><div class="val sm" id="bl-late">—</div></div>
+      <div class="card pad stat"><div class="eyebrow">Pagas este mês</div><div class="val sm" id="bl-paid">—</div></div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card pad">
+        <h3 style="font-size:18px;margin-bottom:6px">Nova conta</h3>
+        <div class="field"><label>Descrição</label><input type="text" id="bl-desc" placeholder="Ex.: Água, Luz, Internet"></div>
+        <div class="inline">
+          <div class="field"><label>Valor (€)</label><input type="number" id="bl-val" placeholder="0" min="0" step="0.01"></div>
+          <div class="field"><label>Vence a</label><input type="date" id="bl-due"></div>
+        </div>
+        <div class="inline">
+          <div class="field"><label>Categoria</label><select id="bl-cat"></select></div>
+          <div class="field"><label>Conta (ao pagar)</label><select id="bl-acct"></select></div>
+        </div>
+        <button class="btn" id="bl-add">Adicionar conta</button>
+        <button class="btn ghost" id="bl-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
+        <div class="teach"><b>Ao marcar como paga,</b> cria-se um movimento de saída no diário, na data de vencimento — o dinheiro sai da conta que escolher.</div>
+      </div>
+      <div class="card pad">
+        <div class="split"><h3 style="font-size:18px">As suas contas</h3><span class="mini" id="bl-count"></span></div>
+        <div id="bl-list" style="margin-top:10px"></div>
+      </div>
     </div>
   </section>
 
@@ -751,7 +787,7 @@ window.addEventListener('unhandledrejection',function(e){bar('ERRO async: '+((e.
 /* ---------- estado + persistência ---------- */
 const KEY='norte_v1';
 let mem=null; // fallback se localStorage falhar (ex.: pré-visualização)
-const defaults=()=>({profile:{name:'',fem:false},budget:[],tx:[],limits:{},limitsY:{},customCats:[],recurring:[],parcelas:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
+const defaults=()=>({profile:{name:'',fem:false},budget:[],tx:[],limits:{},limitsY:{},customCats:[],recurring:[],bills:[],parcelas:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
 let state=load();
 
 function migrate(o){
@@ -843,6 +879,7 @@ function renderPainel(){
   const pn=state.profile&&state.profile.name;
   el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
   renderChart();
+  billsAlert();
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
   el('s-margin').textContent=eur(t.margin);
@@ -950,6 +987,56 @@ function postRecurring(){
   return changed;
 }
 function removeRecurring(id){state.recurring=(state.recurring||[]).filter(r=>r.id!==id);save();}
+/* ---------- contas a pagar ---------- */
+function fillBlCats(){if(el('bl-cat'))el('bl-cat').innerHTML=outCats().map(c=>'<option'+(c==='Casa & contas'?' selected':'')+'>'+esc(c)+'</option>').join('');}
+function todayStr(){return new Date().toISOString().slice(0,10);}
+let editBillId=null;
+function editBill(id){const b=(state.bills||[]).find(x=>x.id===id);if(!b)return;editBillId=id;el('bl-desc').value=b.desc;el('bl-val').value=b.val;el('bl-due').value=b.due||'';fillBlCats();el('bl-cat').value=b.cat||'Casa & contas';if(el('bl-acct'))el('bl-acct').value=b.acct||'';el('bl-add').textContent='Guardar alterações';el('bl-cancel').style.display='';activate('contas');setTimeout(()=>el('bl-desc').focus(),60);}
+function cancelBillEdit(){editBillId=null;el('bl-add').textContent='Adicionar conta';el('bl-cancel').style.display='none';['bl-desc','bl-val','bl-due'].forEach(i=>el(i).value='');}
+function removeBill(id){const b=(state.bills||[]).find(x=>x.id===id);if(b&&b.txId){state.tx=state.tx.filter(x=>x.id!==b.txId);}state.bills=(state.bills||[]).filter(x=>x.id!==id);save();}
+function toggleBill(id){
+  const b=(state.bills||[]).find(x=>x.id===id);if(!b)return;
+  b.paid=!b.paid;
+  if(b.paid){const tid=uid();state.tx.push({id:tid,date:b.due||todayStr(),desc:b.desc+' (conta)',val:b.val,type:'out',cat:b.cat||'Casa & contas',acct:b.acct||null,src:'conta'});b.txId=tid;}
+  else if(b.txId){state.tx=state.tx.filter(x=>x.id!==b.txId);delete b.txId;}
+  save();
+}
+function renderBills(){
+  const list=(state.bills||[]).slice().sort((a,b)=>(a.due||'').localeCompare(b.due||''));
+  const today=todayStr(), ym=today.slice(0,7);
+  const open=list.filter(b=>!b.paid), late=open.filter(b=>b.due&&b.due<today);
+  const paidThis=list.filter(b=>b.paid&&(b.due||'').slice(0,7)===ym);
+  if(el('bl-open'))el('bl-open').textContent=eur(open.reduce((a,b)=>a+b.val,0));
+  if(el('bl-late')){el('bl-late').textContent=eur(late.reduce((a,b)=>a+b.val,0));el('bl-late').className='val sm '+(late.length?'neg':'');}
+  if(el('bl-paid'))el('bl-paid').textContent=eur(paidThis.reduce((a,b)=>a+b.val,0));
+  if(el('bl-count'))el('bl-count').textContent=list.length?list.length+' contas':'';
+  if(!el('bl-list'))return;
+  el('bl-list').innerHTML=list.length?list.map(b=>{
+    const isLate=!b.paid&&b.due&&b.due<today;
+    const dd=b.due?new Date(b.due+'T00:00:00').toLocaleDateString('pt-PT',{day:'numeric',month:'short'}):'sem data';
+    const tag=b.paid?'<span class="pill g">paga</span>':(isLate?'<span class="pill c">em atraso</span>':'<span class="pill b">vence '+dd+'</span>');
+    return '<div class="row"><div class="grow"><div class="name">'+esc(b.desc)+' '+tag+'</div><div class="meta">'+esc(b.cat||'Casa & contas')+' · '+dd+'</div></div><span class="amt neg">'+eur(b.val)+'</span>'
+      +'<label class="mini" style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" onchange="toggleBill(\''+b.id+'\')" '+(b.paid?'checked':'')+'> paga</label>'
+      +'<button class="del" title="Editar" onclick="editBill(\''+b.id+'\')">✎</button><button class="del" onclick="removeBill(\''+b.id+'\')">×</button></div>';
+  }).join(''):'<div class="empty">Sem contas. Adicione a água, a luz, a internet — com a data de vencimento.</div>';
+}
+function billsAlert(){
+  const box=el('p-bills');if(!box)return;
+  const today=todayStr();
+  const late=(state.bills||[]).filter(b=>!b.paid&&b.due&&b.due<today).sort((a,b)=>a.due.localeCompare(b.due));
+  const soon=(state.bills||[]).filter(b=>{if(b.paid||!b.due||b.due<today)return false;const diff=(new Date(b.due)-new Date(today))/86400000;return diff<=7;});
+  let html='';
+  if(late.length){
+    html+='<button onclick="go(\'contas\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(255,107,107,.4);background:var(--clay-bg);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;color:var(--ink)">'
+      +'<div style="font-weight:700;color:var(--clay)">⚠ '+late.length+' conta'+(late.length>1?'s':'')+' em atraso — '+eur(late.reduce((a,b)=>a+b.val,0))+'</div>'
+      +'<div class="mini" style="margin-top:3px">'+late.slice(0,3).map(b=>esc(b.desc)+' (venceu '+new Date(b.due+'T00:00:00').toLocaleDateString('pt-PT',{day:'numeric',month:'short'})+')').join(' · ')+(late.length>3?' …':'')+'</div></button>';
+  }
+  if(soon.length){
+    html+='<button onclick="go(\'contas\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(240,189,81,.35);background:rgba(240,189,81,.08);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;color:var(--ink)">'
+      +'<div style="font-weight:700;color:var(--brass)">'+soon.length+' conta'+(soon.length>1?'s':'')+' a vencer nos próximos dias — '+eur(soon.reduce((a,b)=>a+b.val,0))+'</div></button>';
+  }
+  box.innerHTML=html;
+}
 function renderRecurring(){
   const list=state.recurring||[];
   el('rc-list').innerHTML=list.length
@@ -1152,6 +1239,7 @@ function fillAcctSelects(){
   setSel('i-acct','— sem conta —',false);
   setSel('mv-acct','— escolhe a conta —',true);
   setSel('rc-acct','— sem conta —',true);
+  setSel('bl-acct','— sem conta —',true);
 }
 function renderCarteira(){
   el('w-total').textContent=eur(accountsTotal());
@@ -1396,7 +1484,7 @@ function delInv(id){
 }
 function go(v){activate(v);}
 
-function renderAll(){renderPainel();renderCarteira();renderOrc();renderTx();renderRecurring();renderParcelas();renderResumo();renderDebt();renderGoals();renderInv();renderPatrimonio();}
+function renderAll(){renderPainel();renderCarteira();renderOrc();renderTx();renderRecurring();renderBills();renderParcelas();renderResumo();renderDebt();renderGoals();renderInv();renderPatrimonio();}
 
 /* ---------- eventos ---------- */
 function countUp(id,val){const e=el(id);if(!e)return;if(!isFinite(val)){return;}const dur=650,t0=performance.now();function step(t){const k=Math.min(1,(t-t0)/dur);e.textContent=eur(val*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
@@ -1478,6 +1566,16 @@ el('rc-add')&&(el('rc-add').onclick=()=>{
   postRecurring(); save();
 });
 el('rc-type')&&el('rc-type').addEventListener('change',fillRcCats);
+el('bl-add')&&(el('bl-add').onclick=()=>{
+  const d=txt('bl-desc'), v=num('bl-val');
+  if(!d||v<=0){el('bl-desc').focus();return;}
+  const due=el('bl-due').value||todayStr(), cat=el('bl-cat').value, acct=(el('bl-acct')&&el('bl-acct').value)||null;
+  if(editBillId){const b=state.bills.find(x=>x.id===editBillId);if(b){b.desc=d;b.val=v;b.due=due;b.cat=cat;b.acct=acct;if(b.paid&&b.txId){const tx=state.tx.find(x=>x.id===b.txId);if(tx){tx.val=v;tx.date=due;tx.desc=d+' (conta)';tx.cat=cat;tx.acct=acct;}}}editBillId=null;el('bl-add').textContent='Adicionar conta';el('bl-cancel').style.display='none';}
+  else{state.bills.push({id:uid(),desc:d,val:v,due,cat,acct,paid:false});}
+  ['bl-desc','bl-val','bl-due'].forEach(i=>el(i).value='');
+  save();
+});
+el('bl-cancel')&&(el('bl-cancel').onclick=cancelBillEdit);
 el('t-add').onclick=()=>{
   const v=num('t-val'), date=el('t-date').value||new Date().toISOString().slice(0,10);
   if(v<=0){el('t-val').focus();return;}
@@ -1671,6 +1769,8 @@ el('pc-day')&&(el('pc-day').value=new Date().getDate()>28?28:new Date().getDate(
 el('pc-cat').innerHTML=outCats().map(c=>'<option'+(c==='Compras'?' selected':'')+'>'+esc(c)+'</option>').join('');
 fillCats();
 fillRcCats();
+fillBlCats();
+el('bl-due')&&(el('bl-due').value=new Date().toISOString().slice(0,10));
 postRecurring();
 renderAll();
 el('auth-send').onclick=sbEnter;
