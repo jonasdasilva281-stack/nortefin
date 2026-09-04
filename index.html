@@ -165,6 +165,14 @@
     background:linear-gradient(120deg,rgba(240,189,81,.14),rgba(240,119,79,.10));border:1px solid rgba(240,189,81,.35);
     box-shadow:0 6px 22px rgba(0,0,0,.25);transition:.15s}
   .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
+  .mais-btn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
+  .mais-btn:hover{border-color:var(--brass);transform:translateY(-1px)}
+  .mais-btn .mb-i{font-size:24px;line-height:1}
+  .mais-btn>span:nth-child(2){flex:1;display:flex;flex-direction:column}
+  .mais-btn b{font-family:'Space Grotesk';font-weight:700;font-size:16px;color:var(--ink)}
+  .mais-btn small{color:var(--mut);font-size:12.5px;margin-top:2px}
+  .mais-btn .mb-a{color:var(--brass);font-size:22px}
 
   /* navegação inferior (mobile) */
   .bottomnav{display:none}
@@ -211,7 +219,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v20</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v23</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -259,14 +267,10 @@
 
 <div class="app">
   <nav class="tabs" id="tabs">
-    <button data-v="painel" class="on">Painel</button>
-    <button data-v="lancamentos">Lançamentos</button>
-    <button data-v="carteira">Carteira</button>
-    <button data-v="orcamento">Orçamento</button>
+    <button data-v="painel" class="on">Início</button>
     <button data-v="pagar">A pagar</button>
     <button data-v="poupanca">Poupança &amp; Investir</button>
-    <button data-v="patrimonio">Património</button>
-    <button data-v="resumo">Resumo</button>
+    <button data-v="mais">Mais</button>
   </nav>
 
   <!-- ================= PAINEL ================= -->
@@ -279,6 +283,27 @@
       <div class="card pad stat"><div class="eyebrow">Património líquido</div><div class="val" id="s-net">—</div><div class="lbl">contas + investido + ativos − dívidas</div></div>
       <div class="card pad stat"><div class="eyebrow">Margem mensal</div><div class="val" id="s-margin">—</div><div class="lbl" id="s-margin-lbl">o que sobra por mês</div></div>
       <div class="card pad stat"><div class="eyebrow">Fundo de emergência</div><div class="val sm" id="s-ef">—</div><div class="lbl" id="s-ef-lbl">meses de despesa cobertos</div></div>
+    </div>
+
+    <div class="card pad" style="margin-bottom:16px">
+      <div class="split" style="margin-bottom:12px"><h3 style="font-size:18px">Este mês</h3><span class="mini" id="ck-month"></span></div>
+      <div id="p-cockpit"></div>
+    </div>
+
+    <div class="card pad" style="margin-bottom:16px;border-color:rgba(240,189,81,.3)">
+      <div class="split" style="margin-bottom:10px"><h3 style="font-size:18px">Lançar agora</h3><span class="mini">rápido, sem sair daqui</span></div>
+      <div class="inline">
+        <div class="field"><label>Valor (€)</label><input type="number" id="q-val" placeholder="0" min="0" step="0.01"></div>
+        <div class="field"><label>Descrição</label><input type="text" id="q-desc" placeholder="Ex.: Café, Mercado"></div>
+      </div>
+      <div class="inline">
+        <div class="field"><label>Tipo</label><select id="q-type"><option value="out">Gasto</option><option value="in">Recebi</option></select></div>
+        <div class="field"><label>Categoria</label><select id="q-cat"></select></div>
+        <div class="field"><label>Conta</label><select id="q-acct"></select></div>
+      </div>
+      <div id="q-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px"></div>
+      <button class="btn" id="q-add" style="width:100%">Registar</button>
+      <div class="mini" id="q-msg" style="margin-top:8px"></div>
     </div>
 
     <div id="p-alert"></div>
@@ -361,6 +386,7 @@
           <div class="field"><label>Valor / mês (€)</label><input type="number" id="o-val" placeholder="0" min="0" step="0.01"></div>
         </div>
         <button class="btn" id="o-add">Adicionar entrada</button>
+        <button class="btn ghost" id="o-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
         <div id="o-list" style="margin-top:14px"></div>
       </div>
       <div class="card pad">
@@ -420,9 +446,9 @@
       <div id="t-list" style="margin-top:10px"></div>
     </div>
 
-    <div class="card pad" style="margin-top:16px">
-      <h3 style="font-size:18px;margin-bottom:6px">Movimentos recorrentes</h3>
-      <p class="mini" style="margin:0 0 12px">Renda, ordenado, assinaturas... lançam-se sozinhos todos os meses.</p>
+    <div class="card pad" style="margin-top:16px" id="fixo-card">
+      <h3 style="font-size:18px;margin-bottom:6px">O meu mês fixo</h3>
+      <p class="mini" style="margin:0 0 12px">Configure uma vez o que se repete (ordenado, renda, assinaturas, contas) e a app trata do resto todos os meses.</p>
       <div class="inline">
         <div class="field"><label>Descrição</label><input type="text" id="rc-desc" placeholder="Ex.: Renda, Ordenado, Netflix"></div>
         <div class="field"><label>Valor (€)</label><input type="number" id="rc-val" placeholder="0" min="0" step="0.01"></div>
@@ -433,7 +459,11 @@
         <div class="field"><label>Conta</label><select id="rc-acct"></select></div>
         <div class="field"><label>Dia do mês</label><input type="number" id="rc-day" placeholder="1" min="1" max="28"></div>
       </div>
-      <button class="btn" id="rc-add">Adicionar recorrente</button>
+      <div class="field"><label>Como tratar</label><select id="rc-mode">
+        <option value="auto">Lançar sozinho (assumo que é pago)</option>
+        <option value="conta">Criar conta a pagar, com aviso</option>
+      </select></div>
+      <button class="btn" id="rc-add">Adicionar ao mês fixo</button>
       <div id="rc-list" style="margin-top:14px"></div>
     </div>
   </section>
@@ -734,6 +764,21 @@
     </div>
   </section>
 
+  <!-- ================= MAIS ================= -->
+  <section class="view" id="mais">
+    <h2 class="view-h">Mais</h2>
+    <p class="sub">Tudo o resto, à distância de um toque.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i">🔁</span><span><b>O meu mês fixo</b><small>ordenado, renda, assinaturas e contas — configurar 1 vez</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i">📒</span><span><b>Lançamentos</b><small>o diário completo, editar e recorrentes</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('carteira')"><span class="mb-i">🏦</span><span><b>Carteira</b><small>contas, dinheiro vivo e saldos</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('orcamento')"><span class="mb-i">📋</span><span><b>Orçamento</b><small>o que entra e limites por categoria</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('patrimonio')"><span class="mb-i">💎</span><span><b>Património</b><small>a sua riqueza e objetivos no tempo</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('resumo')"><span class="mb-i">📊</span><span><b>Resumo</b><small>por dia, semana, mês, ano</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('comprar')"><span class="mb-i">🤔</span><span><b>Posso comprar?</b><small>decidir uma compra com cabeça</small></span><span class="mb-a">›</span></button>
+    </div>
+  </section>
+
   <div class="disc" id="storenote"></div>
   <div class="foot">
     Nortefin · finanças pessoais com controlo e sabedoria<br>
@@ -874,6 +919,8 @@ function renderPainel(){
   el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
   renderChart();
   billsAlert();
+  renderCockpit();
+  renderQChips();
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
   el('s-margin').textContent=eur(t.margin);
@@ -927,7 +974,7 @@ function renderOrc(){
   el('o-left').className='val sm '+(t.margin>=0?'pos':'neg');
   const inc=state.budget.filter(b=>b.type==='in');
   el('o-list').innerHTML=inc.length
-    ? inc.map(b=>'<div class="row"><span class="pill g">Entrada</span><div class="grow"><div class="name">'+esc(b.desc)+'</div></div><span class="amt pos">+'+eur(b.val)+'</span><button class="del" onclick="rm(\'budget\',\''+b.id+'\')">×</button></div>').join('')
+    ? inc.map(b=>'<div class="row"><span class="pill g">Entrada</span><div class="grow"><div class="name">'+esc(b.desc)+'</div></div><span class="amt pos">+'+eur(b.val)+'</span><button class="del" title="Editar" onclick="editIncome(\''+b.id+'\')">✎</button><button class="del" onclick="rm(\'budget\',\''+b.id+'\')">×</button></div>').join('')
     : '<div class="empty">Registe as suas entradas: ordenado, negócio, rendimentos.</div>';
   renderBudgetCats();
 }
@@ -973,14 +1020,19 @@ function postRecurring(){
     let ym=r.lastPosted?addMonths(r.lastPosted,1):(r.start||nowYM), guard=0;
     while(ym<=nowYM && guard<600){
       const day=String(Math.min(28,Math.max(1,r.day||1))).padStart(2,'0');
-      state.tx.push({id:uid(),date:ym+'-'+day,desc:r.desc,val:r.val,type:r.type,cat:r.cat,acct:r.acct||null,src:'recorrente'});
+      if(r.mode==='conta'){
+        const exists=(state.bills||[]).some(b=>b.recId===r.id&&(b.due||'').slice(0,7)===ym);
+        if(!exists){state.bills=state.bills||[];state.bills.push({id:uid(),desc:r.desc,val:r.val,due:ym+'-'+day,cat:r.cat,acct:r.acct||null,paid:false,recId:r.id});}
+      }else{
+        state.tx.push({id:uid(),date:ym+'-'+day,desc:r.desc,val:r.val,type:r.type,cat:r.cat,acct:r.acct||null,src:'recorrente'});
+      }
       r.lastPosted=ym; changed=true; ym=addMonths(ym,1); guard++;
     }
   });
   if(changed) saveLocal();
   return changed;
 }
-function removeRecurring(id){state.recurring=(state.recurring||[]).filter(r=>r.id!==id);save();}
+function removeRecurring(id){state.bills=(state.bills||[]).filter(b=>!(b.recId===id&&!b.paid));state.recurring=(state.recurring||[]).filter(r=>r.id!==id);save();}
 /* ---------- contas a pagar ---------- */
 function fillBlCats(){if(el('bl-cat'))el('bl-cat').innerHTML=outCats().map(c=>'<option'+(c==='Casa & contas'?' selected':'')+'>'+esc(c)+'</option>').join('');}
 function todayStr(){return new Date().toISOString().slice(0,10);}
@@ -1014,6 +1066,25 @@ function renderBills(){
       +'<button class="del" title="Editar" onclick="editBill(\''+b.id+'\')">✎</button><button class="del" onclick="removeBill(\''+b.id+'\')">×</button></div>';
   }).join(''):'<div class="empty">Sem contas. Adicione a água, a luz, a internet — com a data de vencimento.</div>';
 }
+function renderCockpit(){
+  const box=el('p-cockpit'); if(!box)return;
+  const now=new Date(), ym=now.toISOString().slice(0,7);
+  const bills=(state.bills||[]).filter(b=>!b.paid&&(b.due||'').slice(0,7)<=ym);
+  let parc=0;(state.parcelas||[]).forEach(p=>{const c=p.sched&&p.sched[ym];if(c&&!c.paid)parc+=c.amt;});
+  const toPay=bills.reduce((a,b)=>a+b.val,0)+parc;
+  const spent=state.tx.filter(t=>t.type==='out'&&t.date.slice(0,7)===ym).reduce((a,b)=>a+b.val,0);
+  const budget=outCats().reduce((a,c)=>a+(state.limits[c]||0),0);
+  const t=totals(), canSpend=t.income-spent-toPay;
+  if(el('ck-month')){const s=now.toLocaleDateString('pt-PT',{month:'long',year:'numeric'});el('ck-month').textContent=s.charAt(0).toUpperCase()+s.slice(1);}
+  let html='<div class="grid g3" style="gap:10px">'
+    +'<div class="stat"><div class="eyebrow">Falta pagar</div><div class="val sm '+(toPay>0?'neg':'')+'">'+eur(toPay)+'</div></div>'
+    +'<div class="stat"><div class="eyebrow">Gasto</div><div class="val sm">'+eur(spent)+'</div><div class="lbl">'+(budget>0?('de '+eur(budget)):'sem orçamento')+'</div></div>'
+    +'<div class="stat"><div class="eyebrow">Pode gastar</div><div class="val sm '+(canSpend>=0?'pos':'neg')+'">'+eur(canSpend)+'</div></div>'
+    +'</div>';
+  if(budget>0){const pct=Math.min(100,Math.round(spent/budget*100));html+='<div class="bar" style="margin-top:12px"><i style="width:'+pct+'%;background:'+(spent>budget?'var(--clay)':'var(--brass)')+'"></i></div>';}
+  if(toPay>0.005)html+='<button onclick="go(\'pagar\')" class="btn ghost" style="width:100%;margin-top:12px">Ver o que falta pagar →</button>';
+  box.innerHTML=html;
+}
 function billsAlert(){
   const box=el('p-bills');if(!box)return;
   const today=todayStr();
@@ -1034,8 +1105,8 @@ function billsAlert(){
 function renderRecurring(){
   const list=state.recurring||[];
   el('rc-list').innerHTML=list.length
-    ? list.map(r=>{const acc=state.accounts.find(a=>a.id===r.acct);return '<div class="row"><div class="grow"><div class="name">'+esc(r.desc)+'</div><div class="meta">'+esc(r.cat)+' · dia '+(r.day||1)+(acc?' · '+esc(acc.name):'')+'</div></div><span class="amt '+(r.type==='in'?'pos':'neg')+'">'+(r.type==='in'?'+':'−')+eur(r.val)+'/mês</span><button class="del" onclick="removeRecurring(\''+r.id+'\')">×</button></div>';}).join('')
-    : '<div class="empty">Sem recorrentes. Adicione a renda, o ordenado, as assinaturas.</div>';
+    ? list.map(r=>{const acc=state.accounts.find(a=>a.id===r.acct);const modeTag=r.mode==='conta'?' <span class="pill b">conta a pagar</span>':' <span class="pill g">automático</span>';return '<div class="row"><div class="grow"><div class="name">'+esc(r.desc)+modeTag+'</div><div class="meta">'+esc(r.cat)+' · dia '+(r.day||1)+(acc?' · '+esc(acc.name):'')+'</div></div><span class="amt '+(r.type==='in'?'pos':'neg')+'">'+(r.type==='in'?'+':'−')+eur(r.val)+'/mês</span><button class="del" onclick="removeRecurring(\''+r.id+'\')">×</button></div>';}).join('')
+    : '<div class="empty">Ainda nada no mês fixo. Adicione o ordenado, a renda, as assinaturas e as contas.</div>';
 }
 function renderTx(){
   const ym=el('t-month').value||new Date().toISOString().slice(0,7);
@@ -1234,6 +1305,7 @@ function fillAcctSelects(){
   setSel('mv-acct','— escolhe a conta —',true);
   setSel('rc-acct','— sem conta —',true);
   setSel('bl-acct','— sem conta —',true);
+  setSel('q-acct','— sem conta —',true);
 }
 function renderCarteira(){
   el('w-total').textContent=eur(accountsTotal());
@@ -1494,7 +1566,17 @@ function activate(v){
 el('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(b)activate(b.dataset.v);});
 el('bnav').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(b)activate(b.dataset.v);});
 
-el('o-add').onclick=()=>{const d=txt('o-desc'),v=num('o-val');if(!d||v<=0){el('o-desc').focus();return;}state.budget.push({id:uid(),desc:d,val:v,type:'in'});el('o-desc').value='';el('o-val').value='';save();};
+let editIncId=null;
+function editIncome(id){const b=state.budget.find(x=>x.id===id);if(!b)return;editIncId=id;el('o-desc').value=b.desc;el('o-val').value=b.val;el('o-add').textContent='Guardar alterações';el('o-cancel').style.display='';activate('orcamento');setTimeout(()=>el('o-val').focus(),60);}
+function cancelIncEdit(){editIncId=null;el('o-add').textContent='Adicionar entrada';el('o-cancel').style.display='none';el('o-desc').value='';el('o-val').value='';}
+el('o-cancel')&&(el('o-cancel').onclick=cancelIncEdit);
+el('o-add').onclick=()=>{
+  const d=txt('o-desc'),v=num('o-val');
+  if(!d||v<=0){el('o-desc').focus();return;}
+  if(editIncId){const b=state.budget.find(x=>x.id===editIncId);if(b){b.desc=d;b.val=v;}editIncId=null;el('o-add').textContent='Adicionar entrada';el('o-cancel').style.display='none';}
+  else{state.budget.push({id:uid(),desc:d,val:v,type:'in'});}
+  el('o-desc').value='';el('o-val').value='';save();
+};
 let editDebtId=null;
 function editDebt(id){const dd=state.debts.find(x=>x.id===id);if(!dd)return;editDebtId=id;el('d-name').value=dd.name;el('d-bal').value=dd.bal;el('d-apr').value=dd.apr||'';el('d-min').value=dd.min||'';el('d-add').textContent='Guardar alterações';el('d-cancel').style.display='';activate('dividas');setTimeout(()=>el('d-name').focus(),60);}
 function cancelDebtEdit(){editDebtId=null;el('d-add').textContent='Adicionar';el('d-cancel').style.display='none';['d-name','d-bal','d-apr','d-min'].forEach(i=>el(i).value='');}
@@ -1555,7 +1637,9 @@ el('rc-add')&&(el('rc-add').onclick=()=>{
   const d=txt('rc-desc'), v=num('rc-val');
   if(!d||v<=0){el('rc-desc').focus();return;}
   const nowYM=new Date().toISOString().slice(0,7);
-  state.recurring.push({id:uid(),desc:d,val:v,type:el('rc-type').value,cat:el('rc-cat').value,acct:(el('rc-acct')&&el('rc-acct').value)||null,day:Math.min(28,Math.max(1,Math.round(num('rc-day')||1))),start:nowYM,lastPosted:null});
+  const mode=(el('rc-mode')&&el('rc-mode').value)||'auto';
+  const type=mode==='conta'?'out':el('rc-type').value;
+  state.recurring.push({id:uid(),desc:d,val:v,type,cat:el('rc-cat').value,acct:(el('rc-acct')&&el('rc-acct').value)||null,day:Math.min(28,Math.max(1,Math.round(num('rc-day')||1))),mode,start:nowYM,lastPosted:null});
   el('rc-desc').value='';el('rc-val').value='';el('rc-day').value='';
   postRecurring(); save();
 });
@@ -1570,6 +1654,29 @@ el('bl-add')&&(el('bl-add').onclick=()=>{
   save();
 });
 el('bl-cancel')&&(el('bl-cancel').onclick=cancelBillEdit);
+function fillQCats(){if(el('q-cat'))el('q-cat').innerHTML=(el('q-type').value==='out'?outCats():CATS.in).map(c=>'<option>'+esc(c)+'</option>').join('');}
+function qLast(){try{return JSON.parse(localStorage.getItem('norte_qlast')||'null')||{};}catch(_){return {};}}
+function renderQChips(){
+  const box=el('q-chips'); if(!box)return;
+  if(el('q-type').value!=='out'){box.innerHTML='';return;}
+  const freq={}; state.tx.filter(t=>t.type==='out').slice(-60).forEach(t=>{freq[t.cat]=(freq[t.cat]||0)+1;});
+  let cats=Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).slice(0,5);
+  if(cats.length<3) cats=['Mercado','Restaurantes','Transporte','Casa & contas'].filter(c=>outCats().includes(c));
+  box.innerHTML=cats.map(c=>'<button type="button" class="chip" data-c="'+esc(c)+'" style="cursor:pointer;border:1px solid var(--line)">'+esc(c)+'</button>').join('');
+}
+el('q-chips')&&el('q-chips').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;el('q-cat').value=b.dataset.c;[...el('q-chips').children].forEach(x=>x.style.borderColor=x===b?'var(--brass)':'var(--line)');el('q-val').focus();});
+function applyQLast(){const l=qLast();if(l.type){el('q-type').value=l.type;}fillQCats();if(l.cat&&[...el('q-cat').options].some(o=>o.value===l.cat))el('q-cat').value=l.cat;if(l.acct&&el('q-acct')&&[...el('q-acct').options].some(o=>o.value===l.acct))el('q-acct').value=l.acct;renderQChips();}
+el('q-type')&&el('q-type').addEventListener('change',()=>{fillQCats();renderQChips();});
+el('q-add')&&(el('q-add').onclick=()=>{
+  const v=num('q-val'); if(v<=0){el('q-val').focus();return;}
+  const type=el('q-type').value, cat=el('q-cat').value, acct=(el('q-acct')&&el('q-acct').value)||null;
+  state.tx.push({id:uid(),date:new Date().toISOString().slice(0,10),desc:txt('q-desc'),val:v,type,cat,acct});
+  try{localStorage.setItem('norte_qlast',JSON.stringify({type,cat,acct}));}catch(_){}
+  el('q-val').value='';el('q-desc').value='';
+  el('q-msg').innerHTML='<span style="color:var(--green)">Registado ✓</span>';
+  setTimeout(()=>{if(el('q-msg'))el('q-msg').textContent='';},1600);
+  save();
+});
 el('t-add').onclick=()=>{
   const v=num('t-val'), date=el('t-date').value||new Date().toISOString().slice(0,10);
   if(v<=0){el('t-val').focus();return;}
@@ -1764,6 +1871,8 @@ el('pc-cat').innerHTML=outCats().map(c=>'<option'+(c==='Compras'?' selected':'')
 fillCats();
 fillRcCats();
 fillBlCats();
+fillQCats();
+applyQLast();
 el('bl-due')&&(el('bl-due').value=new Date().toISOString().slice(0,10));
 postRecurring();
 renderAll();
