@@ -219,14 +219,14 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v23</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v26</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
   <div class="auth-screen" id="scr-choose" style="display:none;max-width:380px;width:100%">
     <div class="card pad">
       <div class="brand" style="margin-bottom:16px"><div class="mark">N</div><div><b>Nortefin</b><span>a sua conta</span></div></div>
-      <h3 style="font-size:22px;margin-bottom:4px">Bem-vindo 👋</h3>
+      <h3 style="font-size:22px;margin-bottom:4px">Bem-vindo</h3>
       <p class="mini" style="margin:0 0 18px">Como quer continuar?</p>
       <button class="btn" id="go-login" style="width:100%;font-size:15px">Entrar</button>
       <button class="btn ghost" id="go-register" style="width:100%;margin-top:10px;font-size:15px">Criar conta</button>
@@ -237,7 +237,7 @@
   <div class="auth-screen" id="scr-form" style="display:none;max-width:380px;width:100%">
     <div class="card pad">
       <button class="btn ghost" id="auth-back" style="padding:6px 12px;font-size:13px;margin-bottom:14px">‹ Voltar</button>
-      <h3 id="auth-hi" style="font-size:22px;margin-bottom:4px">Bem-vindo 👋</h3>
+      <h3 id="auth-hi" style="font-size:22px;margin-bottom:4px">Bem-vindo</h3>
       <p id="auth-sub" class="mini" style="margin:0 0 16px">Vamos criar a sua conta.</p>
       <div id="auth-diag" class="mini" style="margin:0 0 14px;padding:8px 11px;border:1px solid var(--line);border-radius:9px">A ligar à base de dados…</div>
       <div id="auth-reg-fields">
@@ -277,12 +277,14 @@
   <section class="view on" id="painel">
     <h2 class="view-h" id="painel-hi">O seu norte</h2>
     <div class="eyebrow" style="margin-top:6px">Rumo ao seu primeiro milhão</div>
+
+    <div class="card pad" id="p-coach" style="margin:16px 0 0;border-left:3px solid var(--brass)"></div>
     <p class="sub">Onde está hoje — e o que fazer a seguir.</p>
 
-    <div class="grid g3" style="margin-bottom:16px">
+    <div class="grid g3" style="margin-bottom:16px" id="p-stats">
       <div class="card pad stat"><div class="eyebrow">Património líquido</div><div class="val" id="s-net">—</div><div class="lbl">contas + investido + ativos − dívidas</div></div>
-      <div class="card pad stat"><div class="eyebrow">Margem mensal</div><div class="val" id="s-margin">—</div><div class="lbl" id="s-margin-lbl">o que sobra por mês</div></div>
-      <div class="card pad stat"><div class="eyebrow">Fundo de emergência</div><div class="val sm" id="s-ef">—</div><div class="lbl" id="s-ef-lbl">meses de despesa cobertos</div></div>
+      <div class="card pad stat"><div class="eyebrow">Margem real (mês)</div><div class="val" id="s-margin">—</div><div class="lbl" id="s-margin-lbl">entrou − saiu este mês</div></div>
+      <div class="card pad stat" id="s-ef-card"><div class="eyebrow">Fundo de emergência</div><div class="val sm" id="s-ef">—</div><div class="lbl" id="s-ef-lbl">meses de despesa cobertos</div></div>
     </div>
 
     <div class="card pad" style="margin-bottom:16px">
@@ -295,6 +297,7 @@
       <div class="inline">
         <div class="field"><label>Valor (€)</label><input type="number" id="q-val" placeholder="0" min="0" step="0.01"></div>
         <div class="field"><label>Descrição</label><input type="text" id="q-desc" placeholder="Ex.: Café, Mercado"></div>
+        <div class="field"><label>Data</label><input type="date" id="q-date"></div>
       </div>
       <div class="inline">
         <div class="field"><label>Tipo</label><select id="q-type"><option value="out">Gasto</option><option value="in">Recebi</option></select></div>
@@ -370,34 +373,23 @@
   <!-- ================= ORÇAMENTO ================= -->
   <section class="view" id="orcamento">
     <h2 class="view-h">Orçamento &amp; margens</h2>
-    <p class="sub">Primeiro sabes quanto entra e quanto sai. Só depois é que decides.</p>
+    <p class="sub">Defina os limites de gasto por categoria. As entradas configuram-se em "O meu mês fixo".</p>
 
     <div class="grid g3" style="margin-bottom:16px">
-      <div class="card pad stat"><div class="eyebrow">Entradas / mês</div><div class="val sm pos" id="o-in">—</div></div>
+      <div class="card pad stat"><div class="eyebrow">Entradas / mês</div><div class="val sm pos" id="o-in">—</div><div class="lbl">do seu mês fixo</div></div>
       <div class="card pad stat"><div class="eyebrow">Orçamento / mês</div><div class="val sm neg" id="o-out">—</div><div class="lbl">soma dos limites por categoria</div></div>
-      <div class="card pad stat"><div class="eyebrow">Margem planeada</div><div class="val sm" id="o-left">—</div></div>
+      <div class="card pad stat"><div class="eyebrow">Margem do plano</div><div class="val sm" id="o-left">—</div><div class="lbl">entradas − limites</div></div>
     </div>
 
-    <div class="grid g2">
-      <div class="card pad">
-        <h3 style="font-size:18px;margin-bottom:6px">Entradas mensais</h3>
-        <div class="inline">
-          <div class="field"><label>De onde vem</label><input type="text" id="o-desc" placeholder="Ex.: Ordenado, Negócio"></div>
-          <div class="field"><label>Valor / mês (€)</label><input type="number" id="o-val" placeholder="0" min="0" step="0.01"></div>
-        </div>
-        <button class="btn" id="o-add">Adicionar entrada</button>
-        <button class="btn ghost" id="o-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
-        <div id="o-list" style="margin-top:14px"></div>
+    <div class="card pad">
+      <div class="split"><h3 style="font-size:18px">Orçamento por categoria</h3><span class="mini">€/mês · 0 = sem limite</span></div>
+      <div class="limgrid" id="o-limits" style="margin-top:14px"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input type="text" id="cat-new" placeholder="Nova categoria (ex.: Lazer, Filhos)" style="flex:1">
+        <button class="btn ghost" id="cat-add" style="white-space:nowrap">+ Categoria</button>
       </div>
-      <div class="card pad">
-        <div class="split"><h3 style="font-size:18px">Orçamento por categoria</h3><span class="mini">€/mês · 0 = sem limite</span></div>
-        <div class="limgrid" id="o-limits" style="margin-top:14px"></div>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <input type="text" id="cat-new" placeholder="Nova categoria (ex.: Lazer, Filhos)" style="flex:1">
-          <button class="btn ghost" id="cat-add" style="white-space:nowrap">+ Categoria</button>
-        </div>
-        <div class="teach"><b>Este é o coração do plano.</b> Para cada categoria defines o limite por <b>mês</b> e, se quiseres, por <b>ano</b>. O limite mensal controla o dia a dia; o anual serve para saber se, mesmo com um mês em que gastou mais, continuas dentro do plano do ano. Vês a divisão por período no Resumo. Guia 50/30/20: ~50% necessidades, 30% desejos, 20% poupar e investir.</div>
-      </div>
+      <div class="teach"><b>Este é o coração do plano.</b> Para cada categoria defina o limite por <b>mês</b> e, se quiser, por <b>ano</b>. O limite mensal controla o dia a dia; o anual serve para saber se, mesmo com um mês em que gastou mais, continua dentro do plano do ano. Vê a divisão por período no Resumo. Guia 50/30/20: ~50% necessidades, 30% desejos, 20% poupar e investir.</div>
+      <button class="btn ghost" onclick="go('lancamentos')" style="width:100%;margin-top:12px">Definir as entradas em "O meu mês fixo" →</button>
     </div>
   </section>
 
@@ -419,26 +411,25 @@
       <div id="t-alert"></div>
     </div>
 
-    <div class="grid g2">
-      <div class="card pad">
-        <h3 style="font-size:18px;margin-bottom:6px">Novo lançamento</h3>
-        <div class="inline">
-          <div class="field"><label>Data</label><input type="date" id="t-date"></div>
-          <div class="field"><label>Valor (€)</label><input type="number" id="t-val" placeholder="0" min="0" step="0.01"></div>
-        </div>
-        <div class="field"><label>Descrição</label><input type="text" id="t-desc" placeholder="Ex.: Almoço, Combustível, Recebimento cliente"></div>
-        <div class="inline">
-          <div class="field"><label>Tipo</label><select id="t-type"><option value="out">Saída</option><option value="in">Entrada</option></select></div>
-          <div class="field"><label>Categoria</label><select id="t-cat"></select></div>
-        </div>
-        <div class="field"><label>Conta</label><select id="t-acct"></select></div>
-        <button class="btn" id="t-add">Registar</button>
-        <button class="btn ghost" id="t-cancel" style="display:none;margin-left:8px">Cancelar edição</button>
+    <div class="card pad" id="t-form-card" style="display:none">
+      <h3 style="font-size:18px;margin-bottom:6px">Editar lançamento</h3>
+      <div class="inline">
+        <div class="field"><label>Data</label><input type="date" id="t-date"></div>
+        <div class="field"><label>Valor (€)</label><input type="number" id="t-val" placeholder="0" min="0" step="0.01"></div>
       </div>
-      <div class="card pad">
-        <div class="split"><h3 style="font-size:18px">Por categoria</h3><span class="mini">gastos do mês</span></div>
-        <div id="t-cats" style="margin-top:12px"></div>
+      <div class="field"><label>Descrição</label><input type="text" id="t-desc" placeholder="Ex.: Almoço, Combustível"></div>
+      <div class="inline">
+        <div class="field"><label>Tipo</label><select id="t-type"><option value="out">Saída</option><option value="in">Entrada</option></select></div>
+        <div class="field"><label>Categoria</label><select id="t-cat"></select></div>
       </div>
+      <div class="field"><label>Conta</label><select id="t-acct"></select></div>
+      <button class="btn" id="t-add">Guardar alterações</button>
+      <button class="btn ghost" id="t-cancel" style="margin-left:8px">Cancelar</button>
+    </div>
+
+    <div class="card pad">
+      <div class="split"><h3 style="font-size:18px">Por categoria</h3><span class="mini">gastos do mês</span></div>
+      <div id="t-cats" style="margin-top:12px"></div>
     </div>
 
     <div class="card pad" style="margin-top:16px">
@@ -769,13 +760,12 @@
     <h2 class="view-h">Mais</h2>
     <p class="sub">Tudo o resto, à distância de um toque.</p>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i">🔁</span><span><b>O meu mês fixo</b><small>ordenado, renda, assinaturas e contas — configurar 1 vez</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i">📒</span><span><b>Lançamentos</b><small>o diário completo, editar e recorrentes</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('carteira')"><span class="mb-i">🏦</span><span><b>Carteira</b><small>contas, dinheiro vivo e saldos</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('orcamento')"><span class="mb-i">📋</span><span><b>Orçamento</b><small>o que entra e limites por categoria</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('patrimonio')"><span class="mb-i">💎</span><span><b>Património</b><small>a sua riqueza e objetivos no tempo</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('resumo')"><span class="mb-i">📊</span><span><b>Resumo</b><small>por dia, semana, mês, ano</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('comprar')"><span class="mb-i">🤔</span><span><b>Posso comprar?</b><small>decidir uma compra com cabeça</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i" style="display:none"></span><span><b>O meu mês fixo</b><small>ordenado, renda, assinaturas e contas — configurar 1 vez</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i" style="display:none"></span><span><b>Lançamentos</b><small>o diário completo, editar e recorrentes</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('carteira')"><span class="mb-i" style="display:none"></span><span><b>Carteira</b><small>contas, dinheiro vivo e saldos</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('orcamento')"><span class="mb-i" style="display:none"></span><span><b>Orçamento</b><small>o que entra e limites por categoria</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('patrimonio')"><span class="mb-i" style="display:none"></span><span><b>Património</b><small>a sua riqueza e objetivos no tempo</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('resumo')"><span class="mb-i" style="display:none"></span><span><b>Resumo</b><small>por dia, semana, mês, ano</small></span><span class="mb-a">›</span></button>
     </div>
   </section>
 
@@ -842,6 +832,7 @@ function migrate(o){
       o.budget=o.budget.filter(b=>b.type==='in');
     }
   }
+  if(Array.isArray(o.budget)&&o.budget.length){o.budget=[];}  // entradas antigas do orçamento: já não se usam (entradas vêm do "mês fixo")
   return o;
 }
 function load(){
@@ -873,7 +864,7 @@ const PRINCIPLES=[
 function acctBalance(a){let b=a.initial||0;state.tx.forEach(t=>{if(t.acct===a.id)b+=(t.type==='in'?t.val:-t.val);});(state.transfers||[]).forEach(tr=>{if(tr.to===a.id)b+=tr.amount;if(tr.from===a.id)b-=tr.amount;});return b;}
 function accountsTotal(){return state.accounts.reduce((s,a)=>s+acctBalance(a),0);}
 function totals(){
-  const income=state.budget.filter(b=>b.type==='in').reduce((a,b)=>a+b.val,0);   // entradas planeadas/mês
+  const income=(state.recurring||[]).filter(r=>r.type==='in').reduce((a,r)=>a+r.val,0);   // entradas do mês fixo
   const plannedExp=outCats().reduce((a,c)=>a+(state.limits[c]||0),0);              // orçamento por categoria = despesa planeada
   const margin=income-plannedExp;                                                // margem planeada
   const ym=new Date().toISOString().slice(0,7);                                   // real do mês corrente
@@ -920,14 +911,16 @@ function renderPainel(){
   renderChart();
   billsAlert();
   renderCockpit();
+  renderCoach();
   renderQChips();
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
-  el('s-margin').textContent=eur(t.margin);
-  el('s-margin').className='val '+(t.margin>=0?'pos':'neg');
-  el('s-margin-lbl').textContent='planeada · real este mês '+eur(t.realMargin);
-  el('s-ef').textContent=t.plannedExp>0?t.efMonths.toFixed(1)+' meses':'—';
-  el('s-ef').className='val sm '+(t.efMonths>=3?'pos':(t.efMonths>0?'':'neg'));
+  el('s-margin').textContent=eur(t.realMargin);
+  el('s-margin').className='val '+(t.realMargin>=0?'pos':'neg');
+  el('s-margin-lbl').textContent='plano: '+eur(t.margin)+'/mês';
+  const hasEF=state.goals.some(g=>/emerg|emergência|emergencia/i.test(g.name));
+  if(el('s-ef-card')){el('s-ef-card').style.display=hasEF?'':'none';el('p-stats').className='grid '+(hasEF?'g3':'g2');}
+  if(hasEF){el('s-ef').textContent=t.plannedExp>0?t.efMonths.toFixed(1)+' meses':'—';el('s-ef').className='val sm '+(t.efMonths>=3?'pos':(t.efMonths>0?'':'neg'));}
 
   const p=PRINCIPLES[new Date().getDate()%PRINCIPLES.length];
   el('pr-k').textContent=p[0]; el('pr-t').textContent=p[1];
@@ -972,10 +965,6 @@ function renderOrc(){
   el('o-out').textContent=eur(t.plannedExp);
   el('o-left').textContent=eur(t.margin);
   el('o-left').className='val sm '+(t.margin>=0?'pos':'neg');
-  const inc=state.budget.filter(b=>b.type==='in');
-  el('o-list').innerHTML=inc.length
-    ? inc.map(b=>'<div class="row"><span class="pill g">Entrada</span><div class="grow"><div class="name">'+esc(b.desc)+'</div></div><span class="amt pos">+'+eur(b.val)+'</span><button class="del" title="Editar" onclick="editIncome(\''+b.id+'\')">✎</button><button class="del" onclick="rm(\'budget\',\''+b.id+'\')">×</button></div>').join('')
-    : '<div class="empty">Registe as suas entradas: ordenado, negócio, rendimentos.</div>';
   renderBudgetCats();
 }
 function renderBudgetCats(){
@@ -1066,6 +1055,26 @@ function renderBills(){
       +'<button class="del" title="Editar" onclick="editBill(\''+b.id+'\')">✎</button><button class="del" onclick="removeBill(\''+b.id+'\')">×</button></div>';
   }).join(''):'<div class="empty">Sem contas. Adicione a água, a luz, a internet — com a data de vencimento.</div>';
 }
+function renderCoach(){
+  const box=el('p-coach'); if(!box)return;
+  const t=totals(), name=(state.profile&&state.profile.name)?state.profile.name:'';
+  const h=new Date().getHours(), greet=h<12?'Bom dia':(h<20?'Boa tarde':'Boa noite');
+  const ym=new Date().toISOString().slice(0,7), today=new Date().toISOString().slice(0,10);
+  const late=(state.bills||[]).filter(b=>!b.paid&&b.due&&b.due<today);
+  const soon=(state.bills||[]).filter(b=>{if(b.paid||!b.due||b.due<today)return false;return (new Date(b.due)-new Date(today))/86400000<=7;});
+  const spent=state.tx.filter(x=>x.type==='out'&&x.date.slice(0,7)===ym).reduce((a,b)=>a+b.val,0);
+  const budget=t.plannedExp, hasEF=state.goals.some(g=>/emerg/i.test(g.name));
+  let msg;
+  if(!state.accounts.length&&!state.tx.length){msg='vamos começar. Abra o menu Mais e registe as suas contas na Carteira — depois é só lançar o dia a dia aqui.';}
+  else if(late.length){msg='tem '+late.length+(late.length>1?' contas':' conta')+' em atraso, num total de '+eur(late.reduce((a,b)=>a+b.val,0))+'. Vale a pena tratar disso hoje.';}
+  else if(budget>0&&spent>budget){msg='este mês já passou o orçamento em '+eur(spent-budget)+'. Convém abrandar até ao fim do mês.';}
+  else if(t.realMargin<0){msg='este mês saiu mais do que entrou ('+eur(t.realMargin)+'). Veja onde consegue apertar.';}
+  else if(soon.length){msg='tem '+eur(soon.reduce((a,b)=>a+b.val,0))+' a vencer nos próximos dias. Deixe já esse dinheiro de lado.';}
+  else if(!hasEF){msg='a sua margem está positiva. Que tal começar um fundo de emergência? Uns meses de despesa guardados dão muita tranquilidade.';}
+  else if(budget>0){const left=budget-spent;msg=left>=0?('vai dentro do plano: ainda pode gastar '+eur(left)+' este mês sem sair do orçamento.'):('está no limite do orçamento este mês. A partir daqui, cada gasto conta.');}
+  else{msg='defina limites no Orçamento e eu ajudo-o a manter o rumo ao longo do mês.';}
+  box.innerHTML='<div style="font-family:\'Space Grotesk\';font-weight:700;color:var(--brass)">'+greet+(name?', '+esc(name):'')+'.</div><div style="margin-top:4px;font-size:14.5px;line-height:1.5">'+msg+'</div>';
+}
 function renderCockpit(){
   const box=el('p-cockpit'); if(!box)return;
   const now=new Date(), ym=now.toISOString().slice(0,7);
@@ -1093,7 +1102,7 @@ function billsAlert(){
   let html='';
   if(late.length){
     html+='<button onclick="go(\'pagar\')" style="display:block;width:100%;text-align:left;cursor:pointer;border:1px solid rgba(255,107,107,.4);background:var(--clay-bg);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;color:var(--ink)">'
-      +'<div style="font-weight:700;color:var(--clay)">⚠ '+late.length+' conta'+(late.length>1?'s':'')+' em atraso — '+eur(late.reduce((a,b)=>a+b.val,0))+'</div>'
+      +'<div style="font-weight:700;color:var(--clay)">'+late.length+' conta'+(late.length>1?'s':'')+' em atraso — '+eur(late.reduce((a,b)=>a+b.val,0))+'</div>'
       +'<div class="mini" style="margin-top:3px">'+late.slice(0,3).map(b=>esc(b.desc)+' (venceu '+new Date(b.due+'T00:00:00').toLocaleDateString('pt-PT',{day:'numeric',month:'short'})+')').join(' · ')+(late.length>3?' …':'')+'</div></button>';
   }
   if(soon.length){
@@ -1561,22 +1570,11 @@ function activate(v){
   const top=el('tabs').querySelector('[data-v="'+v+'"]');
   if(top&&top.scrollIntoView)top.scrollIntoView({inline:'center',block:'nearest'});
   window.scrollTo({top:0,behavior:'smooth'});
-  if(v==='painel'){const t=totals();countUp('s-net',t.net);countUp('s-margin',t.margin);}
+  if(v==='painel'){const t=totals();countUp('s-net',t.net);countUp('s-margin',t.realMargin);}
 }
 el('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(b)activate(b.dataset.v);});
 el('bnav').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(b)activate(b.dataset.v);});
 
-let editIncId=null;
-function editIncome(id){const b=state.budget.find(x=>x.id===id);if(!b)return;editIncId=id;el('o-desc').value=b.desc;el('o-val').value=b.val;el('o-add').textContent='Guardar alterações';el('o-cancel').style.display='';activate('orcamento');setTimeout(()=>el('o-val').focus(),60);}
-function cancelIncEdit(){editIncId=null;el('o-add').textContent='Adicionar entrada';el('o-cancel').style.display='none';el('o-desc').value='';el('o-val').value='';}
-el('o-cancel')&&(el('o-cancel').onclick=cancelIncEdit);
-el('o-add').onclick=()=>{
-  const d=txt('o-desc'),v=num('o-val');
-  if(!d||v<=0){el('o-desc').focus();return;}
-  if(editIncId){const b=state.budget.find(x=>x.id===editIncId);if(b){b.desc=d;b.val=v;}editIncId=null;el('o-add').textContent='Adicionar entrada';el('o-cancel').style.display='none';}
-  else{state.budget.push({id:uid(),desc:d,val:v,type:'in'});}
-  el('o-desc').value='';el('o-val').value='';save();
-};
 let editDebtId=null;
 function editDebt(id){const dd=state.debts.find(x=>x.id===id);if(!dd)return;editDebtId=id;el('d-name').value=dd.name;el('d-bal').value=dd.bal;el('d-apr').value=dd.apr||'';el('d-min').value=dd.min||'';el('d-add').textContent='Guardar alterações';el('d-cancel').style.display='';activate('dividas');setTimeout(()=>el('d-name').focus(),60);}
 function cancelDebtEdit(){editDebtId=null;el('d-add').textContent='Adicionar';el('d-cancel').style.display='none';['d-name','d-bal','d-apr','d-min'].forEach(i=>el(i).value='');}
@@ -1628,10 +1626,11 @@ function editTx(id){
   if(el('t-acct')) el('t-acct').value=t.acct||'';
   el('t-add').textContent='Guardar alterações';
   el('t-cancel').style.display='';
+  if(el('t-form-card'))el('t-form-card').style.display='';
   activate('lancamentos');
-  setTimeout(()=>el('t-val').focus(),60);
+  setTimeout(()=>{const fc=el('t-form-card');if(fc&&fc.scrollIntoView)fc.scrollIntoView({block:'center'});el('t-val').focus();},60);
 }
-function cancelEdit(){editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';el('t-desc').value='';el('t-val').value='';}
+function cancelEdit(){editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';el('t-desc').value='';el('t-val').value='';if(el('t-form-card'))el('t-form-card').style.display='none';}
 el('t-cancel')&&(el('t-cancel').onclick=cancelEdit);
 el('rc-add')&&(el('rc-add').onclick=()=>{
   const d=txt('rc-desc'), v=num('rc-val');
@@ -1670,10 +1669,11 @@ el('q-type')&&el('q-type').addEventListener('change',()=>{fillQCats();renderQChi
 el('q-add')&&(el('q-add').onclick=()=>{
   const v=num('q-val'); if(v<=0){el('q-val').focus();return;}
   const type=el('q-type').value, cat=el('q-cat').value, acct=(el('q-acct')&&el('q-acct').value)||null;
-  state.tx.push({id:uid(),date:new Date().toISOString().slice(0,10),desc:txt('q-desc'),val:v,type,cat,acct});
+  const date=(el('q-date')&&el('q-date').value)||new Date().toISOString().slice(0,10);
+  state.tx.push({id:uid(),date,desc:txt('q-desc'),val:v,type,cat,acct});
   try{localStorage.setItem('norte_qlast',JSON.stringify({type,cat,acct}));}catch(_){}
   el('q-val').value='';el('q-desc').value='';
-  el('q-msg').innerHTML='<span style="color:var(--green)">Registado ✓</span>';
+  el('q-msg').innerHTML='<span style="color:var(--green)">Registado</span>';
   setTimeout(()=>{if(el('q-msg'))el('q-msg').textContent='';},1600);
   save();
 });
@@ -1683,7 +1683,7 @@ el('t-add').onclick=()=>{
   if(editTxId){
     const t=state.tx.find(x=>x.id===editTxId);
     if(t){t.date=date;t.desc=txt('t-desc');t.val=v;t.type=el('t-type').value;t.cat=el('t-cat').value;t.acct=(el('t-acct')&&el('t-acct').value)||null;}
-    editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';
+    editTxId=null;el('t-add').textContent='Registar';el('t-cancel').style.display='none';if(el('t-form-card'))el('t-form-card').style.display='none';
   }else{
     state.tx.push({id:uid(),date,desc:txt('t-desc'),val:v,type:el('t-type').value,cat:el('t-cat').value,acct:(el('t-acct')&&el('t-acct').value)||null});
   }
@@ -1749,15 +1749,15 @@ function mkClient(){
 async function sbInit(){
   const dg=el('auth-diag');
   if(!sbReady()){
-    if(dg) dg.innerHTML=(!window.supabase)?'<span class="neg">⚠ A base de dados não carregou (cliente Supabase não abriu). Verifique a internet/recarrega.</span>':'<span class="neg">⚠ Base de dados não configurada.</span>';
+    if(dg) dg.innerHTML=(!window.supabase)?'<span class="neg">A base de dados não carregou (cliente Supabase não abriu). Verifique a internet/recarrega.</span>':'<span class="neg">Base de dados não configurada.</span>';
     updateAuthUI();return;
   }
   try{
     mkClient();
-    if(dg) dg.innerHTML='<span style="color:var(--green)">Base de dados ligada ✓</span>';
+    if(dg) dg.innerHTML='<span style="color:var(--green)">Base de dados ligada</span>';
     const {data}=await sb.auth.getSession();
     handleSession(data?data.session:null);
-  }catch(err){ if(dg) dg.innerHTML='<span class="neg">⚠ Erro ao ligar: '+(err&&err.message?err.message:err)+'</span>'; }
+  }catch(err){ if(dg) dg.innerHTML='<span class="neg">Erro ao ligar: '+(err&&err.message?err.message:err)+'</span>'; }
 }
 async function handleSession(session){
   sbUser=session&&session.user?session.user:null;
@@ -1770,9 +1770,9 @@ async function handleSession(session){
   }
 }
 const ONB=[
-  ['🏦','Comece pela Carteira','Diga onde está o seu dinheiro — contas à ordem, poupança e dinheiro vivo. É a base de tudo.'],
-  ['📋','Depois, o Orçamento','Registe o que entra por mês e um limite para cada categoria. É o que lhe dá controlo.'],
-  ['✍️','E lance o dia a dia','Registe gastos e recebimentos à medida que acontecem. O que se repete, ponha em recorrentes.']
+  ['','Comece pela Carteira','Diga onde está o seu dinheiro — contas à ordem, poupança e dinheiro vivo. É a base de tudo.'],
+  ['','Depois, o Orçamento','Registe o que entra por mês e um limite para cada categoria. É o que lhe dá controlo.'],
+  ['','E lance o dia a dia','Registe gastos e recebimentos à medida que acontecem. O que se repete, ponha em recorrentes.']
 ];
 let onbI=0;
 function renderOnb(){const s=ONB[onbI];el('onb-icon').textContent=s[0];el('onb-title').textContent=s[1];el('onb-text').textContent=s[2];el('onb-next').textContent=onbI===ONB.length-1?'Começar':'Seguinte';el('onb-dots').innerHTML=ONB.map((_,i)=>'<span style="width:8px;height:8px;border-radius:50%;background:'+(i===onbI?'var(--brass)':'var(--line)')+'"></span>').join('');}
@@ -1873,6 +1873,7 @@ fillRcCats();
 fillBlCats();
 fillQCats();
 applyQLast();
+el('q-date')&&(el('q-date').value=new Date().toISOString().slice(0,10));
 el('bl-due')&&(el('bl-due').value=new Date().toISOString().slice(0,10));
 postRecurring();
 renderAll();
