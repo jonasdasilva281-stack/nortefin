@@ -173,6 +173,10 @@
   .mais-btn b{font-family:'Space Grotesk';font-weight:700;font-size:16px;color:var(--ink)}
   .mais-btn small{color:var(--mut);font-size:12.5px;margin-top:2px}
   .mais-btn .mb-a{color:var(--brass);font-size:22px}
+  .qa-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 16px}
+  .qa{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 4px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12px;font-weight:600;transition:.15s}
+  .qa:hover{border-color:var(--brass);transform:translateY(-1px)}
+  .qa-i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(240,189,81,.14);color:var(--brass);font-family:'Space Grotesk';font-weight:700;font-size:18px}
 
   /* navegação inferior (mobile) */
   .bottomnav{display:none}
@@ -187,7 +191,7 @@
     .bottomnav .mid svg{width:27px;height:27px;stroke-width:2}
     .app{padding-bottom:92px}
     header.top{padding:12px 16px}
-    nav.tabs{position:sticky;top:63px;background:rgba(9,9,11,.9);backdrop-filter:blur(10px);z-index:15;margin:0 -20px;padding-left:20px;padding-right:20px}
+    nav.tabs{display:none}
     h2.view-h{font-size:26px}
     .stat .val{font-size:28px}
   }
@@ -203,6 +207,7 @@
   <div class="tools">
     <div id="auth-bar" style="display:none;align-items:center;gap:8px">
       <span class="mini" id="auth-who"></span>
+      <button class="btn ghost" id="auth-pinbtn" style="padding:8px 12px;font-size:13px">PIN</button>
       <button class="btn ghost" id="auth-out" style="padding:8px 12px;font-size:13px">Sair</button>
     </div>
     <button class="btn ghost" id="exportBtn" style="padding:8px 12px;font-size:13px">Exportar</button>
@@ -219,7 +224,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho — organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v26</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v30</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -268,63 +273,49 @@
 <div class="app">
   <nav class="tabs" id="tabs">
     <button data-v="painel" class="on">Início</button>
-    <button data-v="pagar">A pagar</button>
-    <button data-v="poupanca">Poupança &amp; Investir</button>
-    <button data-v="mais">Mais</button>
+    <button data-v="lancamentos">Lançar</button>
+    <button data-v="mais">Menu</button>
   </nav>
 
   <!-- ================= PAINEL ================= -->
   <section class="view on" id="painel">
-    <h2 class="view-h" id="painel-hi">O seu norte</h2>
-    <div class="eyebrow" style="margin-top:6px">Rumo ao seu primeiro milhão</div>
+    <div class="eyebrow" id="painel-hi" style="margin-top:2px">O seu norte</div>
 
-    <div class="card pad" id="p-coach" style="margin:16px 0 0;border-left:3px solid var(--brass)"></div>
-    <p class="sub">Onde está hoje — e o que fazer a seguir.</p>
-
-    <div class="grid g3" style="margin-bottom:16px" id="p-stats">
-      <div class="card pad stat"><div class="eyebrow">Património líquido</div><div class="val" id="s-net">—</div><div class="lbl">contas + investido + ativos − dívidas</div></div>
-      <div class="card pad stat"><div class="eyebrow">Margem real (mês)</div><div class="val" id="s-margin">—</div><div class="lbl" id="s-margin-lbl">entrou − saiu este mês</div></div>
-      <div class="card pad stat" id="s-ef-card"><div class="eyebrow">Fundo de emergência</div><div class="val sm" id="s-ef">—</div><div class="lbl" id="s-ef-lbl">meses de despesa cobertos</div></div>
-    </div>
-
-    <div class="card pad" style="margin-bottom:16px">
-      <div class="split" style="margin-bottom:12px"><h3 style="font-size:18px">Este mês</h3><span class="mini" id="ck-month"></span></div>
-      <div id="p-cockpit"></div>
-    </div>
-
-    <div class="card pad" style="margin-bottom:16px;border-color:rgba(240,189,81,.3)">
-      <div class="split" style="margin-bottom:10px"><h3 style="font-size:18px">Lançar agora</h3><span class="mini">rápido, sem sair daqui</span></div>
-      <div class="inline">
-        <div class="field"><label>Valor (€)</label><input type="number" id="q-val" placeholder="0" min="0" step="0.01"></div>
-        <div class="field"><label>Descrição</label><input type="text" id="q-desc" placeholder="Ex.: Café, Mercado"></div>
-        <div class="field"><label>Data</label><input type="date" id="q-date"></div>
+    <div id="p-stats">
+      <div class="card pad" style="margin:12px 0 12px;text-align:center;border:1px solid rgba(240,189,81,.28);background:linear-gradient(135deg,#17171d,#0e0e12)">
+        <div class="eyebrow">Património líquido</div>
+        <div class="val" id="s-net" style="font-size:40px;margin-top:4px">—</div>
+        <div class="lbl">contas + investido + ativos − dívidas</div>
       </div>
-      <div class="inline">
-        <div class="field"><label>Tipo</label><select id="q-type"><option value="out">Gasto</option><option value="in">Recebi</option></select></div>
-        <div class="field"><label>Categoria</label><select id="q-cat"></select></div>
-        <div class="field"><label>Conta</label><select id="q-acct"></select></div>
+      <div id="p-stats-row" class="grid g2">
+        <div class="card pad stat"><div class="eyebrow">Margem real (mês)</div><div class="val sm" id="s-margin">—</div><div class="lbl" id="s-margin-lbl">entrou − saiu este mês</div></div>
+        <div class="card pad stat" id="s-ef-card"><div class="eyebrow">Fundo de emergência</div><div class="val sm" id="s-ef">—</div><div class="lbl" id="s-ef-lbl">meses de despesa cobertos</div></div>
       </div>
-      <div id="q-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px"></div>
-      <button class="btn" id="q-add" style="width:100%">Registar</button>
-      <div class="mini" id="q-msg" style="margin-top:8px"></div>
     </div>
+
+    <div class="qa-row">
+      <button class="qa" onclick="go('lancamentos')"><span class="qa-i">+</span><span>Lançar</span></button>
+      <button class="qa" onclick="go('pagar')"><span class="qa-i">€</span><span>A pagar</span></button>
+      <button class="qa" onclick="go('poupanca')"><span class="qa-i">↑</span><span>Poupar</span></button>
+      <button class="qa" onclick="go('comprar')"><span class="qa-i">?</span><span>Comprar</span></button>
+    </div>
+
+    <div class="card pad" id="p-coach" style="margin:0 0 16px;border-left:3px solid var(--brass)"></div>
 
     <div id="p-alert"></div>
     <div id="p-bills"></div>
     <div id="p-parcelas"></div>
 
-    <div class="card pad" style="margin-bottom:16px">
-      <div class="split" style="margin-bottom:6px"><h3 style="font-size:18px">Evolução</h3><span class="mini">saldo dos últimos meses</span></div>
-      <div id="p-chart"></div>
-    </div>
-
-    <button class="pc-cta" onclick="go('comprar')">
-      <div style="text-align:left">
-        <div style="font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--brass)">Posso comprar isto?</div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:2px">Antes de gastar, pergunte à app.</div>
+    <div class="grid g2" style="margin-bottom:16px">
+      <div class="card pad">
+        <div class="split" style="margin-bottom:12px"><h3 style="font-size:18px">Este mês</h3><span class="mini" id="ck-month"></span></div>
+        <div id="p-cockpit"></div>
       </div>
-      <div style="font-size:26px;color:var(--brass)">→</div>
-    </button>
+      <div class="card pad">
+        <div class="split" style="margin-bottom:6px"><h3 style="font-size:18px">Evolução</h3><span class="mini">saldo dos últimos meses</span></div>
+        <div id="p-chart"></div>
+      </div>
+    </div>
 
     <div class="principle" style="margin-bottom:16px">
       <div class="q">&ldquo;</div>
@@ -395,8 +386,25 @@
 
   <!-- ================= LANÇAMENTOS ================= -->
   <section class="view" id="lancamentos">
-    <h2 class="view-h">Lançamentos diários</h2>
-    <p class="sub">Registe o que gastas e recebes, dia a dia. Cada movimento entra numa categoria.</p>
+    <h2 class="view-h">Lançar</h2>
+    <p class="sub">Registe o que gasta e recebe, dia a dia. Cada movimento entra numa categoria.</p>
+
+    <div class="card pad" style="margin-bottom:16px;border-color:rgba(240,189,81,.3)">
+      <div class="split" style="margin-bottom:10px"><h3 style="font-size:18px">Lançar agora</h3><span class="mini">rápido</span></div>
+      <div class="inline">
+        <div class="field"><label>Valor (€)</label><input type="number" id="q-val" placeholder="0" min="0" step="0.01"></div>
+        <div class="field"><label>Descrição</label><input type="text" id="q-desc" placeholder="Ex.: Café, Mercado"></div>
+        <div class="field"><label>Data</label><input type="date" id="q-date"></div>
+      </div>
+      <div class="inline">
+        <div class="field"><label>Tipo</label><select id="q-type"><option value="out">Gasto</option><option value="in">Recebi</option></select></div>
+        <div class="field"><label>Categoria</label><select id="q-cat"></select></div>
+        <div class="field"><label>Conta</label><select id="q-acct"></select></div>
+      </div>
+      <div id="q-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px"></div>
+      <button class="btn" id="q-add" style="width:100%">Registar</button>
+      <div class="mini" id="q-msg" style="margin-top:8px"></div>
+    </div>
 
     <div class="card pad" style="margin-bottom:16px">
       <div class="split" style="margin-bottom:14px">
@@ -757,15 +765,17 @@
 
   <!-- ================= MAIS ================= -->
   <section class="view" id="mais">
-    <h2 class="view-h">Mais</h2>
-    <p class="sub">Tudo o resto, à distância de um toque.</p>
+    <h2 class="view-h">Menu</h2>
+    <p class="sub">Escolha a secção que quer abrir.</p>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i" style="display:none"></span><span><b>O meu mês fixo</b><small>ordenado, renda, assinaturas e contas — configurar 1 vez</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i" style="display:none"></span><span><b>Lançamentos</b><small>o diário completo, editar e recorrentes</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('lancamentos')"><span class="mb-i" style="display:none"></span><span><b>Lançar</b><small>registar gastos e recebimentos do dia a dia</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('pagar')"><span class="mb-i" style="display:none"></span><span><b>A pagar</b><small>contas do mês, prestações e dívidas</small></span><span class="mb-a">›</span></button>
       <button class="mais-btn" onclick="go('carteira')"><span class="mb-i" style="display:none"></span><span><b>Carteira</b><small>contas, dinheiro vivo e saldos</small></span><span class="mb-a">›</span></button>
-      <button class="mais-btn" onclick="go('orcamento')"><span class="mb-i" style="display:none"></span><span><b>Orçamento</b><small>o que entra e limites por categoria</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('orcamento')"><span class="mb-i" style="display:none"></span><span><b>Orçamento</b><small>limites de gasto por categoria</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('poupanca')"><span class="mb-i" style="display:none"></span><span><b>Poupança &amp; Investir</b><small>objetivos, guardar e fazer render</small></span><span class="mb-a">›</span></button>
       <button class="mais-btn" onclick="go('patrimonio')"><span class="mb-i" style="display:none"></span><span><b>Património</b><small>a sua riqueza e objetivos no tempo</small></span><span class="mb-a">›</span></button>
       <button class="mais-btn" onclick="go('resumo')"><span class="mb-i" style="display:none"></span><span><b>Resumo</b><small>por dia, semana, mês, ano</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('comprar')"><span class="mb-i" style="display:none"></span><span><b>Posso comprar?</b><small>decidir uma compra com cabeça</small></span><span class="mb-a">›</span></button>
     </div>
   </section>
 
@@ -787,12 +797,33 @@
   </div>
 </div>
 
+<div id="pin-gate" style="display:none;position:fixed;inset:0;z-index:108;background:radial-gradient(900px 500px at 50% -5%, rgba(240,189,81,.16), transparent 60%), var(--paper);align-items:center;justify-content:center;padding:24px">
+  <div style="text-align:center;max-width:340px;width:100%">
+    <div class="mark" style="width:64px;height:64px;font-size:34px;border-radius:18px;margin:0 auto 18px">N</div>
+    <h3 id="pin-hi" style="font-size:22px">Olá</h3>
+    <p class="mini" style="margin:6px 0 18px">Escreva o seu PIN para entrar.</p>
+    <input type="password" id="pin-in" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="••••" autocomplete="off" style="width:100%;max-width:220px;text-align:center;font-size:28px;letter-spacing:16px;font-family:'JetBrains Mono',monospace;padding:12px 0;margin:0 auto;display:block">
+    <button class="btn" id="pin-go" style="width:100%;max-width:220px;margin:14px auto 0;display:block">Entrar</button>
+    <div class="mini" id="pin-msg" style="margin-top:12px"></div>
+    <button class="btn ghost" id="pin-forgot" style="margin-top:14px;font-size:13px">Esqueci o PIN — entrar com email</button>
+  </div>
+</div>
+
+<div id="pin-set" style="display:none;position:fixed;inset:0;z-index:109;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
+  <div class="card pad" style="max-width:360px;width:100%;text-align:center">
+    <h3 style="font-size:21px;margin-bottom:6px">Entrar mais rápido</h3>
+    <p class="mini" style="margin:0 0 16px">Crie um PIN de 4 dígitos para, neste telemóvel, entrar sem escrever o email e a senha.</p>
+    <input type="password" id="pin-new" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="••••" autocomplete="off" style="width:100%;max-width:220px;text-align:center;font-size:28px;letter-spacing:16px;font-family:'JetBrains Mono',monospace;padding:12px 0;margin:0 auto 8px;display:block">
+    <div class="mini" id="pin-set-msg" style="margin-bottom:12px"></div>
+    <button class="btn" id="pin-save" style="width:100%">Criar PIN</button>
+    <button class="btn ghost" id="pin-skip" style="width:100%;margin-top:8px;font-size:13px">Agora não</button>
+  </div>
+</div>
+
 <nav class="bottomnav" id="bnav">
-  <button data-v="painel" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Painel</span></button>
-  <button data-v="carteira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M16 12h3.5"/></svg><span>Carteira</span></button>
-  <button data-v="lancamentos" class="mid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg><span>Lançar</span></button>
-  <button data-v="resumo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg><span>Resumo</span></button>
-  <button data-v="patrimonio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l2.6 5.2 5.7.8-4.1 4 1 5.7L12 20.2 6.8 22.7l1-5.7-4.1-4 5.7-.8z"/></svg><span>Património</span></button>
+  <button data-v="painel" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Início</span></button>
+  <button data-v="lancamentos" class="mid" onclick="setTimeout(()=>{var q=document.getElementById('q-val');if(q){q.focus();}},80)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg><span>Lançar</span></button>
+  <button data-v="mais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span>Menu</span></button>
 </nav>
 
 <script>
@@ -916,10 +947,10 @@ function renderPainel(){
   el('s-net').textContent=eur(t.net);
   el('s-net').className='val '+(t.net>=0?'pos':'neg');
   el('s-margin').textContent=eur(t.realMargin);
-  el('s-margin').className='val '+(t.realMargin>=0?'pos':'neg');
+  el('s-margin').className='val sm '+(t.realMargin>=0?'pos':'neg');
   el('s-margin-lbl').textContent='plano: '+eur(t.margin)+'/mês';
   const hasEF=state.goals.some(g=>/emerg|emergência|emergencia/i.test(g.name));
-  if(el('s-ef-card')){el('s-ef-card').style.display=hasEF?'':'none';el('p-stats').className='grid '+(hasEF?'g3':'g2');}
+  if(el('s-ef-card')){el('s-ef-card').style.display=hasEF?'':'none';if(el('p-stats-row'))el('p-stats-row').className='grid '+(hasEF?'g2':'');}
   if(hasEF){el('s-ef').textContent=t.plannedExp>0?t.efMonths.toFixed(1)+' meses':'—';el('s-ef').className='val sm '+(t.efMonths>=3?'pos':(t.efMonths>0?'':'neg'));}
 
   const p=PRINCIPLES[new Date().getDate()%PRINCIPLES.length];
@@ -1759,6 +1790,16 @@ async function sbInit(){
     handleSession(data?data.session:null);
   }catch(err){ if(dg) dg.innerHTML='<span class="neg">Erro ao ligar: '+(err&&err.message?err.message:err)+'</span>'; }
 }
+/* ---------- PIN de acesso rápido (trava local sobre a sessão) ---------- */
+function pinObf(s){try{return btoa('nf'+s+'x9');}catch(_){return 'x'+s;}}
+function pinGet(){try{return JSON.parse(localStorage.getItem('norte_pin')||'null');}catch(_){return null;}}
+function pinFor(uid){const p=pinGet();return (p&&p.uid===uid)?p:null;}
+function pinSaveFor(uid,code){try{localStorage.setItem('norte_pin',JSON.stringify({uid,code:pinObf(code)}));localStorage.setItem('norte_keep','1');}catch(_){}}
+function pinCheckFor(uid,code){const p=pinFor(uid);return !!(p&&p.code===pinObf(code));}
+let pinUnlocked=false;
+function showPinGate(){const nm=(state.profile&&state.profile.name)?state.profile.name:'';el('pin-hi').textContent=nm?('Olá, '+nm):'Olá';el('pin-msg').textContent='';el('pin-in').value='';el('pin-gate').style.display='flex';setTimeout(()=>el('pin-in').focus(),60);}
+function hidePinGate(){el('pin-gate').style.display='none';}
+function offerPin(){if(el('pin-new'))el('pin-new').value='';if(el('pin-set-msg'))el('pin-set-msg').textContent='';el('pin-set').style.display='flex';setTimeout(()=>el('pin-new').focus(),60);}
 async function handleSession(session){
   sbUser=session&&session.user?session.user:null;
   updateAuthUI();
@@ -1767,6 +1808,9 @@ async function handleSession(session){
     if(pendingProfile){ state.profile=pendingProfile; saveLocal(); pushRemote(); pendingProfile=null; }
     if(postRecurring()) pushRemote();
     cacheProfile(); renderAll(); maybeOnboard();
+    const hasPin=pinFor(sbUser.id);
+    if(hasPin && !pinUnlocked){ showPinGate(); }
+    else if(!hasPin && localStorage.getItem('norte_pin_skip')!=='1'){ offerPin(); }
   }
 }
 const ONB=[
@@ -1880,6 +1924,18 @@ renderAll();
 el('auth-send').onclick=sbEnter;
 el('auth-out').onclick=sbSignOut;
 el('auth-forgot').onclick=sbForgot;
+// PIN de acesso rápido
+el('pin-in')&&el('pin-in').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
+el('pin-new')&&el('pin-new').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
+function pinTry(){const c=(el('pin-in').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser&&pinCheckFor(sbUser.id,c)){pinUnlocked=true;hidePinGate();renderAll();maybeOnboard();}else{el('pin-msg').innerHTML='<span class="neg">PIN errado.</span>';el('pin-in').value='';el('pin-in').focus();}}
+el('pin-go')&&(el('pin-go').onclick=pinTry);
+el('pin-in')&&el('pin-in').addEventListener('keydown',e=>{if(e.key==='Enter')pinTry();});
+el('pin-forgot')&&(el('pin-forgot').onclick=()=>{hidePinGate();pinUnlocked=false;sbSignOut();});
+function pinDoSave(){const c=(el('pin-new').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-set-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser){pinSaveFor(sbUser.id,c);pinUnlocked=true;}el('pin-set').style.display='none';}
+el('pin-save')&&(el('pin-save').onclick=pinDoSave);
+el('pin-new')&&el('pin-new').addEventListener('keydown',e=>{if(e.key==='Enter')pinDoSave();});
+el('pin-skip')&&(el('pin-skip').onclick=()=>{try{localStorage.setItem('norte_pin_skip','1');}catch(_){}el('pin-set').style.display='none';});
+el('auth-pinbtn')&&(el('auth-pinbtn').onclick=()=>{if(!sbUser)return;try{localStorage.removeItem('norte_pin_skip');}catch(_){}offerPin();});
 el('auth-pass')&&el('auth-pass').addEventListener('keydown',e=>{if(e.key==='Enter')sbEnter();});
 el('auth-keep')&&(el('auth-keep').checked=(function(){try{return localStorage.getItem('norte_keep')!=='0';}catch(_){return true;}})());
 el('auth-keep')&&el('auth-keep').addEventListener('change',e=>{try{localStorage.setItem('norte_keep',e.target.checked?'1':'0');}catch(_){}if(window.supabase&&sbReady())mkClient();});
