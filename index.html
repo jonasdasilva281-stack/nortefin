@@ -60,7 +60,8 @@
   .brand span{display:block;font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 
   /* nav */
-  nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:14px 0 6px;scrollbar-width:none}
+  nav.tabs{display:flex;gap:6px;overflow-x:auto;padding:0;margin-left:auto;scrollbar-width:none}
+  .app{padding-top:14px}
   nav.tabs::-webkit-scrollbar{display:none}
   nav.tabs button{
     border:1px solid transparent;background:transparent;color:var(--ink-soft);
@@ -244,10 +245,14 @@
 <body>
 
 <header class="top">
-  <div class="brand">
+  <div class="brand" onclick="go('painel')" title="Início" style="cursor:pointer">
     <div class="mark">N</div>
     <div style="display:flex;align-items:baseline;gap:10px;min-width:0"><b>Nortefin</b><i id="painel-hi" class="hdr-hi">O seu norte</i></div>
   </div>
+  <nav class="tabs" id="tabs">
+    <button data-v="registar">+ Registar</button>
+    <button data-v="mais">Menu</button>
+  </nav>
   <div class="tools" style="display:none">
     <div id="auth-bar" style="display:none;align-items:center;gap:8px">
       <span class="mini" id="auth-who"></span>
@@ -268,7 +273,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v39</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v40</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -314,11 +319,6 @@
   </div>
 </div>
 <div class="app">
-  <nav class="tabs" id="tabs">
-    <button data-v="painel" class="on">Início</button>
-    <button data-v="registar">+ Registar</button>
-    <button data-v="mais">Menu</button>
-  </nav>
 
   <!-- ================= INÍCIO (só mostra) ================= -->
   <section class="view on" id="painel">
@@ -689,7 +689,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v39 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v40 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
