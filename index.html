@@ -9,7 +9,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Nortefin">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23111114'/%3E%3Ctext x='50' y='73' font-family='Arial,sans-serif' font-weight='700' font-size='66' fill='%23f0bd51' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f3c95f'/%3E%3Cstop offset='1' stop-color='%23dca62f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='72' font-family='Arial,Helvetica,sans-serif' font-weight='800' font-size='64' fill='%23141017' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,6 +54,7 @@
   .brand{display:flex;align-items:center;gap:11px}
   .mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(145deg,#f3c95f,#dca62f);
     display:grid;place-items:center;color:#141017;font-family:'Space Grotesk';font-weight:700;font-size:21px;line-height:1;box-shadow:0 0 20px rgba(240,189,81,.35)}
+  .hdr-hi{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--brass);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand b{font-family:'Space Grotesk';font-weight:700;font-size:19px;letter-spacing:-.03em}
   .brand span{display:block;font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 
@@ -170,10 +172,12 @@
     background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
   .mais-btn:hover{border-color:var(--brass);transform:translateY(-1px)}
   .mais-btn .mb-i{font-size:24px;line-height:1}
-  .mais-btn>span:nth-child(2){flex:1;display:flex;flex-direction:column}
+  .mais-btn>span:nth-child(2):not(.mb-a){flex:1;display:flex;flex-direction:column}
   .mais-btn b{font-family:'Space Grotesk';font-weight:700;font-size:16px;color:var(--ink)}
   .mais-btn small{color:var(--mut);font-size:12.5px;margin-top:2px}
-  .mais-btn .mb-a{color:var(--brass);font-size:22px}
+  .mais-btn{width:100%}
+  .mais-btn>span:first-child{flex:1;display:flex;flex-direction:column;min-width:0}
+  .mais-btn .mb-a{color:var(--brass);font-size:22px;flex:0 0 auto!important}
   .qa-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 16px}
   .qa{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:12px 4px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:12px;font-weight:600;transition:.15s}
   .qa:hover{border-color:var(--brass);transform:translateY(-1px)}
@@ -240,7 +244,7 @@
 <header class="top">
   <div class="brand">
     <div class="mark">N</div>
-    <div><b>Nortefin</b><span>controlo &amp; sabedoria</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;min-width:0"><b>Nortefin</b><i id="painel-hi" class="hdr-hi">O seu norte</i></div>
   </div>
   <div class="tools" style="display:none">
     <div id="auth-bar" style="display:none;align-items:center;gap:8px">
@@ -262,7 +266,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v36</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v37</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -316,7 +320,6 @@
 
   <!-- ================= INÍCIO (só mostra) ================= -->
   <section class="view on" id="painel">
-    <div class="eyebrow" id="painel-hi" style="margin-top:2px">O seu norte</div>
 
     <div class="card pad" style="margin:12px 0 12px;text-align:center;border:1px solid rgba(240,189,81,.28);background:linear-gradient(135deg,#17171d,#0e0e12)">
       <div class="eyebrow" style="display:flex;align-items:center;justify-content:center;gap:8px">Património líquido <button id="net-eye" type="button" aria-label="Mostrar ou ocultar valor" style="background:none;border:none;color:var(--mut);padding:4px;display:inline-flex;cursor:pointer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
@@ -676,7 +679,6 @@
     <h2 class="view-h">Menu</h2>
     <div class="teach" style="margin:0 0 16px"><b>Como funciona:</b> tudo o que acontece regista-se num só sítio, o botão <b>+ Registar</b>. Contas, orçamento e objetivos definem-se uma vez em <b>Configurar</b>. Todos os outros ecrãs atualizam-se sozinhos.</div>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="mais-btn" onclick="openReg('out')"><span><b>+ Registar</b><small>gastei, recebi, conta, dívida, guardei, investi</small></span><span class="mb-a">›</span></button>
       <div class="eyebrow" style="margin:10px 0 0">Ver</div>
       <button class="mais-btn" onclick="go('movimentos')"><span><b>Movimentos</b><small>o que entrou e saiu, por dia, mês ou ano</small></span><span class="mb-a">›</span></button>
       <button class="mais-btn" onclick="go('pagar')"><span><b>A pagar</b><small>contas, prestações e dívidas</small></span><span class="mb-a">›</span></button>
@@ -690,7 +692,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v36 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v37 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -1427,38 +1429,35 @@ function renderChart(){
   const now=new Date(), months=[];
   for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));}
   const data=months.map(ym=>{const rows=state.tx.filter(t=>t.date.slice(0,7)===ym);const inS=rows.filter(t=>t.type==='in').reduce((a,b)=>a+b.val,0);const outS=rows.filter(t=>t.type==='out').reduce((a,b)=>a+b.val,0);return{ym,net:inS-outS,has:rows.length>0};});
-  if(!data.some(d=>d.has)){box.innerHTML='<div class="empty">Ainda sem dados. Lance movimentos e a evolução aparece aqui.</div>';return;}
-  const hide=netHidden();
-  const short=v=>{const a=Math.abs(v),sg=v<0?'−':'+';if(a>=1000)return sg+(a/1000).toLocaleString('pt-PT',{maximumFractionDigits:1})+' mil';return sg+Math.round(a);};
-  const maxP=Math.max(0,...data.map(d=>d.net)), maxN=Math.max(0,...data.map(d=>-d.net));
-  const H=150, span=(maxP+maxN)||1;
-  const hP=Math.round(H*maxP/span), hN=H-hP;           // espaço acima e abaixo do zero, proporcional
-  const cur=months[months.length-1];
-  let cols='';
-  data.forEach(d=>{
-    const up=d.net>=0, h=Math.max(d.has&&Math.abs(d.net)>0.005?4:0,Math.round(Math.abs(d.net)/span*H));
-    const isCur=d.ym===cur, col=up?'var(--green)':'var(--clay)';
-    const lbl=d.has?(hide?'•••':short(d.net)):'';
-    const tag='<div class="money" style="font-size:10.5px;font-weight:700;color:'+(d.has?col:'var(--mut)')+';white-space:nowrap;line-height:1.2;padding:2px 0">'+lbl+'</div>';
-    const bar='<div style="width:72%;max-width:34px;height:'+h+'px;background:'+col+';opacity:'+(isCur?1:.75)+';border-radius:'+(up?'7px 7px 2px 2px':'2px 2px 7px 7px')+(isCur?';box-shadow:0 0 14px '+(up?'rgba(61,220,151,.45)':'rgba(255,107,107,.45)'):'')+'"></div>';
-    cols+='<div style="flex:1;display:flex;flex-direction:column;align-items:center;min-width:0">'
-      +'<div style="height:'+(hP+18)+'px;width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center">'+(up?tag+bar:'')+'</div>'
-      +'<div style="height:'+(hN+(maxN>0?18:0))+'px;width:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:center">'+(!up?bar+tag:'')+'</div>'
-      +'</div>';
+  if(!data.some(d=>d.has)){box.innerHTML='<div class="empty">Ainda sem dados. Registe movimentos e a evolução aparece aqui.</div>';return;}
+  let acc=0; data.forEach(d=>{acc+=d.net;d.cum=acc;});
+  const hide=netHidden(), cur=months[months.length-1];
+  const short=v=>{const a=Math.abs(v),sg=v<0?'−':'+';return sg+(a>=1000?(a/1000).toLocaleString('pt-PT',{maximumFractionDigits:1})+' mil':Math.round(a));};
+  const vals=data.flatMap(d=>[d.net,d.cum]).concat(0);
+  let hi=Math.max(...vals), lo=Math.min(...vals); const pad=(hi-lo||1)*.18; hi+=pad; if(lo<0)lo-=pad;
+  const W=320,H=170,T=8,B=H-6, y=v=>T+(hi-v)/(hi-lo)*(B-T), y0=y(0), n=data.length, cw=W/n, bw=Math.min(30,cw*.52);
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;overflow:visible" role="img" aria-label="Evolução dos últimos 6 meses">';
+  svg+='<line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="#3a3a46" stroke-dasharray="3 4"/>';
+  data.forEach((d,i)=>{
+    const cx=cw*i+cw/2, up=d.net>=0, yy=y(d.net), top=Math.min(yy,y0), h=Math.max(d.has&&Math.abs(d.net)>0.005?3:0,Math.abs(yy-y0));
+    const col=up?'#3ddc97':'#ff6b6b', isCur=d.ym===cur;
+    if(h>0)svg+='<rect x="'+(cx-bw/2)+'" y="'+(up?y0-h:y0)+'" width="'+bw+'" height="'+h+'" rx="5" fill="'+col+'" opacity="'+(isCur?.95:.6)+'"/>';
+    if(d.has&&!hide)svg+='<text x="'+cx+'" y="'+(up?y0-h-6:y0+h+13)+'" text-anchor="middle" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace" fill="'+col+'">'+short(d.net)+'</text>';
   });
-  const zeroTop=hP+18;
-  let html='<div style="position:relative;margin-top:6px"><div style="position:absolute;left:0;right:0;top:'+zeroTop+'px;height:1px;background:var(--line2);border-top:1px dashed #3a3a46"></div><div style="display:flex;gap:6px;position:relative">'+cols+'</div></div>';
-  html+='<div style="display:flex;gap:6px;margin-top:8px">';
+  const pts=data.map((d,i)=>[cw*i+cw/2,y(d.cum)]);
+  svg+='<polyline points="'+pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')+'" fill="none" stroke="#f0bd51" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach((p,i)=>{svg+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i===n-1?4.5:3)+'" fill="'+(i===n-1?'#f0bd51':'#141418')+'" stroke="#f0bd51" stroke-width="2"/>';});
+  svg+='</svg>';
+  let html='<div style="margin-top:8px">'+svg+'</div><div style="display:flex;margin-top:8px">';
   data.forEach(d=>{const nm=new Date(d.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'short'}).replace('.','');const isCur=d.ym===cur;html+='<div style="flex:1;text-align:center;font-size:11.5px;font-weight:'+(isCur?700:500)+';color:'+(isCur?'var(--brass)':'var(--mut)')+';text-transform:capitalize">'+nm+'</div>';});
-  html+='</div>';
-  const withData=data.filter(d=>d.has), tot=withData.reduce((a,d)=>a+d.net,0), avg=tot/withData.length;
-  const best=withData.reduce((a,d)=>d.net>a.net?d:a,withData[0]);
-  const bestNm=new Date(best.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'long'});
+  html+='</div><div style="display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11.5px;color:var(--mut)">'
+    +'<span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:3px;background:linear-gradient(90deg,#3ddc97 50%,#ff6b6b 50%)"></i>o que sobrou no mês</span>'
+    +'<span style="display:inline-flex;align-items:center;gap:6px"><i style="width:16px;height:3px;border-radius:2px;background:#f0bd51"></i>acumulado</span></div>';
+  const withData=data.filter(d=>d.has), avg=withData.reduce((a,d)=>a+d.net,0)/withData.length, last=data[n-1].cum;
   const m=v=>hide?'•••••':eur(v);
   html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">'
     +'<div><div class="mini">Média por mês</div><div class="amt '+(avg>=0?'pos':'neg')+'" style="font-size:15px">'+m(avg)+'</div></div>'
-    +'<div style="text-align:right"><div class="mini">Melhor mês</div><div class="amt" style="font-size:15px;text-transform:capitalize">'+(best.net>0?bestNm:'nenhum')+'</div></div>'
-    +'</div>';
+    +'<div style="text-align:right"><div class="mini">Acumulado em 6 meses</div><div class="amt" style="font-size:15px;color:var(--brass)">'+m(last)+'</div></div></div>';
   box.innerHTML=html;
 }
 function catSpend(ym){const b={};state.tx.filter(t=>t.date.slice(0,7)===ym&&t.type==='out').forEach(t=>{b[t.cat]=(b[t.cat]||0)+t.val;});return b;}
