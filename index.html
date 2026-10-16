@@ -56,6 +56,10 @@
   .mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(145deg,#f3c95f,#dca62f);
     display:grid;place-items:center;color:#141017;font-family:'Space Grotesk';font-weight:700;font-size:21px;line-height:1;box-shadow:0 0 20px rgba(240,189,81,.35)}
   .hdr-hi{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--brass);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .intro-logo{animation:introPop .7s cubic-bezier(.2,.9,.3,1.2) both}
+  .intro-t{animation:introUp .7s ease both;animation-delay:.25s}
+  @keyframes introPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+  @keyframes introUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .brand b{font-family:'Space Grotesk';font-weight:700;font-size:19px;letter-spacing:-.03em}
   .brand span{display:block;font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 
@@ -243,6 +247,15 @@
 </style>
 </head>
 <body>
+<div id="intro" style="position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(900px 500px at 50% 30%, rgba(240,189,81,.18), transparent 60%), #09090b;transition:opacity .5s ease">
+  <div class="mark intro-logo" style="width:104px;height:104px;font-size:58px;border-radius:28px;box-shadow:0 0 70px rgba(240,189,81,.55)">N</div>
+  <p class="intro-t" style="margin:28px 0 0;color:var(--ink-soft);font-size:16px">Seja bem-vindo ao</p>
+  <h1 class="intro-t" style="font-family:'Space Grotesk';font-weight:700;font-size:46px;letter-spacing:-.04em;margin:2px 0 0;color:#fff">Nortefin</h1>
+  <p class="intro-t" style="color:var(--brass);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px;margin:10px 0 0">Controlo &amp; Sabedoria</p>
+</div>
+<script>
+(function(){var d=document.getElementById('intro');setTimeout(function(){d.style.opacity='0';d.style.pointerEvents='none';setTimeout(function(){d.style.display='none';},520);},2000);})();
+</script>
 
 <header class="top">
   <div class="brand" onclick="go('painel')" title="Início" style="cursor:pointer">
@@ -273,7 +286,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v40</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v41</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -689,7 +702,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v40 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v41 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
