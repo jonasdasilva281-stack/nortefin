@@ -28,13 +28,14 @@
     --r:18px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;overflow-x:hidden;max-width:100%;overscroll-behavior-y:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  html{margin:0;background:#09090b;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{margin:0;overflow-x:hidden;overscroll-behavior-y:none}
   button,input,select,a,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   body::before{content:'';position:fixed;top:0;left:0;right:0;height:6px;z-index:60;background:linear-gradient(90deg,#f0bd51,#f0774f,#e0518f,#7c6cf0,#3ddc97)}
   body{
     font-family:'Inter',system-ui,sans-serif;
     background:radial-gradient(1100px 560px at 50% -8%, rgba(240,189,81,.10), transparent 62%), var(--paper);
-    background-attachment:fixed; color:var(--ink);
+    color:var(--ink);
     -webkit-font-smoothing:antialiased;line-height:1.5;
   }
   .money{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
@@ -184,6 +185,7 @@
   .qa-i{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(240,189,81,.14);color:var(--brass);font-family:'Space Grotesk';font-weight:700;font-size:18px}
 
   /* navegação inferior (mobile) */
+  @media(min-width:761px){body{background-attachment:fixed}}
   .bottomnav{display:none}
   @media(max-width:760px){
     .bottomnav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;
@@ -266,7 +268,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v37</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v38</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -692,7 +694,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v37 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v38 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -1978,7 +1980,7 @@ el('auth-forgot').onclick=sbForgot;
 // PIN de acesso rápido
 el('pin-in')&&el('pin-in').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
 el('pin-new')&&el('pin-new').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
-function pinTry(){const c=(el('pin-in').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser&&pinCheckFor(sbUser.id,c)){pinUnlocked=true;hidePinGate();renderAll();maybeOnboard();}else{el('pin-msg').innerHTML='<span class="neg">PIN errado.</span>';el('pin-in').value='';el('pin-in').focus();}}
+function pinTry(){const c=(el('pin-in').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser&&pinCheckFor(sbUser.id,c)){pinUnlocked=true;hidePinGate();try{el('pin-in').blur();}catch(_){}renderAll();maybeOnboard();setTimeout(()=>{window.scrollTo(0,0);if(window.showBars)window.showBars();},250);}else{el('pin-msg').innerHTML='<span class="neg">PIN errado.</span>';el('pin-in').value='';el('pin-in').focus();}}
 el('pin-go')&&(el('pin-go').onclick=pinTry);
 el('pin-in')&&el('pin-in').addEventListener('keydown',e=>{if(e.key==='Enter')pinTry();});
 el('pin-forgot')&&(el('pin-forgot').onclick=()=>{hidePinGate();pinUnlocked=false;sbSignOut();});
