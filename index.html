@@ -286,7 +286,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v42</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v43</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -702,7 +702,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v42 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v43 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -2004,6 +2004,23 @@ function updateAuthUI(){
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
 
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
+
+/* ---------- atualização automática: se houver versão nova no site, carrega-a ---------- */
+const APP_VER='v43';
+async function checkUpdate(){
+  try{
+    if(document.visibilityState!=='visible'||busyTyping())return;
+    const r=await fetch(location.pathname+'?u='+Date.now(),{cache:'no-store'}); if(!r.ok)return;
+    const m=(await r.text()).match(/const APP_VER='(v\d+)'/);
+    if(m&&m[1]!==APP_VER){
+      const k='norte_upd_'+m[1]; if(sessionStorage.getItem(k))return; sessionStorage.setItem(k,'1');
+      location.replace(location.pathname+'?v='+m[1]);
+    }
+  }catch(_){}
+}
+setTimeout(checkUpdate,3000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate();});
+setInterval(checkUpdate,5*60*1000);
 
 /* ---------- arranque ---------- */
 if(!state.tz)state.tz=myTz();
