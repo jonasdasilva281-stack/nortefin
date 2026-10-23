@@ -174,6 +174,7 @@
     background:linear-gradient(120deg,rgba(240,189,81,.14),rgba(240,119,79,.10));border:1px solid rgba(240,189,81,.35);
     box-shadow:0 6px 22px rgba(0,0,0,.25);transition:.15s}
   .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
+  .avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);color:#141017;font-family:'Space Grotesk';font-weight:700;background-size:cover;background-position:center;overflow:hidden;flex-shrink:0}
   .mais-btn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
     background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
   .mais-btn:hover{border-color:var(--brass);transform:translateY(-1px)}
@@ -289,7 +290,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v45</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v46</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -668,13 +669,29 @@
     </div>
     <div class="card pad" id="cf-conta" style="margin-top:16px">
       <h3 style="font-size:18px">7 · A sua conta</h3>
-      <p class="mini" id="cfg-who" style="margin:4px 0 12px">A sua conta</p>
+
+      <div style="display:flex;align-items:center;gap:14px;margin:8px 0 14px">
+        <span id="cf-avatar" class="avatar" style="width:64px;height:64px;font-size:26px"></span>
+        <div style="flex:1">
+          <div style="font-weight:700" id="cfg-name">A sua conta</div>
+          <div class="mini" id="cfg-who">A sua conta</div>
+          <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost" id="cf-photo-btn" style="padding:6px 10px;font-size:12px">Mudar foto</button>
+            <button class="btn ghost" id="cf-photo-del" style="padding:6px 10px;font-size:12px;display:none">Remover</button>
+          </div>
+        </div>
+        <input type="file" id="cf-photo" accept="image/*" style="display:none">
+      </div>
+      <div class="field" style="margin-bottom:12px"><label>Nome</label><div style="display:flex;gap:8px"><input type="text" id="cf-name" placeholder="O seu nome" style="flex:1"><button class="btn ghost" id="cf-name-save" style="white-space:nowrap">Guardar</button></div></div>
+
       <div style="display:flex;flex-direction:column;gap:10px">
         <button class="mais-btn" style="width:100%" onclick="el('auth-pinbtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>PIN de acesso</b><small>criar ou mudar o PIN de 4 dígitos</small></span><span class="mb-a">›</span></button>
         <button class="mais-btn" style="width:100%" onclick="el('exportBtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>Exportar dados</b><small>guardar uma cópia dos seus dados</small></span><span class="mb-a">›</span></button>
-        <button class="mais-btn" style="width:100%" onclick="el('resetBtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>Repor</b><small>apagar todos os dados e começar de novo</small></span><span class="mb-a">›</span></button>
-        <button class="mais-btn" style="width:100%" onclick="el('auth-out').click()"><span style="flex:1;display:flex;flex-direction:column"><b style="color:var(--clay)">Sair da conta</b><small>terminar a sessão neste dispositivo</small></span><span class="mb-a">›</span></button>
+        <button class="mais-btn" style="width:100%" onclick="el('resetBtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>Repor neste dispositivo</b><small>limpar os dados só deste telemóvel (a conta mantém-se)</small></span><span class="mb-a">›</span></button>
+        <button class="mais-btn" style="width:100%" onclick="el('auth-out').click()"><span style="flex:1;display:flex;flex-direction:column"><b>Sair da conta</b><small>terminar a sessão neste dispositivo</small></span><span class="mb-a">›</span></button>
+        <button class="mais-btn" style="width:100%" id="cf-del"><span style="flex:1;display:flex;flex-direction:column"><b style="color:var(--clay)">Apagar a minha conta</b><small>apaga a conta e todos os dados, sem volta (RGPD)</small></span><span class="mb-a" style="color:var(--clay)">›</span></button>
       </div>
+      <div class="mini" id="cf-msg" style="margin-top:8px"></div>
     </div>
   </section>
 
@@ -705,7 +722,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v45 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v46 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -982,7 +999,7 @@ const KEY='norte_v1';
 const CATS_OUT0=['Mercado','Restaurantes','Casa & contas','Impostos','Transporte','Saúde','Educação','Lazer','Compras','Dívidas','Outros'];
 const CATS_IN0=['Ordenado','Vendas','Serviços','Extra','Outros'];
 let mem=null;
-const defaults=()=>({v:35,profile:{name:''},tx:[],limits:{},outCats:CATS_OUT0.slice(),inCats:CATS_IN0.slice(),recurring:[],bills:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
+const defaults=()=>({v:35,profile:{name:'',avatar:''},tx:[],limits:{},outCats:CATS_OUT0.slice(),inCats:CATS_IN0.slice(),recurring:[],bills:[],accounts:[],assets:[],transfers:[],patGoal:null,debts:[],goals:[],inv:[],debtMethod:'snow',debtExtra:0,invProfile:'mod'});
 let state=load();
 
 function ymNow(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
@@ -1635,6 +1652,7 @@ function renderPatrimonio(){
 
 /* ---------- CONFIGURAR ---------- */
 function renderConfig(){
+  if(typeof paintCfAvatar==='function')paintCfAvatar();
   const tot=accountsTotal();
   el('w-total').textContent=state.accounts.length?'Total: '+eur(tot):'';
   el('w-list').innerHTML=state.accounts.length?state.accounts.map(a=>{const b=acctBalance(a);const res=state.goals.filter(g=>g.acct===a.id).reduce((s,g)=>s+g.have,0);return '<div class="row"><div class="grow"><div class="name">'+esc(a.name)+'</div><div class="meta">'+esc(a.type)+(res>0?' · '+eur(res)+' reservado p/ objetivos':'')+'</div></div><span class="amt '+(b>=0?'':'neg')+'">'+eur(b)+'</span><button class="del" title="Editar" onclick="editAccount(\''+a.id+'\')">✎</button><button class="del" onclick="delAccount(\''+a.id+'\')">×</button></div>';}).join(''):'<div class="empty" style="padding:14px">Ainda sem contas.</div>';
@@ -1733,7 +1751,26 @@ el('pt-set').onclick=()=>{const tg=num('pt-target');if(tg<=0){el('pt-target').fo
 el('a-add').onclick=()=>{const n=txt('a-name'),v=num('a-val');if(!n||v<=0){el('a-name').focus();return;}state.assets.push({id:uid(),name:n,type:el('a-type').value,value:v});el('a-name').value='';el('a-val').value='';save();};
 
 el('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nortefin-'+todayStr()+'.json';a.click();};
-el('resetBtn').onclick=()=>{if(confirm('Isto apaga todos os seus dados. Continuar?')){state=defaults();save();}};
+el('resetBtn').onclick=()=>{if(confirm('Isto limpa os dados só deste dispositivo. A sua conta na nuvem mantém-se. Continuar?')){state=defaults();save();}};
+/* ---------- perfil: foto, nome, apagar conta ---------- */
+function paintAvatar(elm){if(!elm)return;const p=state.profile||{},nm=(p.name||'').trim();if(p.avatar){elm.style.backgroundImage='url('+p.avatar+')';elm.textContent='';}else{elm.style.backgroundImage='none';elm.textContent=nm?nm.charAt(0).toUpperCase():'N';}}
+function paintCfAvatar(){paintAvatar(el('cf-avatar'));const nm=(state.profile&&state.profile.name)||'';if(el('cfg-name'))el('cfg-name').textContent=nm||'A sua conta';if(el('cf-photo-del'))el('cf-photo-del').style.display=(state.profile&&state.profile.avatar)?'':'none';if(el('cf-name')&&document.activeElement!==el('cf-name'))el('cf-name').value=nm;}
+function setAvatarFromFile(file){if(!file)return;const rd=new FileReader();rd.onload=e=>{const img=new Image();img.onload=()=>{const S=160,c=document.createElement('canvas');c.width=S;c.height=S;const ctx=c.getContext('2d');const m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;ctx.drawImage(img,sx,sy,m,m,0,0,S,S);state.profile=state.profile||{};state.profile.avatar=c.toDataURL('image/jpeg',0.82);save();paintCfAvatar();};img.src=e.target.result;};rd.readAsDataURL(file);}
+async function deleteAccount(){
+  const c=prompt('Isto apaga a sua conta e TODOS os dados, sem volta.\n\nPara confirmar, escreva: APAGAR');
+  if((c||'').trim().toUpperCase()!=='APAGAR')return;
+  try{ if(sb&&sbUser) await sb.from('norte_state').delete().eq('user_id',sbUser.id); }catch(e){}
+  try{ if(sb&&sbUser) await sb.from('push_subs').delete().eq('user_id',sbUser.id); }catch(e){}
+  try{ if(sb) await sb.rpc('delete_my_account'); }catch(e){} // remove também o login (RGPD)
+  try{ localStorage.clear(); }catch(e){}
+  try{ if(sb) await sb.auth.signOut(); }catch(e){}
+  location.reload();
+}
+el('cf-photo-btn')&&(el('cf-photo-btn').onclick=()=>el('cf-photo').click());
+el('cf-photo')&&(el('cf-photo').onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)setAvatarFromFile(f);e.target.value='';});
+el('cf-photo-del')&&(el('cf-photo-del').onclick=()=>{state.profile.avatar='';save();paintCfAvatar();});
+el('cf-name-save')&&(el('cf-name-save').onclick=()=>{state.profile=state.profile||{};state.profile.name=(el('cf-name').value||'').trim();save();paintCfAvatar();if(el('cf-msg')){el('cf-msg').innerHTML='<span style="color:var(--green)">Guardado.</span>';setTimeout(()=>{if(el('cf-msg'))el('cf-msg').textContent='';},1500);}});
+el('cf-del')&&(el('cf-del').onclick=deleteAccount);
 
 /* ---------- RESUMOS + NOTIFICAÇÕES ---------- */
 const VAPID_PUBLIC='BJd9m0bp5lLUlDLrA7shq9vTV1bjCaCZ07E24I3cLcVE6gB2uIjgz7_4SuQcopmBeQlcg04SHPkAn0oZgkUZCDc';
