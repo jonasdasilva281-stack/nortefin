@@ -175,13 +175,20 @@
     box-shadow:0 6px 22px rgba(0,0,0,.25);transition:.15s}
   .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
   .avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);color:#141017;font-family:'Space Grotesk';font-weight:700;background-size:cover;background-position:center;overflow:hidden;flex-shrink:0}
-  .wallet-row{display:flex;gap:10px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none}
-  .wallet-row::-webkit-scrollbar{display:none}
-  .wcard{flex:0 0 auto;min-width:160px;border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#1d1d25,#0e0e12);border:1px solid var(--line)}
+  .coach-wrap{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px}
+  .coach-bot{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);display:grid;place-items:center;color:#141017;box-shadow:0 0 16px rgba(240,189,81,.3);animation:botpulse 2.6s ease-in-out infinite}
+  .coach-bot svg{width:24px;height:24px}
+  @keyframes botpulse{0%,100%{box-shadow:0 0 12px rgba(240,189,81,.25)}50%{box-shadow:0 0 22px rgba(240,189,81,.55)}}
+  @media (prefers-reduced-motion:reduce){.coach-bot{animation:none}}
+  .coach-bubble{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:5px 16px 16px 16px;padding:13px 16px}
+  .coach-bubble::before{content:'';position:absolute;left:-7px;top:13px;width:0;height:0;border:7px solid transparent;border-right-color:var(--card);border-left:0}
+  .wallet-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:4px 0 14px}
+  @media(min-width:560px){.wallet-row{grid-template-columns:repeat(3,1fr)}}
+  .wcard{border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#1d1d25,#0e0e12);border:1px solid var(--line)}
   .wcard .wn{font-size:13px;color:var(--ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .wcard .wt{font-size:11px;color:var(--mut)}
-  .wcard .wb{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:800;margin-top:12px;letter-spacing:-.02em}
-  .wcard.add{display:grid;place-items:center;min-width:120px;color:var(--brass);cursor:pointer;border-style:dashed;font-weight:700;font-size:13px}
+  .wcard .wb{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;margin-top:12px;letter-spacing:-.02em}
+  .wcard.add{display:grid;place-items:center;min-height:84px;color:var(--brass);cursor:pointer;border-style:dashed;font-weight:700;font-size:13px;text-align:center}
   .mais-btn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
     background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
   .mais-btn:hover{border-color:var(--brass);transform:translateY(-1px)}
@@ -297,7 +304,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v48</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v50</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -358,7 +365,12 @@
       <span class="mini" style="max-width:120px;text-align:right">o que tem menos o que deve</span>
     </div>
 
-    <div class="card pad" id="p-coach" style="margin:0 0 16px;border-left:3px solid var(--brass)"></div>
+    <div class="coach-wrap">
+      <div class="coach-bot" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5.5"/><circle cx="12" cy="4" r="1.1" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.25" fill="currentColor" stroke="none"/><path d="M9.5 16.8h5"/></svg>
+      </div>
+      <div class="coach-bubble" id="p-coach"></div>
+    </div>
     <div id="p-alerts"></div>
 
     <div class="card pad" style="margin-bottom:16px">
@@ -748,7 +760,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v48 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v50 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
