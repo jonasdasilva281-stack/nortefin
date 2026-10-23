@@ -175,6 +175,13 @@
     box-shadow:0 6px 22px rgba(0,0,0,.25);transition:.15s}
   .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
   .avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);color:#141017;font-family:'Space Grotesk';font-weight:700;background-size:cover;background-position:center;overflow:hidden;flex-shrink:0}
+  .wallet-row{display:flex;gap:10px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none}
+  .wallet-row::-webkit-scrollbar{display:none}
+  .wcard{flex:0 0 auto;min-width:160px;border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#1d1d25,#0e0e12);border:1px solid var(--line)}
+  .wcard .wn{font-size:13px;color:var(--ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wcard .wt{font-size:11px;color:var(--mut)}
+  .wcard .wb{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:800;margin-top:12px;letter-spacing:-.02em}
+  .wcard.add{display:grid;place-items:center;min-width:120px;color:var(--brass);cursor:pointer;border-style:dashed;font-weight:700;font-size:13px}
   .mais-btn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
     background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
   .mais-btn:hover{border-color:var(--brass);transform:translateY(-1px)}
@@ -290,7 +297,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v46</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v48</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -340,10 +347,15 @@
   <!-- ================= INÍCIO (só mostra) ================= -->
   <section class="view on" id="painel">
 
-    <div class="card pad" style="margin:12px 0 12px;text-align:center;border:1px solid rgba(240,189,81,.28);background:linear-gradient(135deg,#17171d,#0e0e12)">
-      <div class="eyebrow" style="display:flex;align-items:center;justify-content:center;gap:8px">Património líquido <button id="net-eye" type="button" aria-label="Mostrar ou ocultar valor" style="background:none;border:none;color:var(--mut);padding:4px;display:inline-flex;cursor:pointer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-      <div class="val money" id="s-net" style="font-size:40px;font-weight:800;margin-top:4px">0,00 €</div>
-      <div class="mini">o que tem menos o que deve</div>
+    <div class="split" style="margin:12px 0 2px"><div class="eyebrow">As minhas contas</div><button class="mini" onclick="go('config','cf-contas')" style="background:none;border:none;color:var(--brass);cursor:pointer">Gerir ›</button></div>
+    <div class="wallet-row" id="p-wallet"></div>
+
+    <div class="card pad" style="margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div>
+        <div class="eyebrow" style="display:flex;align-items:center;gap:8px">Património líquido <button id="net-eye" type="button" aria-label="Mostrar ou ocultar valor" style="background:none;border:none;color:var(--mut);padding:2px;display:inline-flex;cursor:pointer"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div class="val money" id="s-net" style="font-size:26px;font-weight:800;margin-top:2px">0,00 €</div>
+      </div>
+      <span class="mini" style="max-width:120px;text-align:right">o que tem menos o que deve</span>
     </div>
 
     <div class="card pad" id="p-coach" style="margin:0 0 16px;border-left:3px solid var(--brass)"></div>
@@ -652,8 +664,30 @@
       </div>
       <button class="btn" id="a-add">Adicionar bem</button>
     </div>
-    <div class="card pad" id="cf-notif" style="margin-top:16px">
-      <h3 style="font-size:18px">6 · Notificações</h3>
+  </section>
+
+  <!-- ================= A SUA CONTA / PERFIL (ecrã próprio) ================= -->
+  <section class="view" id="perfil">
+    <h2 class="view-h">A sua conta</h2>
+    <p class="sub">O seu perfil e as definições da conta.</p>
+    <div class="card pad">
+      <div style="display:flex;align-items:center;gap:14px;margin:0 0 14px">
+        <span id="cf-avatar" class="avatar" style="width:72px;height:72px;font-size:28px"></span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:17px" id="cfg-name">A sua conta</div>
+          <div class="mini" id="cfg-who">A sua conta</div>
+          <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost" id="cf-photo-btn" style="padding:6px 10px;font-size:12px">Mudar foto</button>
+            <button class="btn ghost" id="cf-photo-del" style="padding:6px 10px;font-size:12px;display:none">Remover</button>
+          </div>
+        </div>
+        <input type="file" id="cf-photo" accept="image/*" style="display:none">
+      </div>
+      <div class="field" style="margin-bottom:0"><label>Nome</label><div style="display:flex;gap:8px"><input type="text" id="cf-name" placeholder="O seu nome" style="flex:1"><button class="btn ghost" id="cf-name-save" style="white-space:nowrap">Guardar</button></div></div>
+    </div>
+
+    <div class="card pad" style="margin-top:16px">
+      <h3 style="font-size:18px">Notificações</h3>
       <p class="mini" style="margin:4px 0 12px">A Nortefin avisa-o no telemóvel, à hora do seu país.</p>
       <div id="nt-status" class="teach" style="margin:0 0 12px"></div>
       <button class="btn" id="nt-on" style="width:100%">Ativar notificações neste telemóvel</button>
@@ -667,23 +701,9 @@
       <button class="btn ghost" id="nt-test" style="width:100%;margin-top:12px">Enviar uma notificação de teste</button>
       <div class="mini" id="nt-msg" style="margin-top:8px"></div>
     </div>
-    <div class="card pad" id="cf-conta" style="margin-top:16px">
-      <h3 style="font-size:18px">7 · A sua conta</h3>
 
-      <div style="display:flex;align-items:center;gap:14px;margin:8px 0 14px">
-        <span id="cf-avatar" class="avatar" style="width:64px;height:64px;font-size:26px"></span>
-        <div style="flex:1">
-          <div style="font-weight:700" id="cfg-name">A sua conta</div>
-          <div class="mini" id="cfg-who">A sua conta</div>
-          <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn ghost" id="cf-photo-btn" style="padding:6px 10px;font-size:12px">Mudar foto</button>
-            <button class="btn ghost" id="cf-photo-del" style="padding:6px 10px;font-size:12px;display:none">Remover</button>
-          </div>
-        </div>
-        <input type="file" id="cf-photo" accept="image/*" style="display:none">
-      </div>
-      <div class="field" style="margin-bottom:12px"><label>Nome</label><div style="display:flex;gap:8px"><input type="text" id="cf-name" placeholder="O seu nome" style="flex:1"><button class="btn ghost" id="cf-name-save" style="white-space:nowrap">Guardar</button></div></div>
-
+    <div class="card pad" style="margin-top:16px">
+      <h3 style="font-size:18px;margin-bottom:12px">Conta</h3>
       <div style="display:flex;flex-direction:column;gap:10px">
         <button class="mais-btn" style="width:100%" onclick="el('auth-pinbtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>PIN de acesso</b><small>criar ou mudar o PIN de 4 dígitos</small></span><span class="mb-a">›</span></button>
         <button class="mais-btn" style="width:100%" onclick="el('exportBtn').click()"><span style="flex:1;display:flex;flex-direction:column"><b>Exportar dados</b><small>guardar uma cópia dos seus dados</small></span><span class="mb-a">›</span></button>
@@ -708,6 +728,12 @@
   <section class="view" id="mais">
     <h2 class="view-h">Menu</h2>
     <div class="teach" style="margin:0 0 16px"><b>Como funciona:</b> tudo o que acontece regista-se num só sítio, o botão <b>+ Registar</b>. Contas, orçamento e objetivos definem-se uma vez em <b>Configurar</b>. Todos os outros ecrãs atualizam-se sozinhos.</div>
+    <button class="mais-btn" onclick="go('perfil')" style="margin-bottom:14px;align-items:center;border-color:rgba(240,189,81,.3)">
+      <span id="mn-avatar" class="avatar" style="width:46px;height:46px;font-size:18px"></span>
+      <span style="flex:1;display:flex;flex-direction:column"><b id="mn-name">A sua conta</b><small id="mn-email">perfil, foto, PIN e sair</small></span>
+      <span class="mb-a">›</span>
+    </button>
+
     <div style="display:flex;flex-direction:column;gap:10px">
       <div class="eyebrow" style="margin:10px 0 0">Ver</div>
       <button class="mais-btn" onclick="go('movimentos')"><span><b>Movimentos</b><small>o que entrou e saiu, por dia, mês ou ano</small></span><span class="mb-a">›</span></button>
@@ -717,12 +743,12 @@
       <button class="mais-btn" onclick="go('resumo')"><span><b>Resumos</b><small>o seu dia, a semana e o mês</small></span><span class="mb-a">›</span></button>
       <button class="mais-btn" onclick="go('comprar')"><span><b>Posso comprar?</b><small>decidir uma compra com cabeça</small></span><span class="mb-a">›</span></button>
       <div class="eyebrow" style="margin:10px 0 0">Definir</div>
-      <button class="mais-btn" onclick="go('config')"><span><b>Configurar</b><small>contas, orçamento, objetivos, notificações, PIN e sair</small></span><span class="mb-a">›</span></button>
+      <button class="mais-btn" onclick="go('config')"><span><b>Configurar</b><small>contas, orçamento, objetivos e notificações</small></span><span class="mb-a">›</span></button>
     </div>
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v46 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v48 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -1097,6 +1123,13 @@ function askRename(kind,c){const n=prompt('Novo nome para "'+c+'":',c);if(n!=nul
 /* ---------- cálculos (a única fonte de verdade) ---------- */
 function acctBalance(a){let b=a.initial||0;state.tx.forEach(t=>{if(t.acct===a.id)b+=(t.type==='in'?t.val:-t.val);});(state.transfers||[]).forEach(tr=>{if(tr.to===a.id)b+=tr.amount;if(tr.from===a.id)b-=tr.amount;});return b;}
 function accountsTotal(){return state.accounts.reduce((s,a)=>s+acctBalance(a),0);}
+function renderWallet(){
+  const box=el('p-wallet'); if(!box)return;
+  const hide=netHidden();
+  if(!state.accounts.length){ box.innerHTML='<div class="wcard add" onclick="go(\'config\',\'cf-contas\')" style="min-width:220px">+ Criar a minha primeira conta</div>'; return; }
+  box.innerHTML=state.accounts.map(a=>{const b=acctBalance(a);return '<div class="wcard"><div class="wn">'+esc(a.name)+'</div><div class="wt">'+esc(a.type||'')+'</div><div class="wb '+(b>=0?'':'neg')+'">'+(hide?'•••• €':eur(b))+'</div></div>';}).join('')
+    + '<div class="wcard add" onclick="go(\'config\',\'cf-contas\')">+ Conta</div>';
+}
 function debtDue(d,ym){ // quanto se paga desta dívida no mês ym (0 se nada)
   if(!(d.bal>0.005)||!(d.min>0)||(d.start||'0000-00')>ym)return 0;
   if(d.paid&&d.paid[ym])return 0;
@@ -1408,6 +1441,7 @@ function renderPainel(){
   if(netHidden()){el('s-net').textContent='••••• €';el('s-net').className='val money';}
   else{el('s-net').textContent=eur(t.net);el('s-net').className='val money '+(t.net>=0?'pos':'neg');}
   if(el('net-eye'))el('net-eye').style.opacity=netHidden()?'.5':'1';
+  renderWallet();
   renderCoach(t); renderCockpit(t); renderChart();
   const p=PRINCIPLES[new Date().getDate()%PRINCIPLES.length]; el('pr-k').textContent=p[0]; el('pr-t').textContent=p[1];
   // avisos: atrasos e limites
@@ -1754,7 +1788,7 @@ el('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],
 el('resetBtn').onclick=()=>{if(confirm('Isto limpa os dados só deste dispositivo. A sua conta na nuvem mantém-se. Continuar?')){state=defaults();save();}};
 /* ---------- perfil: foto, nome, apagar conta ---------- */
 function paintAvatar(elm){if(!elm)return;const p=state.profile||{},nm=(p.name||'').trim();if(p.avatar){elm.style.backgroundImage='url('+p.avatar+')';elm.textContent='';}else{elm.style.backgroundImage='none';elm.textContent=nm?nm.charAt(0).toUpperCase():'N';}}
-function paintCfAvatar(){paintAvatar(el('cf-avatar'));const nm=(state.profile&&state.profile.name)||'';if(el('cfg-name'))el('cfg-name').textContent=nm||'A sua conta';if(el('cf-photo-del'))el('cf-photo-del').style.display=(state.profile&&state.profile.avatar)?'':'none';if(el('cf-name')&&document.activeElement!==el('cf-name'))el('cf-name').value=nm;}
+function paintCfAvatar(){paintAvatar(el('cf-avatar'));paintAvatar(el('mn-avatar'));const nm=(state.profile&&state.profile.name)||'';const email=(sbUser&&sbUser.email)||'';if(el('cfg-name'))el('cfg-name').textContent=nm||'A sua conta';if(el('mn-name'))el('mn-name').textContent=nm||'A sua conta';if(el('mn-email'))el('mn-email').textContent=email||'perfil, foto, PIN e sair';if(el('cf-photo-del'))el('cf-photo-del').style.display=(state.profile&&state.profile.avatar)?'':'none';if(el('cf-name')&&document.activeElement!==el('cf-name'))el('cf-name').value=nm;}
 function setAvatarFromFile(file){if(!file)return;const rd=new FileReader();rd.onload=e=>{const img=new Image();img.onload=()=>{const S=160,c=document.createElement('canvas');c.width=S;c.height=S;const ctx=c.getContext('2d');const m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;ctx.drawImage(img,sx,sy,m,m,0,0,S,S);state.profile=state.profile||{};state.profile.avatar=c.toDataURL('image/jpeg',0.82);save();paintCfAvatar();};img.src=e.target.result;};rd.readAsDataURL(file);}
 async function deleteAccount(){
   const c=prompt('Isto apaga a sua conta e TODOS os dados, sem volta.\n\nPara confirmar, escreva: APAGAR');
