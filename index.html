@@ -182,6 +182,8 @@
   @media (prefers-reduced-motion:reduce){.coach-bot{animation:none}}
   .coach-bubble{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:5px 16px 16px 16px;padding:13px 16px}
   .coach-bubble::before{content:'';position:absolute;left:-7px;top:13px;width:0;height:0;border:7px solid transparent;border-right-color:var(--card);border-left:0}
+  .coach-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+  .coach-col .alert{border-radius:14px;margin-bottom:0}
   .wallet-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:4px 0 14px}
   @media(min-width:560px){.wallet-row{grid-template-columns:repeat(3,1fr)}}
   .wcard{border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#1d1d25,#0e0e12);border:1px solid var(--line)}
@@ -304,7 +306,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v50</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v52</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -354,6 +356,14 @@
   <!-- ================= INÍCIO (só mostra) ================= -->
   <section class="view on" id="painel">
 
+    <div style="display:flex;align-items:center;gap:11px;margin:12px 0 14px">
+      <span id="hi-avatar" class="avatar" style="width:44px;height:44px;font-size:18px;cursor:pointer" onclick="go('perfil')"></span>
+      <div style="min-width:0;flex:1">
+        <div class="mini" id="hi-greet">Olá</div>
+        <div id="hi-name" style="font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">A sua conta</div>
+      </div>
+    </div>
+
     <div class="split" style="margin:12px 0 2px"><div class="eyebrow">As minhas contas</div><button class="mini" onclick="go('config','cf-contas')" style="background:none;border:none;color:var(--brass);cursor:pointer">Gerir ›</button></div>
     <div class="wallet-row" id="p-wallet"></div>
 
@@ -369,9 +379,11 @@
       <div class="coach-bot" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5.5"/><circle cx="12" cy="4" r="1.1" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.25" fill="currentColor" stroke="none"/><path d="M9.5 16.8h5"/></svg>
       </div>
-      <div class="coach-bubble" id="p-coach"></div>
+      <div class="coach-col">
+        <div class="coach-bubble" id="p-coach"></div>
+        <div id="p-alerts"></div>
+      </div>
     </div>
-    <div id="p-alerts"></div>
 
     <div class="card pad" style="margin-bottom:16px">
       <div class="split" style="margin-bottom:12px"><h3 style="font-size:18px">Este mês</h3><span class="mini" id="ck-month"></span></div>
@@ -760,7 +772,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v50 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v52 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -1450,6 +1462,7 @@ function toggleNet(){try{localStorage.setItem('norte_hide_net',netHidden()?'0':'
 function renderPainel(){
   const t=totals(), pn=state.profile&&state.profile.name;
   el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
+  if(typeof paintCfAvatar==='function')paintCfAvatar();
   if(netHidden()){el('s-net').textContent='••••• €';el('s-net').className='val money';}
   else{el('s-net').textContent=eur(t.net);el('s-net').className='val money '+(t.net>=0?'pos':'neg');}
   if(el('net-eye'))el('net-eye').style.opacity=netHidden()?'.5':'1';
@@ -1459,11 +1472,11 @@ function renderPainel(){
   // avisos: atrasos e limites
   const due=dueList(), late=due.filter(i=>i.late), soon=due.filter(i=>!i.late&&(new Date(i.due)-new Date(todayStr()))/86400000<=7);
   const al=monthAlerts(ymNow());
-  let h='';
-  if(late.length)h+='<button class="alert c" onclick="go(\'pagar\')"><b>'+late.length+' por pagar em atraso, '+eur(late.reduce((a,b)=>a+b.val,0))+'</b><span class="mini">'+late.slice(0,3).map(i=>esc(i.name)).join(' · ')+'</span></button>';
-  if(soon.length)h+='<button class="alert b" onclick="go(\'pagar\')"><b>'+eur(soon.reduce((a,b)=>a+b.val,0))+' a vencer nos próximos dias</b><span class="mini">'+soon.slice(0,3).map(i=>esc(i.name)+' ('+shortDate(i.due)+')').join(' · ')+'</span></button>';
-  if(al.length)h+='<button class="alert '+(al.some(a=>a.over)?'c':'b')+'" onclick="go(\'movimentos\')"><b>Atenção ao orçamento</b><span class="mini">'+al.map(a=>esc(a.c)+' '+a.p+'%').join(' · ')+'</span></button>';
-  el('p-alerts').innerHTML=h;
+  const alerts=[];
+  if(late.length)alerts.push('<button class="alert c" onclick="go(\'pagar\')"><b>'+late.length+' por pagar em atraso, '+eur(late.reduce((a,b)=>a+b.val,0))+'</b><span class="mini">'+late.slice(0,3).map(i=>esc(i.name)).join(' · ')+'</span></button>');
+  if(al.length)alerts.push('<button class="alert '+(al.some(a=>a.over)?'c':'b')+'" onclick="go(\'movimentos\')"><b>Atenção ao orçamento</b><span class="mini">'+al.map(a=>esc(a.c)+' '+a.p+'%').join(' · ')+'</span></button>');
+  if(soon.length)alerts.push('<button class="alert b" onclick="go(\'pagar\')"><b>'+eur(soon.reduce((a,b)=>a+b.val,0))+' a vencer nos próximos dias</b><span class="mini">'+soon.slice(0,3).map(i=>esc(i.name)+' ('+shortDate(i.due)+')').join(' · ')+'</span></button>');
+  el('p-alerts').innerHTML=alerts.slice(0,2).join('');  // robô mostra no máximo 3 balões (saudação + 2 avisos)
   // próximo passo
   let step='';
   const hiDebt=[...state.debts].filter(d=>d.bal>0).sort((a,b)=>b.apr-a.apr)[0];
@@ -1800,7 +1813,7 @@ el('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],
 el('resetBtn').onclick=()=>{if(confirm('Isto limpa os dados só deste dispositivo. A sua conta na nuvem mantém-se. Continuar?')){state=defaults();save();}};
 /* ---------- perfil: foto, nome, apagar conta ---------- */
 function paintAvatar(elm){if(!elm)return;const p=state.profile||{},nm=(p.name||'').trim();if(p.avatar){elm.style.backgroundImage='url('+p.avatar+')';elm.textContent='';}else{elm.style.backgroundImage='none';elm.textContent=nm?nm.charAt(0).toUpperCase():'N';}}
-function paintCfAvatar(){paintAvatar(el('cf-avatar'));paintAvatar(el('mn-avatar'));const nm=(state.profile&&state.profile.name)||'';const email=(sbUser&&sbUser.email)||'';if(el('cfg-name'))el('cfg-name').textContent=nm||'A sua conta';if(el('mn-name'))el('mn-name').textContent=nm||'A sua conta';if(el('mn-email'))el('mn-email').textContent=email||'perfil, foto, PIN e sair';if(el('cf-photo-del'))el('cf-photo-del').style.display=(state.profile&&state.profile.avatar)?'':'none';if(el('cf-name')&&document.activeElement!==el('cf-name'))el('cf-name').value=nm;}
+function paintCfAvatar(){paintAvatar(el('cf-avatar'));paintAvatar(el('mn-avatar'));paintAvatar(el('hi-avatar'));const nm=(state.profile&&state.profile.name)||'';const email=(sbUser&&sbUser.email)||'';const hh=new Date().getHours();const greet=hh<12?'Bom dia':(hh<20?'Boa tarde':'Boa noite');if(el('cfg-name'))el('cfg-name').textContent=nm||'A sua conta';if(el('mn-name'))el('mn-name').textContent=nm||'A sua conta';if(el('mn-email'))el('mn-email').textContent=email||'perfil, foto, PIN e sair';if(el('hi-name'))el('hi-name').textContent=nm||'A sua conta';if(el('hi-greet'))el('hi-greet').textContent=greet;if(el('cf-photo-del'))el('cf-photo-del').style.display=(state.profile&&state.profile.avatar)?'':'none';if(el('cf-name')&&document.activeElement!==el('cf-name'))el('cf-name').value=nm;}
 function setAvatarFromFile(file){if(!file)return;const rd=new FileReader();rd.onload=e=>{const img=new Image();img.onload=()=>{const S=160,c=document.createElement('canvas');c.width=S;c.height=S;const ctx=c.getContext('2d');const m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;ctx.drawImage(img,sx,sy,m,m,0,0,S,S);state.profile=state.profile||{};state.profile.avatar=c.toDataURL('image/jpeg',0.82);save();paintCfAvatar();};img.src=e.target.result;};rd.readAsDataURL(file);}
 async function deleteAccount(){
   const c=prompt('Isto apaga a sua conta e TODOS os dados, sem volta.\n\nPara confirmar, escreva: APAGAR');
