@@ -264,6 +264,54 @@
   .rs-ul{margin:10px 0 0;padding-left:18px;font-size:15px;line-height:1.55}
   .rs-ul li{margin:4px 0}
   @media(max-width:520px){.row{gap:8px}.row .amt{font-size:14px}}
+
+  /* ================= v54 · movimento e interação ================= */
+  :root{--ease-out:cubic-bezier(.2,.8,.2,1);--ease-spring:cubic-bezier(.2,.9,.3,1.15)}
+  /* entrada: cabeçalho e títulos */
+  header.top .brand{animation:introUp .5s var(--ease-out) both}
+  h2.view-h{animation:hIn .45s var(--ease-out) both}
+  .sub{animation:hIn .45s var(--ease-out) .06s both}
+  @keyframes hIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  /* navegação entre ecrãs */
+  .view{animation:viewIn .34s var(--ease-out)}
+  @keyframes viewIn{from{opacity:0;transform:translateY(10px) scale(.995)}to{opacity:1;transform:none}}
+  /* scroll: secções surgem ao entrar no ecrã */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);transition-delay:var(--rv-d,0s)}
+  .rv.in{opacity:1;transform:none}
+  /* cartões e imagens: profundidade subtil */
+  .card,.wcard,.principle{transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),border-color .25s}
+  .avatar{transition:transform .3s var(--ease-spring),box-shadow .3s}
+  @media (hover:hover){
+    .card:hover,.wcard:hover{transform:translateY(-2px);border-color:#34343e;box-shadow:0 4px 14px rgba(0,0,0,.5),0 22px 50px rgba(0,0,0,.45)}
+    .avatar:hover{transform:scale(1.06);box-shadow:0 0 0 3px rgba(240,189,81,.25)}
+    .mark:hover{transform:rotate(-6deg) scale(1.05)}
+  }
+  .mark{transition:transform .35s var(--ease-spring)}
+  /* botões: hover, foco e feedback ao toque */
+  button{transition:transform .14s var(--ease-out),background-color .15s,color .15s,filter .15s,box-shadow .15s}
+  button:active:not(:disabled){transform:scale(.96)}
+  .btn:active:not(:disabled){transform:scale(.97);filter:brightness(.95)}
+  button:focus-visible,a:focus-visible,.wcard:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .tap-fx{position:relative;overflow:hidden}
+  .tap-fx>.rip{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.18;transform:scale(0);animation:rip .5s ease-out forwards}
+  @keyframes rip{to{transform:scale(2.6);opacity:0}}
+  /* menu inferior: indicador animado */
+  .bottomnav button svg{transition:transform .25s var(--ease-spring)}
+  .bottomnav button.on svg{transform:translateY(-2px) scale(1.08)}
+  .bottomnav .mid.on svg,.bottomnav .mid:active svg{transform:rotate(90deg) scale(1.08)}
+  /* telemóvel/tablet: alvos de toque confortáveis */
+  @media (pointer:coarse){
+    .btn{min-height:44px}
+    .btn.sm,.btn.pay{min-height:38px}
+    .del{min-width:40px;min-height:40px}
+    nav.tabs button{min-height:40px}
+  }
+  /* acessibilidade: sem movimento para quem o desativou */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1!important;transform:none!important}
+  }
 </style>
 </head>
 <body>
@@ -306,7 +354,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v53</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v54</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -770,7 +818,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v53 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v54 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -2103,7 +2151,7 @@ el('net-eye')&&(el('net-eye').onclick=toggleNet);
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
 
 /* ---------- atualização automática: se houver versão nova no site, carrega-a ---------- */
-const APP_VER='v53';
+const APP_VER='v54';
 async function checkUpdate(){
   try{
     if(document.visibilityState!=='visible'||busyTyping())return;
@@ -2171,6 +2219,42 @@ el('db-clear').onclick=()=>{
   SUPABASE={url:'',anonKey:''}; sbUser=null; sb=null; updateAuthUI(); el('db-modal').style.display='none';
 };
 sbInit();
+
+/* ---------- v54 · movimento: secções surgem no scroll + feedback ao toque ---------- */
+(function(){
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window))return;
+  const SEL='.view .card, .view .principle, .view .coach-wrap, .view .grid > *, .view .row, .view .wcard, .view .mais-btn';
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -6% 0px',threshold:.04});
+  let n=0,t=null;
+  function tag(root){
+    (root||document).querySelectorAll(SEL).forEach(x=>{
+      if(x.dataset.rv)return; if(x.parentElement&&x.parentElement.closest('.rv:not(.in)'))return;
+      x.dataset.rv='1';
+      const r=x.getBoundingClientRect();
+      if(r.top<innerHeight&&r.bottom>0&&x.offsetParent){ /* já visível: só entrada suave escalonada */
+        x.style.setProperty('--rv-d',Math.min(n++,8)*0.045+'s'); x.classList.add('rv');
+        requestAnimationFrame(()=>requestAnimationFrame(()=>x.classList.add('in')));
+      } else if(x.offsetParent){ x.classList.add('rv'); io.observe(x); }
+      else { x.dataset.rv=''; }
+    });
+    clearTimeout(t); t=setTimeout(()=>{n=0;},400);
+  }
+  /* segurança: nada fica escondido */
+  setInterval(()=>document.querySelectorAll('.rv:not(.in)').forEach(x=>{const r=x.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)x.classList.add('in');}),1500);
+  let q=null; const sched=()=>{if(q)return;q=requestAnimationFrame(()=>{q=null;tag(document.querySelector('.view.on'));});};
+  new MutationObserver(ms=>{for(const m of ms){if(m.type==='attributes'&&m.target.classList&&m.target.classList.contains('view')&&m.target.classList.contains('on')){n=0;}} sched();})
+    .observe(document.querySelector('.app')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  setTimeout(sched,60);
+  /* ondulação ao tocar em botões */
+  document.addEventListener('pointerdown',e=>{
+    const b=e.target.closest('.btn, .bottomnav button, .mais-btn, .wcard.add'); if(!b||b.disabled)return;
+    b.classList.add('tap-fx'); const r=b.getBoundingClientRect(), s=Math.max(r.width,r.height);
+    const i=document.createElement('span'); i.className='rip';
+    i.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(e.clientX-r.left-s/2)+'px;top:'+(e.clientY-r.top-s/2)+'px';
+    b.appendChild(i); setTimeout(()=>i.remove(),550);
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
