@@ -176,10 +176,19 @@
   .pc-cta:hover{transform:translateY(-2px);border-color:rgba(240,189,81,.6)}
   .avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);color:#141017;font-family:'Space Grotesk';font-weight:700;background-size:cover;background-position:center;overflow:hidden;flex-shrink:0}
   .coach-wrap{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px}
-  .coach-bot{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:linear-gradient(145deg,#f3c95f,#dca62f);display:grid;place-items:center;color:#141017;box-shadow:0 0 16px rgba(240,189,81,.3);animation:botpulse 2.6s ease-in-out infinite}
-  .coach-bot svg{width:24px;height:24px}
-  @keyframes botpulse{0%,100%{box-shadow:0 0 12px rgba(240,189,81,.25)}50%{box-shadow:0 0 22px rgba(240,189,81,.55)}}
-  @media (prefers-reduced-motion:reduce){.coach-bot{animation:none}}
+  .coach-bot{flex:0 0 auto;position:relative;width:46px;height:46px;border-radius:15px;padding:2px;isolation:isolate;
+    background:conic-gradient(from var(--bot-a,0deg),#f0bd51,#f0774f,#e0518f,#7c6cf0,#3ddc97,#f0bd51);
+    box-shadow:0 6px 22px rgba(124,108,240,.25),0 0 18px rgba(240,189,81,.2);animation:botspin 6s linear infinite}
+  .coach-bot .bot-in{width:100%;height:100%;border-radius:13px;display:grid;place-items:center;
+    background:radial-gradient(120% 90% at 30% 15%,#2a2a36 0%,#121218 70%)}
+  .coach-bot svg{width:34px;height:34px;overflow:visible}
+  .coach-bot .eye{transform-box:fill-box;transform-origin:center;animation:botblink 4.2s ease-in-out infinite}
+  .coach-bot .ant{animation:botglow 1.8s ease-in-out infinite}
+  @property --bot-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+  @keyframes botspin{to{--bot-a:360deg}}
+  @keyframes botblink{0%,44%,50%,100%{transform:scaleY(1)}47%{transform:scaleY(.1)}}
+  @keyframes botglow{0%,100%{opacity:.55}50%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.coach-bot,.coach-bot .eye,.coach-bot .ant{animation:none}}
   .coach-bubble{position:relative;flex:1;background:var(--card);border:1px solid var(--line);border-radius:5px 16px 16px 16px;padding:13px 16px}
   .coach-bubble::before{content:'';position:absolute;left:-7px;top:13px;width:0;height:0;border:7px solid transparent;border-right-color:var(--card);border-left:0}
   .coach-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
@@ -328,7 +337,7 @@
 <header class="top">
   <div class="brand" onclick="go('painel')" title="Início" style="cursor:pointer">
     <div class="mark"><svg viewBox="0 0 100 100" width="74%" height="74%" aria-hidden="true" style="display:block"><path d="M71.21 28.79 L45.40 45.40 L50.00 50.00 Z" fill="#141017"/><path d="M71.21 28.79 L54.60 54.60 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M71.21 71.21 L54.60 45.40 L50.00 50.00 Z" fill="#141017"/><path d="M71.21 71.21 L45.40 54.60 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M28.79 71.21 L54.60 54.60 L50.00 50.00 Z" fill="#141017"/><path d="M28.79 71.21 L45.40 45.40 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M28.79 28.79 L45.40 54.60 L50.00 50.00 Z" fill="#141017"/><path d="M28.79 28.79 L54.60 45.40 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M50.00 6.00 L40.50 50.00 L50.00 50.00 Z" fill="#141017"/><path d="M50.00 6.00 L59.50 50.00 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M94.00 50.00 L50.00 40.50 L50.00 50.00 Z" fill="#141017"/><path d="M94.00 50.00 L50.00 59.50 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M50.00 94.00 L59.50 50.00 L50.00 50.00 Z" fill="#141017"/><path d="M50.00 94.00 L40.50 50.00 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M6.00 50.00 L50.00 59.50 L50.00 50.00 Z" fill="#141017"/><path d="M6.00 50.00 L50.00 40.50 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><circle cx="50" cy="50" r="6.5" fill="#f0bd51" stroke="#141017" stroke-width="3"/></svg></div>
-    <div style="display:flex;align-items:baseline;gap:10px;min-width:0"><b>Nortefin</b><i id="painel-hi" class="hdr-hi">O seu norte</i></div>
+    <div style="display:flex;align-items:baseline;gap:10px;min-width:0"><b>Nortefin</b></div>
   </div>
   <nav class="tabs" id="tabs">
     <button data-v="registar">+ Registar</button>
@@ -354,7 +363,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v55</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v56</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -418,8 +427,14 @@
     </div>
 
     <div class="coach-wrap">
-      <div class="coach-bot" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5.5"/><circle cx="12" cy="4" r="1.1" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.25" fill="currentColor" stroke="none"/><path d="M9.5 16.8h5"/></svg>
+      <div class="coach-bot" aria-hidden="true"><div class="bot-in">
+        <svg viewBox="0 0 32 32" fill="none"><defs><linearGradient id="botv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3ddc97"/><stop offset="1" stop-color="#7c6cf0"/></linearGradient></defs>
+          <path d="M16 4.2v3" stroke="#7d7d8a" stroke-width="1.6" stroke-linecap="round"/><circle class="ant" cx="16" cy="3.4" r="1.7" fill="#f0bd51"/>
+          <rect x="5" y="8" width="22" height="18" rx="7" fill="#1d1d26" stroke="#3a3a48" stroke-width="1.2"/>
+          <rect x="8" y="12" width="16" height="9" rx="4.5" fill="#0b0b10" stroke="url(#botv)" stroke-width="1.2"/>
+          <rect class="eye" x="11.2" y="14.6" width="3" height="3.8" rx="1.5" fill="#3ddc97"/><rect class="eye" x="17.8" y="14.6" width="3" height="3.8" rx="1.5" fill="#3ddc97"/>
+          <rect x="3" y="14" width="2" height="6" rx="1" fill="#3a3a48"/><rect x="27" y="14" width="2" height="6" rx="1" fill="#3a3a48"/>
+        </svg></div>
       </div>
       <div class="coach-col">
         <div class="coach-bubble" id="p-coach"></div>
@@ -814,7 +829,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v55 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v56 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
@@ -1503,7 +1518,7 @@ function netHidden(){try{return localStorage.getItem('norte_hide_net')==='1';}ca
 function toggleNet(){try{localStorage.setItem('norte_hide_net',netHidden()?'0':'1');}catch(_){}renderPainel();}
 function renderPainel(){
   const t=totals(), pn=state.profile&&state.profile.name;
-  el('painel-hi').textContent=pn?('O seu norte, '+pn):'O seu norte';
+  if(el('painel-hi'))el('painel-hi').textContent='';
   if(typeof paintCfAvatar==='function')paintCfAvatar();
   if(netHidden()){el('s-net').textContent='••••• €';el('s-net').className='val money';}
   else{el('s-net').textContent=eur(t.net);el('s-net').className='val money '+(t.net>=0?'pos':'neg');}
@@ -2147,7 +2162,7 @@ el('net-eye')&&(el('net-eye').onclick=toggleNet);
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
 
 /* ---------- atualização automática: se houver versão nova no site, carrega-a ---------- */
-const APP_VER='v55';
+const APP_VER='v56';
 async function checkUpdate(){
   try{
     if(document.visibilityState!=='visible'||busyTyping())return;
