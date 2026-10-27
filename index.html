@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Nortefin · Finanças com controlo e sabedoria</title>
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,21 +20,21 @@
 <script>if(!window.supabase){document.write('<scr'+'ipt src="https://unpkg.com/@supabase/supabase-js@2"></scr'+'ipt>');}</script>
 <style>
   :root{
-    --ink:#f5f5f7; --ink-soft:#b7b7c2; --paper:#09090b; --card:#141418;
-    --line:#26262e; --line2:#37374250; --brass:#f0bd51; --brass-dk:#f0bd51;
+    --ink:#f5f5f7; --ink-soft:#b7b7c2; --paper:#000000; --card:#0d0d11;
+    --line:#222228; --line2:#37374250; --brass:#f0bd51; --brass-dk:#f0bd51;
     --green:#3ddc97; --green-bg:rgba(61,220,151,.13); --clay:#ff6b6b; --clay-bg:rgba(255,107,107,.13);
     --mut:#7d7d8a;
     --shadow:0 2px 10px rgba(0,0,0,.5),0 16px 44px rgba(0,0,0,.4);
     --r:18px;
   }
   *{box-sizing:border-box}
-  html{margin:0;background:#09090b;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  html{margin:0;background:#000;-webkit-text-size-adjust:100%;text-size-adjust:100%}
   body{margin:0;overflow-x:hidden;overscroll-behavior-y:none}
   button,input,select,a,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-  body::before{content:'';position:fixed;top:0;left:0;right:0;height:6px;z-index:60;background:linear-gradient(90deg,#f0bd51,#f0774f,#e0518f,#7c6cf0,#3ddc97)}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;height:1.5px;z-index:60;background:linear-gradient(90deg,transparent,rgba(240,189,81,.55),transparent)}
   body{
     font-family:'Inter',system-ui,sans-serif;
-    background:radial-gradient(1100px 560px at 50% -8%, rgba(240,189,81,.10), transparent 62%), var(--paper);
+    background:radial-gradient(900px 460px at 50% -10%, rgba(240,189,81,.07), transparent 60%), var(--paper);
     color:var(--ink);
     -webkit-font-smoothing:antialiased;line-height:1.5;
   }
@@ -47,7 +47,7 @@
   /* layout */
   .app{max-width:1080px;margin:0 auto;padding:0 20px 120px}
   header.top{
-    position:sticky;top:0;z-index:20;background:rgba(9,9,11,.72);
+    position:sticky;top:0;z-index:20;background:rgba(0,0,0,.72);
     backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
     display:flex;align-items:center;justify-content:space-between;
     padding:16px 20px;max-width:1080px;margin:0 auto;
@@ -129,7 +129,7 @@
   .btn.brass{background:linear-gradient(180deg,#f3c95f,#e0a838)}
   .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
   .btn.ghost:hover{background:#1b1b21;transform:none;filter:none}
-  .seg{display:inline-flex;background:#141418;border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
+  .seg{display:inline-flex;background:#0d0d11;border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
   .seg button{border:none;background:transparent;padding:8px 14px;border-radius:8px;font-weight:600;font-size:13.5px;color:var(--ink-soft)}
   .seg button.on{background:#2a2a33;color:#fff}
 
@@ -186,7 +186,7 @@
   .coach-bot .ag-orb::before{content:'';position:absolute;inset:-30%;border-radius:50%;filter:blur(7px);
     background:conic-gradient(from var(--ag-a,0deg),var(--ag1),var(--ag2),var(--ag3),#3ddc97,var(--ag1));animation:agSpin 7s linear infinite}
   .coach-bot .ag-orb::after{content:'';position:absolute;inset:0;border-radius:50%;
-    background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 30%),radial-gradient(circle at 50% 125%,rgba(9,9,11,.6),transparent 62%)}
+    background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 30%),radial-gradient(circle at 50% 125%,rgba(0,0,0,.6),transparent 62%)}
   .coach-bot .ag-ring{position:absolute;inset:0;border-radius:50%;opacity:0;transition:opacity .3s;
     background:conic-gradient(from var(--ag-a,0deg),transparent 0 60%,var(--ag1) 80%,#fff 88%,transparent 90%);
     -webkit-mask:radial-gradient(circle,transparent 62%,#000 64%);mask:radial-gradient(circle,transparent 62%,#000 64%)}
@@ -376,7 +376,7 @@
 </style>
 </head>
 <body>
-<div id="intro" style="position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(900px 500px at 50% 30%, rgba(240,189,81,.18), transparent 60%), #09090b;transition:opacity .5s ease">
+<div id="intro" style="position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(900px 500px at 50% 30%, rgba(240,189,81,.18), transparent 60%), #000000;transition:opacity .5s ease">
   <div class="mark intro-logo" style="width:104px;height:104px;font-size:58px;border-radius:28px;box-shadow:0 0 70px rgba(240,189,81,.55)"><svg viewBox="0 0 100 100" width="74%" height="74%" aria-hidden="true" style="display:block"><path d="M71.21 28.79 L45.40 45.40 L50.00 50.00 Z" fill="#141017"/><path d="M71.21 28.79 L54.60 54.60 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M71.21 71.21 L54.60 45.40 L50.00 50.00 Z" fill="#141017"/><path d="M71.21 71.21 L45.40 54.60 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M28.79 71.21 L54.60 54.60 L50.00 50.00 Z" fill="#141017"/><path d="M28.79 71.21 L45.40 45.40 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M28.79 28.79 L45.40 54.60 L50.00 50.00 Z" fill="#141017"/><path d="M28.79 28.79 L54.60 45.40 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M50.00 6.00 L40.50 50.00 L50.00 50.00 Z" fill="#141017"/><path d="M50.00 6.00 L59.50 50.00 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M94.00 50.00 L50.00 40.50 L50.00 50.00 Z" fill="#141017"/><path d="M94.00 50.00 L50.00 59.50 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M50.00 94.00 L59.50 50.00 L50.00 50.00 Z" fill="#141017"/><path d="M50.00 94.00 L40.50 50.00 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><path d="M6.00 50.00 L50.00 59.50 L50.00 50.00 Z" fill="#141017"/><path d="M6.00 50.00 L50.00 40.50 L50.00 50.00 Z" fill="#141017" fill-opacity="0.62"/><circle cx="50" cy="50" r="6.5" fill="#f0bd51" stroke="#141017" stroke-width="3"/></svg></div>
   <p class="intro-t" style="margin:28px 0 0;color:var(--ink-soft);font-size:16px">Seja bem-vindo ao</p>
   <h1 class="intro-t" style="font-family:'Space Grotesk';font-weight:700;font-size:46px;letter-spacing:-.04em;margin:2px 0 0;color:#fff">Nortefin</h1>
@@ -415,7 +415,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v60</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v61</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -873,10 +873,10 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v60 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v61 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
-<div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
+<div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.94);align-items:center;justify-content:center;padding:24px">
   <div class="card pad" style="max-width:400px;width:100%;text-align:center">
     <div id="onb-icon" style="font-size:42px;margin-bottom:8px"></div>
     <h3 id="onb-title" style="font-size:22px"></h3>
@@ -899,7 +899,7 @@
   </div>
 </div>
 
-<div id="pin-set" style="display:none;position:fixed;inset:0;z-index:109;background:rgba(9,9,11,.94);align-items:center;justify-content:center;padding:24px">
+<div id="pin-set" style="display:none;position:fixed;inset:0;z-index:109;background:rgba(0,0,0,.94);align-items:center;justify-content:center;padding:24px">
   <div class="card pad" style="max-width:360px;width:100%;text-align:center">
     <h3 style="font-size:21px;margin-bottom:6px">Entrar mais rápido</h3>
     <p class="mini" style="margin:0 0 16px">Crie um PIN de 4 dígitos para, neste telemóvel, entrar sem escrever o email e a senha.</p>
@@ -1564,8 +1564,8 @@ function renderPainel(){
   const t=totals(), pn=state.profile&&state.profile.name;
   if(el('painel-hi'))el('painel-hi').textContent='';
   if(typeof paintCfAvatar==='function')paintCfAvatar();
-  if(netHidden()){el('s-net').textContent='••••• €';el('s-net').className='val money';}
-  else{el('s-net').textContent=eur(t.net);el('s-net').className='val money '+(t.net>=0?'pos':'neg');}
+  if(netHidden()){el('s-net').textContent='••••• €';el('s-net').className='val money';el('s-net').removeAttribute('data-to');}
+  else{el('s-net').textContent=eur(t.net);el('s-net').className='val money nf-n '+(t.net>=0?'pos':'neg');el('s-net').dataset.to=t.net;}
   if(el('net-eye'))el('net-eye').style.opacity=netHidden()?'.5':'1';
   renderWallet();
   renderCoach(t); renderCockpit(t); renderChart();
@@ -1613,23 +1613,34 @@ function renderCockpit(t){
   const inBase=Math.max(t.income,t.realIn);
   const canSpend=inBase-t.realOut-t.toPay;
   let html='<div class="grid g3" style="gap:10px">'
-    +'<div class="stat"><div class="eyebrow">Entrou</div><div class="val sm pos">'+eur(t.realIn)+'</div><div class="lbl">'+(t.income>0?'previsto '+eur(t.income):'')+'</div></div>'
-    +'<div class="stat"><div class="eyebrow">Gastou</div><div class="val sm">'+eur(t.realOut)+'</div><div class="lbl">'+(t.plannedExp>0?'de '+eur(t.plannedExp)+' do orçamento':'sem orçamento')+'</div></div>'
-    +'<div class="stat"><div class="eyebrow">Falta pagar</div><div class="val sm '+(t.toPay>0?'neg':'')+'">'+eur(t.toPay)+'</div><div class="lbl">contas e prestações</div></div>'
+    +'<div class="stat"><div class="eyebrow">Entrou</div><div class="val sm pos nf-n" data-to="'+t.realIn+'">'+eur(t.realIn)+'</div><div class="lbl">'+(t.income>0?'previsto '+eur(t.income):'')+'</div></div>'
+    +'<div class="stat"><div class="eyebrow">Gastou</div><div class="val sm nf-n" data-to="'+t.realOut+'">'+eur(t.realOut)+'</div><div class="lbl">'+(t.plannedExp>0?'de '+eur(t.plannedExp)+' do orçamento':'sem orçamento')+'</div></div>'
+    +'<div class="stat"><div class="eyebrow">Falta pagar</div><div class="val sm nf-n '+(t.toPay>0?'neg':'')+'" data-to="'+t.toPay+'">'+eur(t.toPay)+'</div><div class="lbl">contas e prestações</div></div>'
     +'</div>';
   if(t.plannedExp>0){const pct=Math.min(100,Math.round(t.realOut/t.plannedExp*100));html+='<div class="bar" style="margin-top:12px"><i style="width:'+pct+'%;background:'+(t.realOut>t.plannedExp?'var(--clay)':'var(--brass)')+'"></i></div>';}
-  html+='<div class="split" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)"><span class="name">Ainda pode gastar</span><b class="money '+(canSpend>=0?'pos':'neg')+'" style="font-size:20px">'+eur(canSpend)+'</b></div><div class="mini">o que entra − o que já gastou − o que falta pagar</div>';
+  html+='<div class="split" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)"><span class="name">Ainda pode gastar</span><b class="money nf-n '+(canSpend>=0?'pos':'neg')+'" data-to="'+canSpend+'" style="font-size:20px">'+eur(canSpend)+'</b></div><div class="mini">o que entra − o que já gastou − o que falta pagar</div>';
   el('p-cockpit').innerHTML=html;
 }
 let chartMonthsN=6, chartSel=null, chartCache=[];
 function chartSetRange(n){chartMonthsN=n;chartSel=null;renderChart();}
 function chartPick(i){chartSel=i;renderChart();}
+function nfSmooth(pts){
+  if(pts.length<2)return pts[0]?('M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1)):'';
+  let d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;
+    const c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6;
+    const c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;
+    d+=' C'+c1x.toFixed(1)+','+c1y.toFixed(1)+' '+c2x.toFixed(1)+','+c2y.toFixed(1)+' '+p2[0].toFixed(1)+','+p2[1].toFixed(1);
+  }
+  return d;
+}
 function chartCats(ym,hide){
   const cs=catSpend(ym), cats=Object.entries(cs).sort((a,b)=>b[1]-a[1]).slice(0,4);
   if(!cats.length)return '';
   const mx=cats[0][1]||1;
-  let h='<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)"><div class="mini" style="margin-bottom:7px">Onde gastou</div>';
-  cats.forEach(([c,v])=>{const p=Math.round(v/mx*100);h+='<div style="margin-bottom:8px"><div class="split" style="font-size:12.5px"><span>'+esc(c)+'</span><span class="amt neg" style="font-size:12.5px">'+(hide?'•••':eur(v))+'</span></div><div style="height:5px;border-radius:99px;background:#26262e;margin-top:3px;overflow:hidden"><i style="display:block;height:100%;width:'+p+'%;background:#ff6b6b"></i></div></div>';});
+  let h='<div style="margin-top:13px;padding-top:12px;border-top:1px solid var(--line)"><div class="mini" style="margin-bottom:9px;letter-spacing:.04em;text-transform:uppercase;opacity:.7">Onde gastou</div>';
+  cats.forEach(([c,v])=>{const p=Math.max(5,Math.round(v/mx*100));h+='<div style="margin-bottom:10px"><div class="split" style="font-size:12.5px;margin-bottom:5px"><span style="font-weight:600">'+esc(c)+'</span><span class="money neg" style="font-size:12.5px">'+(hide?'•••':eur(v))+'</span></div><div style="height:6px;border-radius:99px;background:#17171c;overflow:hidden"><i style="display:block;height:100%;width:'+p+'%;border-radius:99px;background:linear-gradient(90deg,#ff7a6b,#ff5470)"></i></div></div>';});
   return h+'</div>';
 }
 function renderChart(){
@@ -1639,47 +1650,50 @@ function renderChart(){
   const data=months.map(ym=>{const rows=state.tx.filter(t=>t.date.slice(0,7)===ym);const inS=rows.filter(t=>t.type==='in').reduce((a,b)=>a+b.val,0);const outS=rows.filter(t=>t.type==='out').reduce((a,b)=>a+b.val,0);return{ym,inS,outS,net:inS-outS,has:rows.length>0};});
   let acc=0; data.forEach(d=>{acc+=d.net;d.cum=acc;});
   chartCache=data;
-  const rangeSeg='<div class="seg" style="font-size:12px"><button type="button" onclick="chartSetRange(6)" class="'+(N===6?'on':'')+'" style="padding:5px 10px">6 meses</button><button type="button" onclick="chartSetRange(12)" class="'+(N===12?'on':'')+'" style="padding:5px 10px">12 meses</button></div>';
+  const rangeSeg='<div class="seg" style="font-size:12px"><button type="button" onclick="chartSetRange(6)" class="'+(N===6?'on':'')+'" style="padding:5px 11px">6M</button><button type="button" onclick="chartSetRange(12)" class="'+(N===12?'on':'')+'" style="padding:5px 11px">12M</button></div>';
   if(!data.some(d=>d.has)){box.innerHTML='<div style="display:flex;justify-content:flex-end;margin-bottom:8px">'+rangeSeg+'</div><div class="empty">Ainda sem dados. Registe movimentos e a evolução aparece aqui.</div>';return;}
   if(chartSel==null||chartSel>=data.length)chartSel=data.length-1;
-  const hide=netHidden(), cur=months[months.length-1];
-  const short=v=>{const a=Math.abs(v),sg=v<0?'−':'+';return sg+(a>=1000?(a/1000).toLocaleString('pt-PT',{maximumFractionDigits:1})+' mil':Math.round(a));};
-  const vals=data.flatMap(d=>[d.net,d.cum]).concat(0);
-  let hi=Math.max(...vals), lo=Math.min(...vals); const pad=(hi-lo||1)*.18; hi+=pad; if(lo<0)lo-=pad;
-  const W=320,H=170,T=8,B=H-6, y=v=>T+(hi-v)/(hi-lo)*(B-T), y0=y(0), n=data.length, cw=W/n, bw=Math.min(30,cw*.52);
-  let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;overflow:visible" role="img" aria-label="Evolução">';
-  svg+='<line x1="0" x2="'+W+'" y1="'+y0+'" y2="'+y0+'" stroke="#3a3a46" stroke-dasharray="3 4"/>';
-  data.forEach((d,i)=>{
-    const cx=cw*i+cw/2, up=d.net>=0, yy=y(d.net), h=Math.max(d.has&&Math.abs(d.net)>0.005?3:0,Math.abs(yy-y0));
-    const col=up?'#3ddc97':'#ff6b6b', sel=i===chartSel;
-    if(sel)svg+='<rect x="'+(cw*i)+'" y="0" width="'+cw+'" height="'+H+'" fill="rgba(240,189,81,.10)"/>';
-    if(h>0)svg+='<rect x="'+(cx-bw/2)+'" y="'+(up?y0-h:y0)+'" width="'+bw+'" height="'+h+'" rx="5" fill="'+col+'" opacity="'+(sel?1:.55)+'"'+(sel?' stroke="#fff" stroke-width="1"':'')+'/>';
-    if(d.has&&!hide&&(N<=6||sel))svg+='<text x="'+cx+'" y="'+(up?y0-h-6:y0+h+13)+'" text-anchor="middle" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace" fill="'+col+'">'+short(d.net)+'</text>';
-  });
-  const pts=data.map((d,i)=>[cw*i+cw/2,y(d.cum)]);
-  svg+='<polyline points="'+pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')+'" fill="none" stroke="#f0bd51" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
-  pts.forEach((p,i)=>{const sel=i===chartSel;svg+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(sel?5.5:3)+'" fill="'+(sel?'#f0bd51':'#141418')+'" stroke="#f0bd51" stroke-width="2"/>';});
-  // áreas de toque (uma por mês) — torna o gráfico interativo
-  data.forEach((d,i)=>{svg+='<rect x="'+(cw*i)+'" y="0" width="'+cw+'" height="'+H+'" fill="transparent" style="cursor:pointer" onclick="chartPick('+i+')"></rect>';});
+  const hide=netHidden(), sel=chartSel;
+  const eurK=v=>{const a=Math.abs(v),s=v<0?'−':'';return s+'€'+(a>=1000?(a/1000).toLocaleString('pt-PT',{maximumFractionDigits:1})+'k':Math.round(a));};
+  // geometria
+  const W=340,H=176,PL=12,PR=12,PT=24,PB=10, baseY=H-PB;
+  const n=data.length, cw=(W-PL-PR)/n, X=i=>PL+cw*i+cw/2;
+  const cums=data.map(d=>d.cum);
+  let hi=Math.max(...cums,0), lo=Math.min(...cums,0); if(hi===lo){hi+=1;lo-=1;}
+  const rng=hi-lo, hiP=hi+rng*.20, loP=lo-rng*.14;
+  const Y=v=>PT+(hiP-v)/(hiP-loP)*(baseY-PT);
+  const pts=data.map((d,i)=>[X(i),Y(d.cum)]);
+  const line=nfSmooth(pts);
+  const area=line+' L'+pts[n-1][0].toFixed(1)+','+baseY+' L'+pts[0][0].toFixed(1)+','+baseY+' Z';
+  const sp=pts[sel], u='c'+(Date.now()%100000);
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;overflow:visible" role="img" aria-label="Evolução do saldo acumulado">';
+  svg+='<defs>'
+    +'<linearGradient id="'+u+'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0bd51" stop-opacity=".30"/><stop offset=".7" stop-color="#f0bd51" stop-opacity=".05"/><stop offset="1" stop-color="#f0bd51" stop-opacity="0"/></linearGradient>'
+    +'<linearGradient id="'+u+'l" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d79b2e"/><stop offset=".5" stop-color="#f0bd51"/><stop offset="1" stop-color="#f8d583"/></linearGradient>'
+    +'<filter id="'+u+'g" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+  +'</defs>';
+  if(loP<0&&hiP>0){const yz=Y(0);svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+yz.toFixed(1)+'" y2="'+yz.toFixed(1)+'" stroke="#26262e" stroke-width="1" stroke-dasharray="1 6" stroke-linecap="round"/>';}
+  svg+='<line x1="'+sp[0].toFixed(1)+'" x2="'+sp[0].toFixed(1)+'" y1="'+(PT-6)+'" y2="'+baseY+'" stroke="#f0bd51" stroke-opacity=".22" stroke-width="1"/>';
+  svg+='<path d="'+area+'" fill="url(#'+u+'a)"/>';
+  svg+='<path d="'+line+'" fill="none" stroke="url(#'+u+'l)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" filter="url(#'+u+'g)"/>';
+  svg+='<circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="9" fill="#f0bd51" opacity=".15"/><circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="4.3" fill="#f0bd51" stroke="#000" stroke-width="1.8"/>';
+  if(!hide){const lx=Math.min(Math.max(sp[0],PL+20),W-PR-20);svg+='<text x="'+lx.toFixed(1)+'" y="'+Math.max(13,sp[1]-13).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="800" font-family="JetBrains Mono,monospace" fill="#f8d583">'+eurK(data[sel].cum)+'</text>';}
+  data.forEach((d,i)=>{svg+='<rect x="'+(PL+cw*i).toFixed(1)+'" y="0" width="'+cw.toFixed(1)+'" height="'+H+'" fill="transparent" style="cursor:pointer" onclick="chartPick('+i+')"></rect>';});
   svg+='</svg>';
-  let html='<div style="display:flex;justify-content:flex-end;margin-bottom:6px">'+rangeSeg+'</div><div>'+svg+'</div><div style="display:flex;margin-top:8px">';
-  data.forEach((d,i)=>{const nm=new Date(d.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'short'}).replace('.','');const sel=i===chartSel;html+='<div onclick="chartPick('+i+')" style="flex:1;text-align:center;font-size:'+(N>8?'10':'11.5')+'px;cursor:pointer;font-weight:'+(sel?700:500)+';color:'+(sel?'var(--brass)':'var(--mut)')+';text-transform:capitalize">'+nm+'</div>';});
+  let html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span class="mini" style="letter-spacing:.04em;text-transform:uppercase;opacity:.65">Saldo acumulado</span>'+rangeSeg+'</div><div>'+svg+'</div><div style="display:flex;margin-top:6px;padding:0 '+PL+'px">';
+  data.forEach((d,i)=>{const nm=new Date(d.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'short'}).replace('.','');const s=i===sel;html+='<div onclick="chartPick('+i+')" style="flex:1;text-align:center;font-size:'+(N>8?'9.5':'11')+'px;cursor:pointer;font-weight:'+(s?700:500)+';color:'+(s?'var(--brass)':'var(--mut)')+';text-transform:capitalize">'+nm+'</div>';});
   html+='</div>';
-  // painel de detalhe do mês selecionado
-  const s=data[chartSel], mn=new Date(s.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'long',year:'numeric'});
+  const s=data[sel], mn=new Date(s.ym+'-01T00:00:00').toLocaleDateString('pt-PT',{month:'long',year:'numeric'});
   const m=v=>hide?'•••••':eur(v);
-  html+='<div style="margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(240,189,81,.05)">'
-    +'<div class="mini" style="text-transform:capitalize;color:var(--brass);font-weight:700">'+mn+'</div>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:8px">'
-    +'<div><div class="mini">Entrou</div><div class="amt pos" style="font-size:15px">'+m(s.inS)+'</div></div>'
-    +'<div style="text-align:right"><div class="mini">Saiu</div><div class="amt neg" style="font-size:15px">'+m(s.outS)+'</div></div>'
-    +'<div><div class="mini">Saldo do mês</div><div class="amt '+(s.net>=0?'pos':'neg')+'" style="font-size:15px">'+m(s.net)+'</div></div>'
-    +'<div style="text-align:right"><div class="mini">Acumulado</div><div class="amt" style="font-size:15px;color:var(--brass)">'+m(s.cum)+'</div></div>'
+  html+='<div style="margin-top:14px;padding:14px 15px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(240,189,81,.06),rgba(240,189,81,.015))">'
+    +'<div class="mini" style="text-transform:capitalize;color:var(--brass);font-weight:700;letter-spacing:.02em">'+mn+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-top:10px">'
+    +'<div><div class="mini">Entrou</div><div class="money pos" style="font-size:15.5px;font-weight:700;margin-top:1px">'+m(s.inS)+'</div></div>'
+    +'<div style="text-align:right"><div class="mini">Saiu</div><div class="money neg" style="font-size:15.5px;font-weight:700;margin-top:1px">'+m(s.outS)+'</div></div>'
+    +'<div><div class="mini">Saldo do mês</div><div class="money '+(s.net>=0?'pos':'neg')+'" style="font-size:15.5px;font-weight:700;margin-top:1px">'+m(s.net)+'</div></div>'
+    +'<div style="text-align:right"><div class="mini">Acumulado</div><div class="money" style="font-size:15.5px;font-weight:700;margin-top:1px;color:var(--brass)">'+m(s.cum)+'</div></div>'
     +'</div>'+chartCats(s.ym,hide)+'</div>';
-  html+='<div style="display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11.5px;color:var(--mut)">'
-    +'<span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:3px;background:linear-gradient(90deg,#3ddc97 50%,#ff6b6b 50%)"></i>saldo do mês</span>'
-    +'<span style="display:inline-flex;align-items:center;gap:6px"><i style="width:16px;height:3px;border-radius:2px;background:#f0bd51"></i>acumulado</span></div>';
-  html+='<div class="mini" style="text-align:center;margin-top:8px;opacity:.7">Toque num mês para ver os detalhes</div>';
+  html+='<div class="mini" style="text-align:center;margin-top:9px;opacity:.55">Toque num mês para ver os detalhes</div>';
   box.innerHTML=html;
 }
 function catSpend(ym){const b={};state.tx.filter(t=>t.date.slice(0,7)===ym&&t.type==='out').forEach(t=>{b[t.cat]=(b[t.cat]||0)+t.val;});return b;}
@@ -1885,8 +1899,42 @@ function activate(v){
   window.scrollTo({top:0,behavior:'smooth'});
   if(window.showBars)window.showBars();
   if(v!=='registar'&&editRef)resetForm();
+  if(v==='painel'&&window.nfReveal)requestAnimationFrame(window.nfReveal);
+  if(window.nfHaptic)nfHaptic(6);
 }
 function go(v,anchor){activate(v);if(anchor)setTimeout(()=>{const a=el(anchor);if(a&&a.scrollIntoView)a.scrollIntoView({behavior:'smooth',block:'start'});},120);}
+
+/* ---------- v61 · vida: números a rolar, barras a encher, vibração ---------- */
+const NF_RM=matchMedia('(prefers-reduced-motion:reduce)');
+function nfHaptic(ms){try{if(navigator.vibrate&&!NF_RM.matches)navigator.vibrate(ms||8);}catch(_){}}
+window.nfHaptic=nfHaptic;
+function nfCountNode(node){
+  const to=parseFloat(node.dataset.to); if(!isFinite(to))return;
+  if(NF_RM.matches){node.textContent=eur(to);return;}
+  const dur=850,t0=performance.now();
+  (function step(now){
+    const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);
+    node.textContent=eur(to*e);
+    if(p<1)requestAnimationFrame(step);else node.textContent=eur(to);
+  })(t0);
+}
+let nfRevealT=0;
+function nfReveal(){
+  const pan=el('painel'); if(!pan||!pan.classList.contains('on'))return;
+  const now=Date.now(); if(now-nfRevealT<400)return; nfRevealT=now; // evita repetir em re-render
+  pan.querySelectorAll('.nf-n[data-to]').forEach(nfCountNode);
+  if(NF_RM.matches)return;
+  pan.querySelectorAll('.bar>i').forEach(b=>{
+    const w=b.style.width; if(!w||w==='0%')return;
+    b.style.transition='none'; b.style.width='0%'; void b.offsetWidth;
+    requestAnimationFrame(()=>{b.style.transition='';b.style.width=w;});
+  });
+}
+window.nfReveal=nfReveal;
+/* vibração ao tocar na barra inferior e nos botões principais */
+document.addEventListener('click',e=>{
+  if(e.target.closest('.bottomnav button,.btn,.qa,.kt,.tab,.alert'))nfHaptic(8);
+},true);
 
 /* ---------- eventos ---------- */
 el('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;if(b.dataset.v==='registar')openReg('out');else activate(b.dataset.v);});
@@ -2231,7 +2279,7 @@ el('net-eye')&&(el('net-eye').onclick=toggleNet);
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
 
 /* ---------- atualização automática: se houver versão nova no site, carrega-a ---------- */
-const APP_VER='v58';
+const APP_VER='v61';
 async function checkUpdate(){
   try{
     if(document.visibilityState!=='visible'||busyTyping())return;
@@ -2252,6 +2300,7 @@ if(!state.tz)state.tz=myTz();
 postRecurring();
 resetForm();
 renderAll();
+setTimeout(()=>{if(window.nfReveal)nfReveal();},350);
 (function(){try{const r=new URLSearchParams(location.search).get('r');if(r&&['manha','noite','semana','quinzena','mes'].includes(r)){rsSlot=r;renderResumo();activate('resumo');}}catch(_){}})();
 if('serviceWorker' in navigator&&window.Notification&&Notification.permission==='granted'){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 el('auth-send').onclick=sbEnter;
@@ -2260,7 +2309,7 @@ el('auth-forgot').onclick=sbForgot;
 // PIN de acesso rápido
 el('pin-in')&&el('pin-in').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
 el('pin-new')&&el('pin-new').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);});
-function pinTry(){const c=(el('pin-in').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser&&pinCheckFor(sbUser.id,c)){pinUnlocked=true;hidePinGate();try{el('pin-in').blur();}catch(_){}renderAll();maybeOnboard();setTimeout(()=>{window.scrollTo(0,0);if(window.showBars)window.showBars();},250);}else{el('pin-msg').innerHTML='<span class="neg">PIN errado.</span>';el('pin-in').value='';el('pin-in').focus();}}
+function pinTry(){const c=(el('pin-in').value||'').trim();if(!/^\d{4}$/.test(c)){el('pin-msg').innerHTML='<span class="neg">Escreva 4 dígitos.</span>';return;}if(sbUser&&pinCheckFor(sbUser.id,c)){pinUnlocked=true;hidePinGate();try{el('pin-in').blur();}catch(_){}renderAll();maybeOnboard();setTimeout(()=>{window.scrollTo(0,0);if(window.showBars)window.showBars();if(window.nfReveal)nfReveal();},250);}else{el('pin-msg').innerHTML='<span class="neg">PIN errado.</span>';el('pin-in').value='';el('pin-in').focus();}}
 el('pin-go')&&(el('pin-go').onclick=pinTry);
 el('pin-in')&&el('pin-in').addEventListener('keydown',e=>{if(e.key==='Enter')pinTry();});
 el('pin-forgot')&&(el('pin-forgot').onclick=()=>{hidePinGate();pinUnlocked=false;sbSignOut();});
