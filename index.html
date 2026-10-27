@@ -373,6 +373,39 @@
   .ag-dots i{width:6px;height:6px;border-radius:50%;background:var(--brass);animation:agDot 1s ease-in-out infinite}
   .ag-dots i:nth-child(2){animation-delay:.15s}.ag-dots i:nth-child(3){animation-delay:.3s}
   @keyframes agDot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+  /* ===== WB · mascote conselheiro ===== */
+  .wb-robot{display:block}
+  .wb-eye{animation:wbBlink 4.5s infinite}
+  @keyframes wbBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+  .wb-robot .wb-eye{transform-origin:center;transform-box:fill-box}
+  .wb-btn{padding:0;border:none;background:none;cursor:pointer;position:relative;display:grid;place-items:center}
+  .wb-hdr{flex:none;width:48px;height:48px;border-radius:15px;border:1px solid var(--line);background:linear-gradient(160deg,#17171d,#0c0c10);box-shadow:0 2px 10px rgba(0,0,0,.4),0 0 18px rgba(240,189,81,.12)}
+  .wb-hdr:active{transform:scale(.94)}
+  .wb-fab{position:fixed;right:16px;bottom:88px;z-index:70;width:62px;height:62px;border-radius:20px;border:1px solid #2a2a33;background:radial-gradient(120% 120% at 30% 22%,#1c1c24,#0a0a0d);box-shadow:0 12px 30px rgba(0,0,0,.55),0 0 26px rgba(240,189,81,.18);animation:wbFloat 4.5s ease-in-out infinite}
+  .wb-fab:active{transform:scale(.93)}
+  @keyframes wbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .wb-bot-speak .wb-robot{animation:wbNod .5s ease-in-out infinite}
+  @keyframes wbNod{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+  .wb-badge{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;border-radius:10px;background:var(--clay);color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 5px;border:2px solid #000;box-shadow:0 0 0 2px rgba(255,107,107,.25)}
+  .wb-badge.on{display:flex;animation:wbPulse 2s ease-in-out infinite}
+  @keyframes wbPulse{0%,100%{box-shadow:0 0 0 2px rgba(255,107,107,.25)}50%{box-shadow:0 0 0 6px rgba(255,107,107,0)}}
+  .wb-back{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);display:none;animation:fade .25s ease}
+  .wb-back.on{display:block}
+  .wb-panel{position:fixed;z-index:95;right:16px;bottom:88px;width:min(380px,calc(100vw - 32px));max-height:74vh;overflow:auto;background:#0e0e12;border:1px solid #26262e;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.65);display:none}
+  .wb-panel.on{display:block;animation:wbIn .3s cubic-bezier(.2,.85,.25,1)}
+  @keyframes wbIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+  .wb-head{display:flex;align-items:center;gap:11px;padding:15px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0e0e12;z-index:2}
+  .wb-ico{flex:none;width:44px;height:44px;border-radius:13px;background:linear-gradient(160deg,#17171d,#0c0c10);display:grid;place-items:center}
+  .wb-head .nm{font-family:'Space Grotesk';font-weight:700;font-size:16px;line-height:1.1}
+  .wb-head .sub{font-size:11.5px;color:var(--brass);letter-spacing:.02em;margin-top:2px}
+  .wb-say{margin-left:auto;background:none;border:1px solid var(--line);border-radius:10px;color:var(--brass);cursor:pointer;padding:7px;display:flex}
+  .wb-say.on{background:var(--brass);color:#141017;border-color:transparent}
+  .wb-x{background:none;border:none;color:var(--mut);cursor:pointer;padding:6px;display:flex}
+  .wb-body{padding:14px 16px;display:flex;flex-direction:column;gap:13px}
+  .wb-body #p-coach{font-size:14.5px;line-height:1.5}
+  .wb-step-wrap{border-top:1px solid var(--line);padding-top:12px}
+  @media(max-width:720px){.wb-hdr{display:none}.wb-panel{left:16px;right:16px;width:auto}}
+  @media(min-width:721px){.wb-fab{display:none}.wb-panel{bottom:24px}.wb-back{background:rgba(0,0,0,.35)}}
 </style>
 </head>
 <body>
@@ -415,7 +448,7 @@
     <p style="color:var(--brass);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin:6px 0 0">Controlo &amp; Sabedoria</p>
     <p class="mini" style="margin:18px auto 0;max-width:300px;font-size:14px;line-height:1.6">Bem-vindo. Este é o seu caminho, organizar, decidir com cabeça e construir o seu património.</p>
     <button class="btn" id="splash-go" style="margin-top:26px;min-width:220px;font-size:16px;padding:14px 18px">Começar</button>
-    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v61</div>
+    <div class="mini" style="margin-top:18px;opacity:.6">Nortefin · v64</div>
   </div>
 
   <!-- 2) ESCOLHER: ENTRAR OU CRIAR -->
@@ -471,18 +504,11 @@
         <div class="mini" id="hi-greet">Olá</div>
         <div id="hi-name" style="font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">A sua conta</div>
       </div>
-      <div class="card" style="flex:none;max-width:62%;padding:10px 14px;text-align:right;border-radius:14px">
+      <button id="wb-hdr" class="wb-btn wb-hdr" onclick="wbToggle()" aria-label="Falar com o WB, o seu conselheiro"></button>
+      <div class="card" style="flex:none;max-width:56%;padding:10px 14px;text-align:right;border-radius:14px">
         <div class="eyebrow" style="display:flex;align-items:center;justify-content:flex-end;gap:6px;font-size:10px;letter-spacing:.08em;white-space:nowrap">Património líquido <button id="net-eye" type="button" aria-label="Mostrar ou ocultar valor" style="background:none;border:none;color:var(--mut);padding:2px;display:inline-flex;cursor:pointer"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         <div class="val money" id="s-net" style="font-size:clamp(17px,5.2vw,24px);font-weight:800;line-height:1.15;white-space:nowrap">0,00 €</div>
         <div class="mini" style="font-size:10.5px;white-space:nowrap">o que tem menos o que deve</div>
-      </div>
-    </div>
-
-    <div class="coach-wrap">
-      <div class="coach-bot" data-s="idle" aria-hidden="true"><span class="ag-glow"></span><span class="ag-orb"></span><span class="ag-ring"></span><span class="ag-waves"><i></i><i></i><i></i><i></i><i></i></span></div>
-      <div class="coach-col">
-        <div class="coach-bubble" id="p-coach"></div>
-        <div id="p-alerts"></div>
       </div>
     </div>
 
@@ -873,7 +899,7 @@
   </section>
 
   <div class="disc" id="storenote"></div>
-  <div class="foot">Nortefin · v61 · finanças pessoais com controlo e sabedoria</div>
+  <div class="foot">Nortefin · v64 · finanças pessoais com controlo e sabedoria</div>
 </div>
 
 <div id="onb" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.94);align-items:center;justify-content:center;padding:24px">
@@ -909,6 +935,27 @@
     <button class="btn ghost" id="pin-skip" style="width:100%;margin-top:8px;font-size:13px">Agora não</button>
   </div>
 </div>
+
+<!-- ================= WB · conselheiro financeiro ================= -->
+<div id="wb-back" class="wb-back" onclick="wbClose()"></div>
+<div id="wb-panel" class="wb-panel" role="dialog" aria-label="WB, o seu conselheiro financeiro">
+  <div class="wb-head">
+    <span id="wb-ico" class="wb-ico"></span>
+    <div><div class="nm">WB</div><div class="sub">o seu conselheiro financeiro</div></div>
+    <button id="wb-say" class="wb-say" type="button" aria-label="Ouvir">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.3 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+    </button>
+    <button class="wb-x" type="button" onclick="wbClose()" aria-label="Fechar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="wb-body">
+    <div class="coach-col" style="gap:12px">
+      <div id="p-coach"></div>
+      <div id="p-alerts"></div>
+    </div>
+    <div class="wb-step-wrap"><div class="mini" style="text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:8px">O meu conselho</div><div id="wb-step"></div></div>
+  </div>
+</div>
+<button id="wb-fab" class="wb-btn wb-fab" onclick="wbToggle()" aria-label="Falar com o WB, o seu conselheiro"></button>
 
 <nav class="bottomnav" id="bnav">
   <button data-v="painel" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>Início</span></button>
@@ -1590,6 +1637,8 @@ function renderPainel(){
   else if(t.margin>0)step=stepCard('Ponha a margem a trabalhar','Sobra-lhe '+eur(t.margin)+'/mês no plano e já tem rede. Hora de investir com regularidade.',"openReg('inv')",'Registar investimento');
   else step=stepCard('Reequilibre o orçamento','O plano gasta mais do que entra. Baixe limites ou aumente entradas.',"go('config','cf-orc')",'Rever orçamento');
   el('nextstep').innerHTML=step;
+  if(el('wb-step'))el('wb-step').innerHTML=step;
+  const wbN=alerts.length;['wb-badge-h','wb-badge-f'].forEach(id=>{const bb=el(id);if(bb){bb.textContent=wbN||'';bb.classList.toggle('on',wbN>0);}});
   el('goalcount').textContent=state.goals.length?state.goals.length+(state.goals.length>1?' ativos':' ativo'):'';
   el('goalmini').innerHTML=state.goals.length?state.goals.slice(0,3).map(g=>{const pct=g.target>0?Math.min(100,g.have/g.target*100):0;return '<div style="margin-bottom:12px"><div class="split"><span class="name">'+esc(g.name)+'</span><span class="mini money">'+Math.round(pct)+'%</span></div><div class="bar brass"><i style="width:'+pct+'%"></i></div></div>';}).join(''):'<div class="empty" style="padding:14px">Ainda sem objetivos.</div>';
 }
@@ -1676,8 +1725,21 @@ function renderChart(){
   svg+='<line x1="'+sp[0].toFixed(1)+'" x2="'+sp[0].toFixed(1)+'" y1="'+(PT-6)+'" y2="'+baseY+'" stroke="#f0bd51" stroke-opacity=".22" stroke-width="1"/>';
   svg+='<path d="'+area+'" fill="url(#'+u+'a)"/>';
   svg+='<path d="'+line+'" fill="none" stroke="url(#'+u+'l)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" filter="url(#'+u+'g)"/>';
+  // pontinho discreto em cada mês
+  pts.forEach((p,i)=>{if(i!==sel)svg+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.3" fill="#6a6a76"/>';});
+  // balão no mês tocado: entrada / saída / lucro, junto ao ponto
+  if(!hide){
+    const s=data[sel], bw2=108,bh2=54; let bx=sp[0]-bw2/2; bx=Math.min(Math.max(bx,PL),W-PR-bw2);
+    let by=sp[1]-bh2-12, below=false; if(by<0){by=sp[1]+12;below=true;}
+    const rows=[['Entrada','+'+eurK(s.inS),'#3ddc97'],['Saída','−'+eurK(s.outS),'#ff6b6b'],['Lucro',(s.net>=0?'+':'−')+eurK(Math.abs(s.net)),(s.net>=0?'#3ddc97':'#ff6b6b')]];
+    const tipX=Math.min(Math.max(sp[0],bx+10),bx+bw2-10);
+    svg+='<path d="M'+(tipX-5).toFixed(1)+','+(below?by:by+bh2).toFixed(1)+' L'+tipX.toFixed(1)+','+(below?by-5:by+bh2+5).toFixed(1)+' L'+(tipX+5).toFixed(1)+','+(below?by:by+bh2).toFixed(1)+'Z" fill="#121218"/>';
+    svg+='<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw2+'" height="'+bh2+'" rx="11" fill="#121218" stroke="#2c2c35"/>';
+    svg+='<g font-family="JetBrains Mono,monospace">';
+    rows.forEach((r,k)=>{const ty=by+16+k*15;svg+='<text x="'+(bx+10)+'" y="'+ty+'" font-size="8" fill="#9a9aa4">'+r[0]+'</text><text x="'+(bx+bw2-10)+'" y="'+ty+'" text-anchor="end" font-size="9.5" font-weight="800" fill="'+r[2]+'">'+r[1]+'</text>';});
+    svg+='</g>';
+  }
   svg+='<circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="9" fill="#f0bd51" opacity=".15"/><circle cx="'+sp[0].toFixed(1)+'" cy="'+sp[1].toFixed(1)+'" r="4.3" fill="#f0bd51" stroke="#000" stroke-width="1.8"/>';
-  if(!hide){const lx=Math.min(Math.max(sp[0],PL+20),W-PR-20);svg+='<text x="'+lx.toFixed(1)+'" y="'+Math.max(13,sp[1]-13).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="800" font-family="JetBrains Mono,monospace" fill="#f8d583">'+eurK(data[sel].cum)+'</text>';}
   data.forEach((d,i)=>{svg+='<rect x="'+(PL+cw*i).toFixed(1)+'" y="0" width="'+cw.toFixed(1)+'" height="'+H+'" fill="transparent" style="cursor:pointer" onclick="chartPick('+i+')"></rect>';});
   svg+='</svg>';
   let html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span class="mini" style="letter-spacing:.04em;text-transform:uppercase;opacity:.65">Saldo acumulado</span>'+rangeSeg+'</div><div>'+svg+'</div><div style="display:flex;margin-top:6px;padding:0 '+PL+'px">';
@@ -1933,8 +1995,31 @@ function nfReveal(){
 window.nfReveal=nfReveal;
 /* vibração ao tocar na barra inferior e nos botões principais */
 document.addEventListener('click',e=>{
-  if(e.target.closest('.bottomnav button,.btn,.qa,.kt,.tab,.alert'))nfHaptic(8);
+  if(e.target.closest('.bottomnav button,.btn,.qa,.kt,.tab,.alert,.wb-btn'))nfHaptic(8);
 },true);
+
+/* ---------- WB · mascote conselheiro financeiro ---------- */
+const WBSVG='<svg class="wb-robot" viewBox="0 0 48 48" width="70%" height="70%" aria-hidden="true">'
++'<line x1="24" y1="3.5" x2="24" y2="10" stroke="#f0bd51" stroke-width="2" stroke-linecap="round"/>'
++'<circle cx="24" cy="3.2" r="2.6" fill="#f0bd51"/>'
++'<rect x="4.6" y="18" width="3.4" height="9" rx="1.7" fill="#c9962b"/>'
++'<rect x="40" y="18" width="3.4" height="9" rx="1.7" fill="#c9962b"/>'
++'<rect x="8" y="10" width="32" height="26" rx="9" fill="#f0bd51"/>'
++'<rect x="11.5" y="13.8" width="25" height="18.4" rx="7" fill="#0a0a0d"/>'
++'<circle class="wb-eye" cx="19" cy="22.5" r="3" fill="#3ddc97"/>'
++'<circle class="wb-eye" cx="29" cy="22.5" r="3" fill="#3ddc97"/>'
++'<path d="M18.5 28 q5.5 3.2 11 0" stroke="#3ddc97" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".85"/>'
++'<rect x="16" y="37" width="16" height="5" rx="2.5" fill="#f0bd51"/>'
++'</svg>';
+(function(){
+  const h=el('wb-hdr'); if(h)h.innerHTML=WBSVG+'<span class="wb-badge" id="wb-badge-h"></span>';
+  const f=el('wb-fab'); if(f)f.innerHTML=WBSVG+'<span class="wb-badge" id="wb-badge-f"></span>';
+  const i=el('wb-ico'); if(i)i.innerHTML=WBSVG;
+})();
+function wbOpen(){const p=el('wb-panel');if(!p)return;p.classList.add('on');const b=el('wb-back');if(b)b.classList.add('on');nfHaptic(10);if(window.wbSpeak)setTimeout(()=>{try{wbSpeak(true);}catch(_){}},180);}
+function wbClose(){const p=el('wb-panel');if(p)p.classList.remove('on');const b=el('wb-back');if(b)b.classList.remove('on');if(window.wbStopSpeak)wbStopSpeak();}
+function wbToggle(){const p=el('wb-panel');if(p&&p.classList.contains('on'))wbClose();else wbOpen();}
+window.wbOpen=wbOpen;window.wbClose=wbClose;window.wbToggle=wbToggle;
 
 /* ---------- eventos ---------- */
 el('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;if(b.dataset.v==='registar')openReg('out');else activate(b.dataset.v);});
@@ -2279,7 +2364,7 @@ el('net-eye')&&(el('net-eye').onclick=toggleNet);
 el('net-eye')&&(el('net-eye').onclick=toggleNet);
 
 /* ---------- atualização automática: se houver versão nova no site, carrega-a ---------- */
-const APP_VER='v61';
+const APP_VER='v64';
 async function checkUpdate(){
   try{
     if(document.visibilityState!=='visible'||busyTyping())return;
@@ -2388,15 +2473,14 @@ sbInit();
 /* ---------- v57 · voz: o robô fala + registar a falar ---------- */
 (function(){
   /* estados do agente: idle · listen · think · speak · ping */
-  const AG=document.querySelector('.coach-bot');
-  window.agState=function(s){if(AG)AG.dataset.s=s||'idle';};
+  const AGS=[el('wb-hdr'),el('wb-fab')].filter(Boolean);
+  window.agState=function(s){AGS.forEach(a=>{a.dataset.s=s||'idle';a.classList.toggle('wb-bot-speak',s==='speak'||s==='think');});};
   /* recado novo: entra suave, o agente "pensa" e avisa, texto longo fica com "ver mais" */
   (function(){
     const bub=el('p-coach'); if(!bub)return; let last='';
     function onMsg(){
       const t=[...bub.children].filter(c=>!c.classList.contains('ag-more')).map(c=>c.innerText).join(' ').trim(); if(!t||t===last)return; last=t;
       bub.classList.remove('ag-new'); void bub.offsetWidth; bub.classList.add('ag-new');
-      if(AG&&(AG.dataset.s==='idle'||AG.dataset.s==='ping')){agState('think');setTimeout(()=>{if(AG.dataset.s!=='think')return;agState('ping');setTimeout(()=>{if(AG.dataset.s==='ping')agState('idle');},1800);},700);}
       const body=bub.children[1]; const old=bub.querySelector('.ag-more'); if(old)old.remove(); bub.classList.remove('ag-clamp');
       if(body&&body.innerText.length>150){bub.classList.add('ag-clamp');const m=document.createElement('button');m.type='button';m.className='ag-more';m.textContent='Ver mais';
         m.onclick=ev=>{ev.stopPropagation();const c=bub.classList.toggle('ag-clamp');m.textContent=c?'Ver mais':'Ver menos';};bub.appendChild(m);}
@@ -2408,19 +2492,19 @@ sbInit();
   const tts=window.speechSynthesis;
   function ptVoice(){const vs=tts?tts.getVoices():[];return vs.find(v=>/pt[-_]PT/i.test(v.lang))||vs.find(v=>/^pt/i.test(v.lang))||null;}
   if(tts&&tts.onvoiceschanged!==undefined)tts.onvoiceschanged=()=>{};
-  const col=document.querySelector('.coach-col'), bub=el('p-coach');
-  if(col&&bub&&tts){
-    const b=document.createElement('button'); b.type='button'; b.className='say-btn'; b.setAttribute('aria-label','Ouvir a mensagem');
-    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18.3 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
-    col.appendChild(b);
+  const b=el('wb-say'), bub=el('p-coach');
+  if(b&&bub&&tts){
     const stop=()=>{try{tts.cancel();}catch(_){} b.classList.remove('on'); agState('idle');};
-    const speak=()=>{
-      if(b.classList.contains('on')){stop();return;}
-      const t=[...bub.children].filter(c=>!c.classList.contains('ag-more')).map(c=>c.innerText).join('. ').replace(/\s+/g,' ').trim(); if(!t)return;
+    window.wbStopSpeak=stop;
+    const gather=()=>{let p=[];const c=el('p-coach');if(c)p=p.concat([...c.children].filter(x=>!x.classList.contains('ag-more')).map(x=>x.innerText));const a=el('p-alerts');if(a&&a.innerText.trim())p.push(a.innerText);return p.join('. ').replace(/\s+/g,' ').trim();};
+    const speak=(force)=>{
+      if(b.classList.contains('on')){if(force)return;stop();return;}
+      const t=gather(); if(!t)return;
       stop(); const u=new SpeechSynthesisUtterance(t); u.lang='pt-PT'; const v=ptVoice(); if(v)u.voice=v; u.rate=1; u.pitch=1;
       u.onstart=()=>agState('speak'); u.onend=u.onerror=()=>{b.classList.remove('on');agState('idle');}; b.classList.add('on'); agState('think'); tts.speak(u);
     };
-    b.onclick=speak; const bot=document.querySelector('.coach-bot'); if(bot)bot.onclick=speak;
+    window.wbSpeak=speak;
+    b.onclick=()=>speak();
     document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
   }
 
